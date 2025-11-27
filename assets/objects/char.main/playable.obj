@@ -1,14 +1,13 @@
-Cmp:
+Obj:
   nam: 'minjun'
-  scl: [3, 3, 1]
   chl:
-    - Obj:
-      pos: [0, 0, 1000]
-      col: [1, 0, 0, 1]
-      vie:
-        Image:
-          tex: '%white'
-          siz: [1, 0]
+    #- Obj:
+    #  pos: [0, 0, 1000]
+    #  col: [1, 0, 0, 1]
+    #  vie:
+    #    Image:
+    #      tex: '%white'
+    #      siz: [1, 0]
     - Obj:
       nam: 'views'
       fnc: '@plugins/child_selector/select_child.fnc'
@@ -33,7 +32,7 @@ Cmp:
                   mat: 'transparent'
         - Obj:
           nam: 'run'
-          pos: [5, 4, 0]
+          pos: [4, 4, 0]
           vie:
             Sprite:
               cnt: -1
@@ -55,6 +54,36 @@ Cmp:
                   frm: 4
                   siz: {'!relh.pair':[0, 153]}
                   mat: 'transparent'
+        - Obj:
+          nam: 'hit'
+          pos: [2, 0, 0]
+          vie:
+            Sprite:
+              cnt: -1
+              cel:
+                '!sprite.cellsBySheet':
+                  tex: './sprites/hit.png'
+                  row: 3
+                  col: 3
+                  idx: [0, 0, 1, 2, 3, 4, 5, 6, 7, 8]
+                  frm: 5
+                  siz: {'!relh.pair':[0, 161]}
+                  mat: 'transparent'
+        #- Obj:
+        #  nam: 'ko'
+        #  pos: [0, 0, 0]
+        #  vie:
+        #    Sprite:
+        #      cnt: -1
+        #      cel:
+        #        '!sprite.cellsBySheet':
+        #          tex: './sprites/ko.png'
+        #          row: 4
+        #          col: 3
+        #          idx: [0, 0, 1, 2, 3, 4, 5, 6, 7, 8]
+        #          frm: 5
+        #          siz: {'!relh.pair':[0, 161]}
+        #          mat: 'transparent'
       #acl:
       #  - ActionItem:
       #    nam: '%onInit'
@@ -62,4 +91,4 @@ Cmp:
       #      SendMessage:
       #        dst: '.'
       #        nam: 'selectChild'
-      #        par: ['run']
+      #        par: ['idle']
