@@ -161,7 +161,7 @@ ObjectFormat:
       short_name: 'reg'
       is_essential: false
       formats:
-        - '@system/node_loader_format/common/rectangle_uint.nlf':
+        - '@system/node_loader_format/common/rectangle_real.nlf':
           on_load:
             '''{(
                   FormatContext* ctx,
@@ -171,7 +171,27 @@ ObjectFormat:
                 )
 
               auto self = loadable->cast<ImageViewDef>();
-              self->build_conf()->image_region(ctx->getData("rectangle_uint.val").v<Rectangle<uint>>());
+              self->build_conf()->image_region(ctx->getData("rectangle_real.val").v<Rectangle<real>>());
+              self->build_conf()->img_reg_norm_mode(false);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'image_region_norm'
+      short_name: 'rgn'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/rectangle_real.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ImageViewDef>();
+              self->build_conf()->image_region(ctx->getData("rectangle_real.val").v<Rectangle<real>>());
+              self->build_conf()->img_reg_norm_mode(true);
               return Var(true);
             '''
     - AttributeFormat:

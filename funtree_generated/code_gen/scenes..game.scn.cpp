@@ -35,10 +35,37 @@ static void ___CodeSetBundleRegisterer___ () {
 
 
 
+static Var __code_0 (
+    vector<Var> const& params
+) {
+
+  #include "scenes..game.scn.0.code"
+}
+
+
+static Var __code_1 (
+    vector<Var> const& params
+) {
+
+  #include "scenes..game.scn.1.code"
+}
+
+
+static Var __code_2 (
+    vector<Var> const& params
+) {
+
+  #include "scenes..game.scn.2.code"
+}
+
+
 Var Code_ScenesGameScn::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
+    case 0: return __code_0(params);
+    case 1: return __code_1(params);
+    case 2: return __code_2(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"scenes..game.scn.cpp\"", code_idx);
       return null_var;

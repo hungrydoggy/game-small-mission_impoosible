@@ -1,0 +1,22 @@
+Obj:
+  nam: 'minjun'
+  chl:
+    - Cmp:
+      nam: 'views'
+      fnc: '@plugins/child_selector/selce_child.fnc'
+      chl:
+        - Obj:
+          nam: 'idle'
+          ref:
+            frm: 1
+            tex: '@./sprites/idle.png'
+          vie:
+            Sprite:
+              cnt: -1
+              cel:
+                - Cell:
+                  frm: '$frm'
+                  img:
+                    tex: '$tex'
+                    siz: []
+                    mat: ''

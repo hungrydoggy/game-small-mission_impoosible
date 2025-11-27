@@ -1,0 +1,5 @@
+auto self = params[0].as<GameObject*>();  
+
+self->setAction(action::Wait(DefaultRandomPocket::draw(0.5, 6.0)), "wait_before_show");
+self->enqueueAction("show");
+return null_var;
