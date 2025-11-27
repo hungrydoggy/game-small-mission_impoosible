@@ -1,13 +1,14 @@
 Obj:
   nam: 'minjun'
+  scl: [3, 3, 1]
   chl:
-    #- Obj:
-    #  pos: [0, 0, 1000]
-    #  col: [1, 0, 0, 1]
-    #  vie:
-    #    Image:
-    #      tex: '%white'
-    #      siz: [1, 0]
+    - Obj:
+      pos: [0, 0, 1000]
+      col: [1, 0, 0, 1]
+      vie:
+        Image:
+          tex: '%white'
+          siz: [1, 0]
     - Obj:
       nam: 'views'
       fnc: '@plugins/child_selector/select_child.fnc'
@@ -69,26 +70,70 @@ Obj:
                   frm: 5
                   siz: {'!relh.pair':[0, 161]}
                   mat: 'transparent'
-        #- Obj:
-        #  nam: 'ko'
-        #  pos: [0, 0, 0]
-        #  vie:
-        #    Sprite:
-        #      cnt: -1
-        #      cel:
-        #        '!sprite.cellsBySheet':
-        #          tex: './sprites/ko.png'
-        #          row: 4
-        #          col: 3
-        #          idx: [0, 0, 1, 2, 3, 4, 5, 6, 7, 8]
-        #          frm: 5
-        #          siz: {'!relh.pair':[0, 161]}
-        #          mat: 'transparent'
-      #acl:
-      #  - ActionItem:
-      #    nam: '%onInit'
-      #    act:
-      #      SendMessage:
-      #        dst: '.'
-      #        nam: 'selectChild'
-      #        par: ['idle']
+        - Obj:
+          nam: 'ko'
+          pos: [2, 0, 0]
+          vie:
+            Sprite:
+              cnt: -1
+              cel:
+                '!seq.concat':
+                  - '!sprite.cellsBySheet':
+                    tex: './sprites/ko.png'
+                    row: 4
+                    col: 4
+                    idx: 10
+                    frm: 5
+                    siz: {'!relh.pair':[0, 158]}
+                    mat: 'transparent'
+                  -
+                    - Cell:
+                      frm: 5
+                      pos: [10, 0, 0]
+                      rot: [0, 0, -15]
+                      img:
+                        Image:
+                          tex: './sprites/ko.png'
+                          siz: {'!relh.pair':[0, 158]}
+                          rgn: [0.25, 0.5, 0.25, 0.25]
+                    - Cell:
+                      frm: 5
+                      pos: [22, -8, 0]
+                      rot: [0, 0, 15]
+                      img:
+                        Image:
+                          tex: './sprites/ko.png'
+                          siz: {'!relh.pair':[0, 74]}
+                          reg: [268, 317, 123, 74]
+                    - Cell:
+                      frm: 5
+                      pos: [30, -17, 0]
+                      img:
+                        Image:
+                          tex: './sprites/ko.png'
+                          siz: {'!relh.pair':[0, 76]}
+                          reg: [19, 554, 150, 76]
+                    - Cell:
+                      frm: 5
+                      pos: [32, -15, 0]
+                      img:
+                        Image:
+                          tex: './sprites/ko.png'
+                          siz: {'!relh.pair':[0, 75]}
+                          reg: [20, 476, 148, 75]
+                    - Cell:
+                      frm: 45
+                      pos: [34, -17, 0]
+                      img:
+                        Image:
+                          tex: './sprites/ko.png'
+                          siz: {'!relh.pair':[0, 76]}
+                          reg: [19, 554, 150, 76]
+      acl:
+        - ActionItem:
+          nam: '%onInit'
+          act:
+            SendMessage:
+              dst: '.'
+              nam: 'selectChild'
+              par: ['ko']
