@@ -1,0 +1,12 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto self = loadable->cast<Macro>();
+self->params.set(1, make_shared<Value>(ctx->getData("vector3.val"), content));
+return Var(true);
+return null_var;

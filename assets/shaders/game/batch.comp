@@ -1,0 +1,107 @@
+#version 460
+
+
+layout (local_size_x = 256) in;
+
+
+layout(set=0, binding=0) uniform Config {
+  mat4 projview_mat;
+  uint object_count;
+  uint opaque_object_count;
+  uint opaque_index_count;
+  uint transparent_index_count;
+} config;
+
+
+#include "./common/object_data.glsl"
+layout(set=0, binding=1) readonly buffer ObjectBuffer {
+  ObjectData data[];
+} obj_buff;
+
+
+struct VertexData {
+  vec3 position;
+  vec2 st;
+  uint object_idx;
+};
+layout(set=0, binding=2) readonly buffer RefVertexBuffer {
+  VertexData vertices[];
+} ref_vertex_buff;
+
+
+layout(set=0, binding=3) readonly buffer RefIndexBuffer {
+  uint indices[];
+} ref_index_buff;
+
+
+layout(set=0, binding=4) buffer DynamicVertexBuffer {
+  VertexData vertices[];
+} dynamic_vertex_buff;
+
+
+layout(set=0, binding=5) buffer DynamicIndexBuffer {
+  uint indices[];
+} dynamic_index_buff;
+
+
+struct DrawCommand {
+  uint index_count;
+  uint instance_count;
+  uint first_index;
+  int  vertex_offset;
+  uint first_instance;
+};
+layout(set=1, binding=0) buffer OpaqueDrawCommandBuffer {
+  DrawCommand cmd;
+} opaque_draw_cmd_buffer;
+
+
+layout(set=1, binding=1) buffer TransparentDrawCommandBuffer {
+  DrawCommand cmd;
+} transparent_draw_cmd_buffer;
+
+
+
+
+void main () {
+
+  uint obj_idx = gl_GlobalInvocationID.x;
+  const uint kMaxObjectCount = 2560;
+  if (obj_idx >= min(config.object_count, kMaxObjectCount))
+    return;
+
+
+  ObjectData obj_data = obj_buff.data[obj_idx];
+
+
+  // write dynamic vertex buffer
+  for (uint vi=0; vi<obj_data.vertex_count; ++vi) {
+    dynamic_vertex_buff.vertices[vi + obj_data.dst_vertex_offset] = ref_vertex_buff.vertices[vi + obj_data.first_vertex];
+    dynamic_vertex_buff.vertices[vi + obj_data.dst_vertex_offset].object_idx = obj_idx;
+  }
+
+
+  // write dynamic index buffer
+  for (uint ii=0; ii<obj_data.index_count; ++ii) {
+    dynamic_index_buff.indices[ii + obj_data.dst_index_offset] =
+        ref_index_buff.indices[ii + obj_data.first_index] + obj_data.dst_vertex_offset;
+  }
+
+
+  // write draw command buffers
+  if (obj_idx == 0) {
+    opaque_draw_cmd_buffer.cmd.index_count    = config.opaque_index_count;
+    opaque_draw_cmd_buffer.cmd.instance_count = 1;
+    opaque_draw_cmd_buffer.cmd.first_index    = 0;
+    opaque_draw_cmd_buffer.cmd.vertex_offset  = 0;
+    opaque_draw_cmd_buffer.cmd.first_instance = 0;
+
+
+    transparent_draw_cmd_buffer.cmd.index_count    = config.transparent_index_count;
+    transparent_draw_cmd_buffer.cmd.instance_count = 1;
+    transparent_draw_cmd_buffer.cmd.first_index    = config.opaque_index_count;
+    transparent_draw_cmd_buffer.cmd.vertex_offset  = 0;
+    transparent_draw_cmd_buffer.cmd.first_instance = 0;
+  }
+}
+

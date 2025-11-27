@@ -1,0 +1,28 @@
+auto loadable = params[0].as<NodeLoadable*>();  auto e = params[1].as<KeyEvent const*>();  
+
+auto self = loadable->cast<Scene>();
+
+auto& gs = self->getDataRef("game_state").v<sp<GameState>>();
+auto& gd = self->getDataRef("game_data" ).v<sp<GameData >>();
+
+unlikely (e->state != KeyEventState::STATE_PRESSED)
+  return null_var;
+
+switch (gs->play_state) {
+  case PlayState::READY_TO_START:
+    gs->play_state = PlayState::PLAYING;
+    self->callFunc("updateUi", {});
+    break;
+
+  //case PlayState::DEAD:
+  //  unlikely (e->type == KeyEventType::KEY_ENTER)
+  //    self->callFunc("resetGame", {});
+  //  return null_var;
+
+  default:
+    break;
+}
+
+
+gd->last_key_type = e->type;
+return null_var;

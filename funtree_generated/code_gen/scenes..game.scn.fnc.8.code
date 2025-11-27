@@ -1,0 +1,39 @@
+auto loadable = params[0].as<NodeLoadable*>();  
+
+auto self = loadable->cast<Scene>();
+
+auto& gs = self->getDataRef("game_state").v<sp<GameState>>();
+auto& gd = self->getDataRef("game_data" ).v<sp<GameData >>();
+
+gs->play_state = PlayState::READY_TO_START;
+
+gs->level      = 1;
+gs->apple_left = 1;
+gs->score      = 0;
+
+gs->board_w         = self->getData("board_w"        , 10);
+gs->board_h         = self->getData("board_h"        , 10);
+gs->snake_speed_spt = self->getData("snake_speed_spt", 1.0);
+
+gs->need_tile_show_action = false;
+
+gs->wall_poses.clear();
+
+gs->snake_length = 2;
+gs->snake_head_pos = {1, (byte)gs->board_h/2};
+gs->snake_velocity = {1, 0};
+gs->snake_action_history.clear();
+gs->apple_pos  = {-1, -1};
+gs->banana_pos = {-1, -1};
+
+gd->next_bling_idx = 0;
+gd->last_key_type = KeyEventType::KEY_NONE;
+gd->elapsed_time = 0.0;
+
+self->callFunc("applyGameState", {});
+
+gd->apple_cmp ->is_drawable_self(false);
+gd->banana_cmp->is_drawable_self(false);
+gd->placeApple(self, gs.get());
+gd->updateSnake(gs.get());
+return null_var;

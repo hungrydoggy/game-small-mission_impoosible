@@ -1,0 +1,74 @@
+MacroFormat:
+  full_name: 'String.split'
+  short_name: 'str.split'
+  include_part:
+    '''{
+      #include <util/util.h>
+    '''
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'string'
+          short_name: 'str'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'separator'
+          short_name: 'sep'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(1, content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      // get params
+      auto str = mac_params.get(0)->asValue<string>();
+      auto sep = mac_params.get(1)->asValue<string>();
+
+
+      // make result
+      vector<string> splited;
+      Util::split(str, sep[0], splited);
+
+      auto result = make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+      for (auto& sp : splited)
+        result->add(make_shared<Value>(Var(sp), content));
+
+      return Var(result);
+    '''

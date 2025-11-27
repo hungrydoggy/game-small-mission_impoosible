@@ -1,0 +1,90 @@
+Scene:
+  cls: DebugDrawScene
+  nam: 'debug_draw'
+  gtr:
+    GpuTaskRunner:
+      cls: DebugDrawGTR
+      ref:
+        'kMaxLineCount': 10000
+      dat:
+        'kMaxLineCount': '$kMaxLineCount'
+      tsk:
+        - GpuTaskItem:
+          nam: 'debug_draw'
+          tsd:
+            GpuTaskDef:
+              crt: DRAW
+              cnf:
+                GraphicsConfig:
+                  tpl: LINE_LIST
+                  vsh: './shader/debug_draw.vert'
+                  fsh: './shader/debug_draw.frag'
+                  vtd:
+                    VertexDef:
+                      byt: 24
+                      atl:
+                        - VertexAttributeDef:
+                          usg: POSITION
+                          bnd: 0
+                          loc: 0
+                          fmt: R32G32B32_SFLOAT
+                          ofs: 0
+                        - VertexAttributeDef:
+                          usg: COLOR
+                          bnd: 0
+                          loc: 1
+                          fmt: R32G32B32_SFLOAT
+                          ofs: 12
+                  dop:
+                    DrawOption:
+                      unu:
+                        - DEPTH_TEST
+                      bln:
+                        - BlendOption:
+                          sfc: SRC_ALPHA
+                          dfc: ONE_MINUS_SRC_ALPHA
+                          eqa: ADD
+                      dpt:
+                        DepthOption:
+                          msk: false
+                  vvp: DYNAMIC
+                  att:
+                    - SwapchainAttachment:
+                      lop: LOAD
+              dbl:
+                - ShaderDataBindDef:
+                  nam: global_data
+                  set: 0
+                  bnd: 0
+                  dtp: UNIFORM_BUFFER
+                  stf:
+                    - VERTEX_BIT
+                    - FRAGMENT_BIT
+                  len: 1
+                  byt: 16
+                  usg:
+                    - TRANSFER_DST_BIT
+                    - UNIFORM_BUFFER_BIT
+                  prp: STATIC_STAGED
+                - ShaderDataBindDef:
+                  nam: scene_data
+                  set: 0
+                  bnd: 1
+                  dtp: STORAGE_BUFFER
+                  stf:
+                    - VERTEX_BIT
+                    - FRAGMENT_BIT
+                  len: 1
+                  byt: 80
+                  usg:
+                    - TRANSFER_DST_BIT
+                    - STORAGE_BUFFER_BIT
+                  prp: STATIC_STAGED
+  chl:
+    - Camera:
+      nam: 'camera'
+      pos: [0, 0, 4000]
+      scl: [1, 1, 1]
+      prj:
+        Projection:
+          typ: 'orthogonal'

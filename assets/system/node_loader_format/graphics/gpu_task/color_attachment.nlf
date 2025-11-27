@@ -1,0 +1,532 @@
+ObjectFormat:
+  full_name: 'ColorAttachment'
+  groups: ['AttachmentGroup']
+  guard_head: '#ifndef SERVER_ONLY'
+  guard_tail: '#endif'
+  include_part:
+    '''{
+      #include <gpu_task/_gpu_task_def_config.h>
+    '''
+  loadable_class: 'AttachmentInfo'
+  pre_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto self = loadable->cast<AttachmentInfo>();
+      self->type = AttachmentInfo::Type::COLOR;
+
+      #if defined(USE_VULKAN)
+        self->width               = VulkanHelper::swapchain_extent().width,
+        self->height              = VulkanHelper::swapchain_extent().height,
+        self->desc.format         = VulkanHelper::swapchain_image_format();
+        self->desc.samples        = VK_SAMPLE_COUNT_1_BIT;
+        self->desc.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        self->desc.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
+        self->desc.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        self->desc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        self->desc.initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;
+        self->desc.finalLayout    = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        self->additional_usage_flags  = 0;
+        self->additional_aspect_flags = 0;
+      #elif defined(USE_WEB_GPU)
+        self->width                  = WebGpuHelper::swapchain_width ();
+        self->height                 = WebGpuHelper::swapchain_height();
+        self->format                 = WebGpuHelper::swapchain_image_format();
+        self->samples                = WebGpuHelper::SampleCountFlagBits::_1_BIT;
+        self->load_op                = WGPULoadOp_Clear;
+        self->store_op               = WGPUStoreOp_Store;
+        self->stencil_load_op        = WGPULoadOp_Undefined;
+        self->stencil_store_op       = WGPUStoreOp_Undefined;
+        self->additional_usage_flags = 0;
+      #endif
+
+      return Var(true);
+    '''
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto self = loadable->cast<AttachmentInfo>();
+
+
+      // color clear value
+      unlikely (self->hasData("color_clear_value_vec") == true) {
+        auto& color_clear_vec = self->getDataRef("color_clear_value_vec").v<vector<real>>();
+        
+      #if defined(USE_VULKAN)
+        auto cv = self->clear_value;
+        cv.color = {{color_clear_vec[0], color_clear_vec[1], color_clear_vec[2], color_clear_vec[3]}};
+        self->clear_value = cv;
+      #elif defined(USE_WEB_GPU)
+        self->color_clear_value = {color_clear_vec[0], color_clear_vec[1], color_clear_vec[2], color_clear_vec[3]};
+      #endif
+      }
+
+
+      // depth clear value
+      unlikely (self->hasData("depth_clear_value") == true) {
+        auto depth_clear = self->getData("depth_clear_value", REAL(1.0));
+
+      #if defined(USE_VULKAN)
+        auto cv = self->clear_value;
+        cv.depthStencil.depth = depth_clear;
+        self->clear_value = cv;
+      #elif defined(USE_WEB_GPU)
+        self->depth_clear_value = depth_clear;
+      #endif
+      }
+
+
+      // stencil clear value
+      unlikely (self->hasData("stencil_clear_value") == true) {
+        auto stencil_clear = self->getData("stencil_clear_value", (uint)0);
+        
+      #if defined(USE_VULKAN)
+        auto cv = self->clear_value;
+        cv.depthStencil.stencil = stencil_clear;
+        self->clear_value = cv;
+      #elif defined(USE_WEB_GPU)
+        self->stencil_clear_value = stencil_clear;
+      #endif
+      }
+
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<AttachmentInfo>();
+              self->name = content->asValue<string>();
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'width'
+      short_name: 'wid'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto width = content->asValue<uint>();
+
+              auto self = loadable->cast<AttachmentInfo>();
+              self->width = width;
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'height'
+      short_name: 'hei'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto height = content->asValue<uint>();
+
+              auto self = loadable->cast<AttachmentInfo>();
+              self->height = height;
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'format'
+      short_name: 'fmt'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto fmt_str = content->asValue<string>();
+              Util::upper(fmt_str);
+
+              #if defined(USE_VULKAN)
+              auto fmt_p = Util::find(VulkanHelper::format_enm_map(), fmt_str);
+              unlikely (fmt_p == null) {
+                CNT_LOG_ERR(content, "unknown VulkanHelper::Format --- %s", fmt_str.c_str());
+                return Var(false);
+              }
+              #elif defined(USE_WEB_GPU)
+              auto fmt_p = Util::find(WebGpuHelper::textureformat_enm_map(), fmt_str);
+              unlikely (fmt_p == null) {
+                CNT_LOG_ERR(content, "unknown WebGpuHelper::TextureFormat --- %s", fmt_str.c_str());
+                return Var(false);
+              }
+              #endif
+
+              auto self = loadable->cast<AttachmentInfo>();
+              #if defined(USE_VULKAN)
+                self->desc.format = *fmt_p;
+              #elif defined(USE_WEB_GPU)
+                self->format = *fmt_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'sample_count'
+      short_name: 'sam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto sample_count = content->asValue<int>();
+              auto sam_str = std::to_string(sample_count) + "_BIT";
+
+              auto sam_p = Util::find(GpuHelper::samplecount_enm_map(), sam_str);
+              unlikely (sam_p == null) {
+                CNT_LOG_ERR(content, "unknown GpuHelper::SampleCountFlagBits --- %s", sam_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<AttachmentInfo>();
+              #if defined(USE_VULKAN)
+              self->desc.samples = *sam_p;
+              #elif defined(USE_WEB_GPU)
+              self->samples = *sam_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'load_op'
+      short_name: 'lop'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto lop_str = content->asValue<string>();
+              Util::upper(lop_str);
+
+              auto lop_p = Util::find(GpuHelper::attachmentloadop_enm_map(), lop_str);
+              unlikely (lop_p == null) {
+                CNT_LOG_ERR(content, "unknown GpuHelper::AttachmentLoadOp --- %s", lop_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<AttachmentInfo>();
+              #if defined(USE_VULKAN)
+                self->desc.loadOp = *lop_p;
+              #elif defined(USE_WEB_GPU)
+                self->load_op = *lop_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'store_op'
+      short_name: 'sop'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto sop_str = content->asValue<string>();
+              Util::upper(sop_str);
+
+              auto sop_p = Util::find(GpuHelper::attachmentstoreop_enm_map(), sop_str);
+              unlikely (sop_p == null) {
+                CNT_LOG_ERR(content, "unknown GpuHelper::AttachmentStoreOp --- %s", sop_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<AttachmentInfo>();
+              #if defined(USE_VULKAN)
+                self->desc.storeOp = *sop_p;
+              #elif defined(USE_WEB_GPU)
+                self->store_op = *sop_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'stencil_load_op'
+      short_name: 'slo'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto slo_str = content->asValue<string>();
+              Util::upper(slo_str);
+
+              auto slo_p = Util::find(GpuHelper::attachmentloadop_enm_map(), slo_str);
+              unlikely (slo_p == null) {
+                CNT_LOG_ERR(content, "unknown GpuHelper::AttachmentLoadOp --- %s", slo_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<AttachmentInfo>();
+              #if defined(USE_VULKAN)
+                self->desc.stencilLoadOp = *slo_p;
+              #elif defined(USE_WEB_GPU)
+                self->stencil_load_op = *slo_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'stencil_store_op'
+      short_name: 'sso'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto sso_str = content->asValue<string>();
+              Util::upper(sso_str);
+
+              auto sso_p = Util::find(GpuHelper::attachmentstoreop_enm_map(), sso_str);
+              unlikely (sso_p == null) {
+                CNT_LOG_ERR(content, "unknown GpuHelper::AttachmentStoreOp --- %s", sso_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<AttachmentInfo>();
+              #if defined(USE_VULKAN)
+                self->desc.stencilStoreOp = *sso_p;
+              #elif defined(USE_WEB_GPU)
+                self->stencil_store_op = *sso_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'additional_usage_flags'
+      short_name: 'usf'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count:  0
+          max_count: -1
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto usg_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(usg_str);
+
+                      auto usg_p = Util::find(GpuHelper::imageusageflags_enm_map(), usg_str);
+                      unlikely (usg_p == null) {
+                        LOG_ERR("unknown GpuHelper::ImageUsageFlags --- %s", usg_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<AttachmentInfo>();
+                      self->additional_usage_flags = self->additional_usage_flags | *usg_p;
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'additional_aspect_flags'
+      short_name: 'asf'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count:  0
+          max_count: -1
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      #if defined(USE_VULKAN)
+                      auto asp_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(asp_str);
+
+                      auto asp_p = Util::find(VulkanHelper::imageaspectflags_enm_map(), asp_str);
+                      unlikely (asp_p == null) {
+                        LOG_ERR("unknown VulkanHelper::ImageAspectFlags --- %s", asp_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<AttachmentInfo>();
+                      self->additional_aspect_flags = self->additional_aspect_flags | *asp_p;
+                      #endif  // if defined(USE_VULKAN)
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'color_clear_value'
+      short_name: 'ccv'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 4
+          max_count: 4
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'number'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<AttachmentInfo>();
+                      unlikely (self->hasData("color_clear_value_vec") == false)
+                        self->setData("color_clear_value_vec", vector<real>{});
+
+                      auto& color_clear_value_vec = self->getDataRef("color_clear_value_vec").v<vector<real>>();
+
+                      auto value = content->cast<Value>()->var().as<real>();
+                      color_clear_value_vec.push_back(value);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'depth_clear_value'
+      short_name: 'dcv'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<AttachmentInfo>();
+
+              auto value = content->cast<Value>()->var().as<real>();
+              self->setData("depth_clear_value", value);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'stencil_clear_value'
+      short_name: 'scv'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<AttachmentInfo>();
+
+              auto value = content->cast<Value>()->var().as<uint>();
+              self->setData("stencil_clear_value", value);
+
+              return Var(true);
+            '''

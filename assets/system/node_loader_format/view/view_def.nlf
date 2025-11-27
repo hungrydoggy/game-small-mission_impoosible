@@ -1,0 +1,112 @@
+ObjectFormat:
+  full_name: 'ViewDef'
+  short_name: 'View'
+  groups: ['ViewDefGroup', 'ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <view/view_def.h>
+    '''
+  loadable_class: 'ViewDef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'mesh_path'
+      short_name: 'msh'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ViewDef>();
+              self->mesh_path(content->resolveFilePath(content->asValue<string>()));
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'texture_paths'
+      short_name: 'tex'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<ViewDef>();
+                      self->texture_paths().push_back(content->resolveFilePath(content->asValue<string>()));
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'samplers'
+      short_name: 'sam'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'Sampler'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto sam = ctx->loadSubNodeAs<Sampler>(node, content);
+                      unlikely (sam == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<ViewDef>();
+                      self->sampler_keys().push_back({
+                          sam->mag_filter(),
+                          sam->min_filter(),
+                          sam->wrap_s    (),
+                          sam->wrap_t    (),
+                          sam->mip_levels(),
+                      });
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'material'
+      short_name: 'mat'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ViewDef>();
+              self->material_reg(StringRegistry::default_registry().lookUp(content->asValue<string>()));
+              return Var(true);
+            '''

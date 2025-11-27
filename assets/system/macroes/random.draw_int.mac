@@ -1,0 +1,59 @@
+MacroFormat:
+  full_name: 'Random.drawInt'
+  short_name: 'rand.drawInt'
+  include_part: '{#include <util/random.h>'
+  formats:
+    - SequenceFormat:
+      min_count: 0
+      max_count: 2
+      elements:
+        - ElementFormat:
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = dpc<Macro>(loadable);
+                  self->params.add(content);
+                  return Var(true);
+                '''
+
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      int min_v =   0;
+      int max_v = 100;
+      switch (mac_params.size()) {
+        case 0:
+          break;
+
+        case 1:
+          max_v = mac_params.get(0)->asValue<int>();
+          break;
+
+        case 2:
+          min_v = mac_params.get(0)->asValue<int>();
+          max_v = mac_params.get(1)->asValue<int>();
+          break;
+
+        default:
+          CNT_LOG_ERR(content, "you cannot be here");
+          return null_var;
+      }
+
+      return Var(make_shared<Value>(Var(DefaultRandomPocket::draw(min_v, max_v)), content));
+    '''
+
+

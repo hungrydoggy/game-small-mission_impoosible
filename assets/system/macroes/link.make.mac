@@ -1,0 +1,80 @@
+MacroFormat:
+  full_name: 'Link.make'
+  short_name: 'lnk.make'
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'path'
+          short_name: 'pth'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'additional_map'
+          short_name: 'add'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Map'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(1, content);
+                  return Var(true);
+                '''
+    - ValueFormat:
+      type: 'Value'
+      sub_type: 'string'
+      on_load:
+        '''{(
+              FormatContext* ctx,
+              shared_ptr<NodeLoadable> loadable,
+              shared_ptr<Node> node,
+              shared_ptr<Content> content
+            )
+
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+      auto path    = mac_params.get(0)->asValue<string>();
+      auto add_map = dpc<Map>(mac_params.get(1));
+
+      auto result =
+          make_shared<Link>(
+            path,
+            add_map,
+            content->file_path(),
+            content->line_in_file(),
+            content->column_in_file()
+          );
+
+      return Var(result);
+    '''

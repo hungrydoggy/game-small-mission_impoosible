@@ -1,0 +1,82 @@
+SequenceFormat:
+  min_count: 3
+  max_count: 4
+  include_part:
+    '''{
+      #include <util/quaternion.h>
+      #include <util/vector3.h>
+    '''
+  loadable_class: 'NodeLoadable'
+  elements:
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto value = Var(Vector3());
+              value.v<Vector3>().x(content->cast<Value>()->var().as<real>());
+
+              ctx->setData("quaternion.vec3", value);
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& value = ctx->getDataRef("quaternion.vec3");
+              value.v<Vector3>().y(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& vec3 = ctx->getDataRef("quaternion.vec3").v<Vector3>();
+              vec3.z(content->cast<Value>()->var().as<real>());
+
+              ctx->setData("quaternion.val", Var(Quaternion(vec3 * math::kDeg2RadFactor)));
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& vec3 = ctx->getData("quaternion.vec3").v<Vector3>();
+              ctx->setData("quaternion.val", Var(Quaternion(vec3.x(), vec3.y(), vec3.z(), content->cast<Value>()->var().as<real>())));
+              return Var(true);
+            '''

@@ -1,0 +1,21 @@
+GpuTaskRunner:
+  cls: GameTaskRunner
+  ref:
+    'kMaxObjectCount':
+      '$kMaxObjectCount' : {'!*':[256, 10]}
+  dat:
+    'kMaxObjectCount': '$kMaxObjectCount'
+    
+  tsk:
+    - GpuTaskItem:
+      nam: 'batch'
+      tsd: '@gpu_tasks/game/batch.gtd'
+    - GpuTaskItem:
+      nam: 'opaque'
+      tsd: '@gpu_tasks/game/opaque.gtd'
+    - GpuTaskItem:
+      nam: 'transparent'
+      tsd: '@gpu_tasks/game/transparent.gtd'
+    - GpuTaskItem:
+      nam: 'to_swapchain'
+      tsd: '@gpu_tasks/game/to_swapchain.gtd'

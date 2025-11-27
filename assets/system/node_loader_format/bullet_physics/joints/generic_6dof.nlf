@@ -1,0 +1,133 @@
+ObjectFormat:
+  full_name: 'BulletJointInfo_General6DOF'
+  short_name: 'BulletJointGeneral6DOF'
+  aliases: ['BulletGeneral6DOF']
+  groups: ['PhysicsJointGroup', 'BulletJointGroup']
+  include_part:
+    '''{
+      #include <physics/bullet/joint/_generic_6dof.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>
+    '''
+  loadable_class: 'BulletJointInfo_General6DOF'
+  attributes:
+    - AttributeFormat:
+      full_name: 'disable_collisions_between_linked_bodies'
+      short_name: 'dcl'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletJointInfo_General6DOF>();
+              self->disable_collisions_between_linked_bodies = content->asValue<bool>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'attachment_point'
+      short_name: 'atp'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'BulletJointAttachmentPointGroup'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto atp = ctx->loadSubNodeAs<BulletJointAttachmentPoint>(node, content);
+              unlikely (atp == null)
+                return Var(false);
+
+              auto self = loadable->cast<BulletJointInfo_General6DOF>();
+              self->attachment_point = atp;
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'linear_lower_limit'
+      short_name: 'lll'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletJointInfo_General6DOF>();
+              auto& lll = ctx->getData("vector3.val").v<Vector3>();
+              BulletWrapper::vector3ToBtVector3(lll, self->linear_lower_limit);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'linear_upper_limit'
+      short_name: 'lul'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletJointInfo_General6DOF>();
+              auto& lul = ctx->getData("vector3.val").v<Vector3>();
+              BulletWrapper::vector3ToBtVector3(lul, self->linear_upper_limit);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'angular_lower_limit'
+      short_name: 'all'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletJointInfo_General6DOF>();
+              auto& all = ctx->getData("vector3.val").v<Vector3>();
+              BulletWrapper::vector3ToBtVector3(all, self->angular_lower_limit);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'angular_upper_limit'
+      short_name: 'aul'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletJointInfo_General6DOF>();
+              auto& aul = ctx->getData("vector3.val").v<Vector3>();
+              BulletWrapper::vector3ToBtVector3(aul, self->angular_upper_limit);
+              return Var(true);
+            '''

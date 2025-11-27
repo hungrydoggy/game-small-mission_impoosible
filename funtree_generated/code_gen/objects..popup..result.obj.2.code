@@ -1,0 +1,22 @@
+auto loadable = params[0].as<NodeLoadable*>();  auto rank_items = params[1].as<vector<RankItem>*>();  auto my_score = params[2].as<int>();  
+
+auto self = loadable->cast<GameComponent>();
+
+stringstream ss;
+likely (rank_items != null) {
+  for (auto& itm : *rank_items)
+    ss << itm.score << endl;
+}
+self->findByNamePath<GameObject>("./content/txt.rank.val")->setText(ss.str());
+
+auto highlight = self->findByNamePath("./content/highlight");
+highlight->is_drawable_self(false);
+likely (rank_items != null) {
+  for (int ri=0; ri<rank_items->size(); ++ri) {
+    unlikely ((*rank_items)[ri].score == my_score) {
+      highlight->callFunc("setPos", {Var(ri)});
+      break;
+    }
+  }
+}
+return null_var;

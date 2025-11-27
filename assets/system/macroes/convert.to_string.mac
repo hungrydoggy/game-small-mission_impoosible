@@ -1,0 +1,59 @@
+MacroFormat:
+  full_name: 'Convert.toString'
+  short_name: 'conv.toString'
+  aliases: ['toString', 'toStr']
+  include_part: '{#include <util/util.h>'
+  formats:
+    - ValueFormat:
+      type: 'Value'
+      sub_type: 'number'
+      on_load:
+        '''{(
+              FormatContext* ctx,
+              shared_ptr<NodeLoadable> loadable,
+              shared_ptr<Node> node,
+              shared_ptr<Content> content
+            )
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+        '''
+    - ValueFormat:
+      type: 'Value'
+      sub_type: 'string'
+      on_load:
+        '''{(
+              FormatContext* ctx,
+              shared_ptr<NodeLoadable> loadable,
+              shared_ptr<Node> node,
+              shared_ptr<Content> content
+            )
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      auto& v = mac_params.get(0)->cast<Value>()->var();
+
+      likely (v.isString() == true)
+        return Var(make_shared<Value>(Var(v.as<string>()), content));
+
+      likely (v.isInteger() == true)
+        return Var(make_shared<Value>(Var(std::to_string(v.as<int64>())), content));
+
+      likely (v.isReal() == true)
+        return Var(make_shared<Value>(Var(std::to_string(v.as<double>())), content));
+
+      CNT_LOG_ERR(content, "you cannot be here");
+      return null_var;
+    '''
+
+

@@ -1,0 +1,88 @@
+ObjectFormat:
+  full_name: 'BulletPhysics'
+  short_name: 'Bullet'
+  groups: ['PhysicsGroup']
+  include_part:
+    '''{
+      #include <physics/bullet/bullet_wrapper.h>
+    '''
+  loadable_class: 'BulletWrapper'
+  attributes:
+    - AttributeFormat:
+      full_name: 'game_to_physics_scale'
+      short_name: 'scl'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletWrapper>();
+              self->game_to_physics_scale(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'time_step'
+      short_name: 'stp'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletWrapper>();
+              self->time_step(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'max_sub_step'
+      short_name: 'mss'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletWrapper>();
+              self->max_sub_step(content->cast<Value>()->var().as<int>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'gravity'
+      short_name: 'gra'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletWrapper>();
+              self->info().gravity = ctx->getData("vector3.val").v<Vector3>();
+              return Var(true);
+            '''

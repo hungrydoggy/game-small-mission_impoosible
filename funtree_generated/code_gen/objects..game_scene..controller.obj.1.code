@@ -1,0 +1,4 @@
+auto self = params[0].as<GameObject*>();  
+
+Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_DOWN, KeyEventState::STATE_PRESSED});
+return null_var;

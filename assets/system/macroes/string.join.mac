@@ -1,0 +1,120 @@
+MacroFormat:
+  full_name: 'String.join'
+  short_name: 'str.join'
+  include_part:
+    '''{
+      #include <util/util.h>
+    '''
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'string_list'
+          short_name: 'stl'
+          is_essential: true
+          formats:
+            - SequenceFormat:
+              min_count:  1
+              max_count: -1
+              elements:
+                - ElementFormat:
+                  formats:
+                    - ValueFormat:
+                      type: 'Value'
+                      sub_type: 'string'
+                      on_load:
+                        '''{(
+                              FormatContext* ctx,
+                              shared_ptr<NodeLoadable> loadable,
+                              shared_ptr<Node> node,
+                              shared_ptr<Content> content
+                            )
+
+                          auto self = loadable->cast<Macro>();
+                          self->params.add(3, content);
+                          return Var(true);
+                        '''
+        - AttributeFormat:
+          full_name: 'separator'
+          short_name: 'sep'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'begin_idx'
+          short_name: 'beg'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(1, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'size'
+          short_name: 'siz'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(2, content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      // get params
+      auto sep = mac_params.get(0)->asValue<string>();
+      auto beg = KV( 0U, mac_params.get(1), template asValue<uint>());
+      auto siz = KV(~0U, mac_params.get(2), template asValue<uint>());
+
+      vector<string> string_list;
+      for (size_t mi=3; mac_params.size(); ++mi)
+        string_list.push_back(mac_params.get(mi)->asValue<string>());
+
+
+      // make result
+      string result;
+      Util::join(string_list, sep[0], result, beg, siz);
+      return Var(make_shared<Value>(Var(result), content));
+    '''

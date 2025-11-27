@@ -1,0 +1,94 @@
+'@system/node_loader_format/game_component/game_component.nlf':
+  full_name: 'Scene'
+  short_name: 'Scene'
+  aliases: ['Scn']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_item.h>
+      #include <game_component/scene/scene.h>
+      #include <game_component/game_component.h>
+      #include <physics/bullet/bullet_body.h>
+      #include <physics/bullet/bullet_shape_info.h>
+      #include <physics/bullet/bullet_shape.h>
+      #include <physics/physics.h>
+      #include <resource/audio_clip/audio_clip.h>
+      #include <resource/resource_holder.h>
+      #include <sstream>
+      #include <util/util.h>
+    '''
+  loadable_class: 'Scene'
+  attributes+:
+    - AttributeFormat:
+      full_name: 'physics'
+      short_name: 'phy'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'PhysicsGroup'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto phy = ctx->loadSubNodeAs<Physics>(node, content);
+              unlikely (phy == null)
+                return Var(false);
+
+              phy->need_debug_draw(Project::active_project()->need_physics_debug_draw());
+              phy->init();
+
+              auto self = loadable->cast<Scene>();
+              self->physics(phy);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'ambient'
+      short_name: 'amb'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/color.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<Scene>();
+              self->ambient(ctx->getData("color.val").v<Color>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'gpu_task_runner'
+      short_name: 'gtr'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'GpuTaskRunnerGroup'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto gtr = ctx->loadSubNodeAs<GpuTaskRunner>(node, content);
+              unlikely (gtr == null)
+                return Var(false);
+
+              auto self = loadable->cast<Scene>();
+              self->gpu_task_runner(gtr);
+              #endif
+
+              return Var(true);
+            '''

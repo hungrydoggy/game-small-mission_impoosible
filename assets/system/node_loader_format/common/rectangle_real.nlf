@@ -1,0 +1,79 @@
+SequenceFormat:
+  min_count: 4
+  max_count: 4
+  include_part:
+    '''{
+      #include <util/rectangle.h>
+    '''
+  loadable_class: 'NodeLoadable'
+  elements:
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto value = Var(Rectangle<real>());
+              value.v<Rectangle<real>>().x(content->cast<Value>()->var().as<real>());
+
+              ctx->setData("rectangle_real.val", value);
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& value = ctx->getDataRef("rectangle_real.val");
+              value.v<Rectangle<real>>().y(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& value = ctx->getDataRef("rectangle_real.val");
+              value.v<Rectangle<real>>().width(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& value = ctx->getDataRef("rectangle_real.val");
+              value.v<Rectangle<real>>().height(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''

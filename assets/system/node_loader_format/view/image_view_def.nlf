@@ -1,0 +1,196 @@
+ObjectFormat:
+  full_name: 'ImageViewDef'
+  short_name: 'ImageView'
+  aliases: ['Image']
+  groups: ['ViewDefGroup', 'ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <view/image_view/image_view_def.h>
+    '''
+  loadable_class: 'ImageViewDef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'mesh_path'
+      short_name: 'msh'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ImageViewDef>();
+              self->mesh_path(content->resolveFilePath(content->asValue<string>()));
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'texture_path'
+      short_name: 'tex'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ViewDef>();
+              self->texture_paths().resize(1);
+              self->texture_paths()[0] = content->resolveFilePath(content->asValue<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'sampler'
+      short_name: 'sam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'Sampler'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto sam = ctx->loadSubNodeAs<Sampler>(node, content);
+              unlikely (sam == null)
+                return Var(false);
+
+              auto self = loadable->cast<ImageViewDef>();
+              self->sampler_keys().resize(1);
+              self->sampler_keys()[0] =
+                  SamplerKey{
+                      sam->mag_filter(),
+                      sam->min_filter(),
+                      sam->wrap_s    (),
+                      sam->wrap_t    (),
+                      sam->mip_levels(),
+                  };
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'horizontal_align'
+      short_name: 'hor'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto hor_str = content->cast<Value>()->var().as<string>();
+              Util::upper(hor_str);
+              auto hor_p = Util::find(HorizontalAlign::type_enum_map(), hor_str);
+              unlikely (hor_p == null) {
+                LOG_ERR("unknown HorizontalAlign::Type --- %s", hor_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<ImageViewDef>();
+              self->build_conf()->hor_align(*hor_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'vertical_align'
+      short_name: 'ver'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto ver_str = content->cast<Value>()->var().as<string>();
+              Util::upper(ver_str);
+              auto ver_p = Util::find(VerticalAlign::type_enum_map(), ver_str);
+              unlikely (ver_p == null) {
+                LOG_ERR("unknown VerticalAlign::Type --- %s", ver_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<ImageViewDef>();
+              self->build_conf()->ver_align(*ver_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'image_size'
+      short_name: 'siz'
+      is_essential: true
+      formats:
+        - '@system/node_loader_format/common/vector2.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ImageViewDef>();
+              self->build_conf()->image_size(ctx->getData("vector2.val").v<Vector2>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'image_region'
+      short_name: 'reg'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/rectangle_uint.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ImageViewDef>();
+              self->build_conf()->image_region(ctx->getData("rectangle_uint.val").v<Rectangle<uint>>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'material'
+      short_name: 'mat'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ViewDef>();
+              self->material_reg(StringRegistry::default_registry().lookUp(content->asValue<string>()));
+              return Var(true);
+            '''

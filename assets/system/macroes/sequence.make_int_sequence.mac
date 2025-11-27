@@ -1,0 +1,107 @@
+MacroFormat:
+  full_name: 'Sequence.makeIntSequence'
+  short_name: 'seq.makeIntSeq'
+  aliases: ['seq.intSeq']
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'start'
+          short_name: 'sta'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'end'
+          short_name: 'end'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(1, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'increment'
+          short_name: 'inc'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(2, content);
+                  return Var(true);
+                '''
+    - ValueFormat:
+      type: 'Value'
+      sub_type: 'number'
+      on_load:
+        '''{(
+              FormatContext* ctx,
+              shared_ptr<NodeLoadable> loadable,
+              shared_ptr<Node> node,
+              shared_ptr<Content> content
+            )
+
+          auto self = dpc<Macro>(loadable);
+          self->params.set(1, content);
+          return Var(true);
+        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      auto sta = KV((int)0, mac_params.get(0), template asValue<int>());
+      auto end = mac_params.get(1)->asValue<int>();
+      auto inc = KV((sta<=end)? (int)1 : (int)-1, mac_params.get(2), template asValue<int>());
+
+      auto result =
+          make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+      if (sta < end) {
+        for (int v=sta; v<end; v+=inc)
+          result->add(make_shared<Value>(Var(v), content));
+      }else {
+        for (int v=sta; v>end; v+=inc)
+          result->add(make_shared<Value>(Var(v), content));
+      }
+
+      return Var(result);
+    '''

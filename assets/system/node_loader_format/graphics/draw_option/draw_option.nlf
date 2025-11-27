@@ -1,0 +1,199 @@
+ObjectFormat:
+  full_name: 'DrawOption'
+  include_part:
+    '''{
+      #include <common/draw_option/draw_option.h>
+    '''
+  loadable_class: 'DrawOption'
+  attributes:
+    - AttributeFormat:
+      full_name: 'use'
+      short_name: 'use'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto ena_typ_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(ena_typ_str);
+
+                      auto ena_typ_p = Util::find(DrawOption::str_enable_map(), ena_typ_str);
+                      unlikely (ena_typ_p == null) {
+                        LOG_ERR("unknown DrawOption::EnableType --- %s", ena_typ_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<DrawOption>();
+                      self->use(*ena_typ_p);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'unuse'
+      short_name: 'unu'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto ena_typ_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(ena_typ_str);
+
+                      auto ena_typ_p = Util::find(DrawOption::str_enable_map(), ena_typ_str);
+                      unlikely (ena_typ_p == null) {
+                        LOG_ERR("unknown DrawOption::EnableType --- %s", ena_typ_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<DrawOption>();
+                      self->unuse(*ena_typ_p);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'blend_option'
+      short_name: 'bln'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'BlendOption'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      #ifndef SERVER_ONLY
+                      auto bopt = ctx->loadSubNodeAs<BlendOptionInfo>(node, content);
+                      unlikely (bopt == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<DrawOption>();
+
+                      auto idx = self->blend_option.size();
+                      self->blend_option.resize(idx + 1);
+
+                      self->blend_option.setFactors(
+                          idx,
+                          bopt->src_factor,
+                          bopt->dst_factor,
+                          bopt->src_alpha_factor,
+                          bopt->dst_alpha_factor
+                      );
+                      self->blend_option.setEquation(idx, bopt->equation, bopt->alpha_equation);
+                      self->blend_option.setMask(idx, bopt->mask);
+
+                      #endif
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'depth_option'
+      short_name: 'dpt'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'DepthOption'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto dopt = ctx->loadSubNodeAs<DepthOption>(node, content);
+              unlikely (dopt == null)
+                return Var(false);
+
+              auto self = loadable->cast<DrawOption>();
+              self->depth_option = *dopt;
+              self->use(DrawOption::EnableType::DEPTH_TEST);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'stencil_option'
+      short_name: 'stc'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'StencilOption'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto sopt = ctx->loadSubNodeAs<StencilOption>(node, content);
+              unlikely (sopt == null)
+                return Var(false);
+
+              auto self = loadable->cast<DrawOption>();
+              self->stencil_option = *sopt;
+              self->use(DrawOption::EnableType::STENCIL_TEST);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'back_stencil_option'
+      short_name: 'bst'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'StencilOption'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto sopt = ctx->loadSubNodeAs<StencilOption>(node, content);
+              unlikely (sopt == null)
+                return Var(false);
+
+              auto self = loadable->cast<DrawOption>();
+              self->back_stencil_option = *sopt;
+              self->use(DrawOption::EnableType::STENCIL_TEST);
+
+              return Var(true);
+            '''

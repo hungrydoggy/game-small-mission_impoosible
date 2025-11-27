@@ -1,0 +1,35 @@
+MacroFormat:
+  full_name: 'Math.cos'
+  short_name: 'math.cos'
+  aliases: ['cos']
+  include_part: '{#include <util/math.h>'
+  formats:
+    - ValueFormat:
+      type: 'Value'
+      sub_type: 'number'
+      on_load:
+        '''{(
+              FormatContext* ctx,
+              shared_ptr<NodeLoadable> loadable,
+              shared_ptr<Node> node,
+              shared_ptr<Content> content
+            )
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      auto v = mac_params.get(0)->asValue<double>();
+
+      return Var(make_shared<Value>(Var(math::cos(v)), content));
+    '''
+
+

@@ -1,0 +1,53 @@
+ObjectFormat:
+  full_name: 'GameBaseAxis'
+  include_part:
+    '''{
+      #include <_game_base_axis.h>
+    '''
+  loadable_class: 'GameBaseAxis'
+  attributes:
+    - AttributeFormat:
+      full_name: 'base_axis'
+      short_name: 'axs'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              string axs_str = content->cast<Value>()->var().as<string>();
+              Util::upper(axs_str);
+
+              auto axis_p = Util::find(TypesUtil::axis_enm_map, axs_str);
+              auto self = loadable->cast<GameBaseAxis>();
+              self->base_axis = (axis_p != null)? *axis_p : Axis::NONE;
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'axis_size'
+      short_name: 'siz'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameBaseAxis>();
+              self->axis_size = content->cast<Value>()->var().as<uint>();
+
+              return Var(true);
+            '''

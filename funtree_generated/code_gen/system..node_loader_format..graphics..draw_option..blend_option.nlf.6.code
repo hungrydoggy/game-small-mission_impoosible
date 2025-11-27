@@ -1,0 +1,23 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+#ifndef SERVER_ONLY
+auto factor_str = content->cast<Value>()->var().as<string>();
+Util::upper(factor_str);
+
+auto factor_p = Util::find(BlendOption::str_factor_map(), factor_str);
+unlikely (factor_p == null) {
+  LOG_ERR("unknown BlendOption::FactorType --- %s", factor_str.c_str());
+  return Var(false);
+}
+auto self = loadable->cast<BlendOptionInfo>();
+self->dst_alpha_factor = *factor_p;
+#endif
+
+return Var(true);
+return null_var;

@@ -1,0 +1,155 @@
+ObjectFormat:
+  full_name: 'GpuTaskDef'
+  guard_head: '#ifndef SERVER_ONLY'
+  guard_tail: '#endif'
+  include_part:
+    '''{
+      #include <gpu_task/gpu_task_def.h>
+    '''
+  loadable_class: 'GpuTaskDef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GpuTaskDef>();
+
+              auto name = content->cast<Value>()->var().as<string>();
+              self->name(name);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'cmd_run_type'
+      short_name: 'crt'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto crt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(crt_str);
+
+              auto crt_p = Util::find(GpuCmdRunTypeUtil::cmdruntype_enm_map(), crt_str);
+              unlikely (crt_p == null) {
+                CNT_LOG_ERR(content, "unknown GpuCmdRunTypeUtil::GpuCmdRunType --- %s", crt_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<GpuTaskDef>();
+              self->cmd_run_type(*crt_p);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'shader_data_bind_defs'
+      short_name: 'dbl'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'ShaderDataBindDef'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto dbl = ctx->loadSubNodeAs<ShaderDataBindDef>(node, content);
+                      unlikely (dbl == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<GpuTaskDef>();
+                      self->shader_data_bind_defs().push_back(*dbl);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'config'
+      short_name: 'cnf'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'GpuTaskConfigGroup'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GpuTaskDef>();
+
+              auto cnf = ctx->loadSubNode(node, content);
+
+              auto grp_cnf = dpc<GraphicsConfig>(cnf);
+              likely (grp_cnf != null) {
+                self->graphics_config(grp_cnf);
+                return Var(true);
+              }
+
+              auto com_cnf = dpc<ComputeConfig>(cnf);
+              likely (com_cnf != null) {
+                self->compute_config(com_cnf);
+                return Var(true);
+              }
+
+              CNT_LOG_ERR(content, "GpuTaskDef.config must be one of (ComputeConfig | GraphicsConfig)");
+              return Var(false);
+            '''
+    - AttributeFormat:
+      full_name: 'extra_vmp_alloc_items'
+      short_name: 'eva'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'ExtraVmpAllocItem'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto eva = ctx->loadSubNodeAs<ExtraVmpAllocItem>(node, content);
+                      unlikely (eva == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<GpuTaskDef>();
+                      self->extra_vmp_alloc_items().push_back(*eva);
+                    '''

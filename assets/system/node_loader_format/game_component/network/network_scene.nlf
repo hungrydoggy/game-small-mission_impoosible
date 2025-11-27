@@ -1,0 +1,40 @@
+'@system/node_loader_format/game_component/scene.nlf':
+  full_name: 'NetworkScene'
+  short_name: 'NetScene'
+  aliases: ['NetScn']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_item.h>
+      #include <game_component/scene/network_scene.h>
+      #include <game_component/game_component.h>
+      #include <physics/bullet/bullet_body.h>
+      #include <physics/bullet/bullet_shape_info.h>
+      #include <physics/bullet/bullet_shape.h>
+      #include <resource/audio_clip/audio_clip.h>
+      #include <resource/resource_holder.h>
+      #include <sstream>
+      #include <util/util.h>
+    '''
+  loadable_class: 'NetworkScene'
+  attributes+:
+    - AttributeFormat:
+      full_name: 'is_server'
+      short_name: 'srv'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<NetworkScene>();
+              self->is_server(content->asValue<bool>());
+              return Var(true);
+            '''

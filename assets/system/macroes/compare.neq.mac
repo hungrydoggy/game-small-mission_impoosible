@@ -1,0 +1,59 @@
+MacroFormat:
+  full_name: 'Compare.neq'
+  short_name: 'neq'
+  aliases: ['\!=']
+  formats:
+    - SequenceFormat:
+      min_count: 2
+      max_count: 2
+      elements:
+        - ElementFormat:
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = dpc<Macro>(loadable);
+                  self->params.add(content);
+                  return Var(true);
+                '''
+    - SequenceFormat:
+      min_count: 2
+      max_count: 2
+      elements:
+        - ElementFormat:
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = dpc<Macro>(loadable);
+                  self->params.add(content);
+                  return Var(true);
+                '''
+
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+      Var& left  = mac_params.get(0)->cast<Value>()->var();
+      Var& right = mac_params.get(1)->cast<Value>()->var();
+
+      return Var(make_shared<Value>(left != right, content));
+    '''

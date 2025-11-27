@@ -1,0 +1,105 @@
+ObjectFormat:
+  full_name: 'Action.PlaySound'
+  short_name: 'PlaySound'
+  groups: ['ActionGroup']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_factory.h>
+      #include <audio/audio_source.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      al->action = action::PlaySound(
+          al->getData("target_path", "."),
+          al->getData("sound_path" , ""),
+          al->getData("volume"     , REAL(1.0)),
+          al->getData("mode"       , AudioSource::Mode::FORWARD)
+      );
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'target_path'
+      short_name: 'tar'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("target_path", content->cast<Value>()->var());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'sound_path'
+      short_name: 'pth'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("sound_path", content->resolveFilePath(content->asValue<string>()));
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'volume'
+      short_name: 'vol'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("volume", content->cast<Value>()->var());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'mode'
+      short_name: 'mod'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              auto mod_str = content->cast<Value>()->var().as<string>();
+              self->setData("mode", AudioSource::getModeFromStr(mod_str));
+              return Var(true);
+            '''

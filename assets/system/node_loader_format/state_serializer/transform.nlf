@@ -1,0 +1,58 @@
+ObjectFormat:
+  full_name: 'TransformStateSerializer'
+  short_name: 'TransformSttSer'
+  groups: ['StateSerializerGroup']
+  include_part:
+    '''{
+      #include <common/state_serializer/state_serializer.h>
+    '''
+  loadable_class: 'StateSerializerNodeLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+      auto self = loadable->cast<StateSerializerNodeLoadable>();
+
+      self->on_serialize_func =
+          [](GameComponent* cmp, string const& name, vector<byte>& buffer) {
+            Serializer::serializeByAuto(cmp->position(), buffer);
+            Serializer::serializeByAuto(cmp->rotation(), buffer);
+            Serializer::serializeByAuto(cmp->scale   (), buffer);
+
+            return true;
+          };
+
+      self->on_deserialize_func =
+          [](GameComponent* cmp, string const& name, byte const*& buffer) {
+            { Vector3    v; Serializer::deserializeByAuto(v, buffer); cmp->position(v); }
+            { Quaternion v; Serializer::deserializeByAuto(v, buffer); cmp->rotation(v); }
+            { Vector3    v; Serializer::deserializeByAuto(v, buffer); cmp->scale   (v); }
+
+            return true;
+          };
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              self->name = content->asValue<string>();
+              return Var(true);
+            '''

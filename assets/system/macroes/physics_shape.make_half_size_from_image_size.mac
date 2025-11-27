@@ -1,0 +1,103 @@
+MacroFormat:
+  full_name: 'PhysicsShape.makeHalfSizeFromImageSize'
+  short_name: 'Shape.makeHalfSizeFromImageSize'
+  aliases: ['shp.hszFromImg']
+  include_part:
+    '''{
+      #include <game_component/object/game_object.h>
+      #include <view/image_view/image_view_def.h>
+      #include <view/nine_patch_view/nine_patch_view_def.h>
+      #include <view/view.h>
+    '''
+  formats:
+    - ValueFormat:
+      type: 'Value'
+      sub_type: 'string'
+      on_load:
+        '''{(
+              FormatContext* ctx,
+              shared_ptr<NodeLoadable> loadable,
+              shared_ptr<Node> node,
+              shared_ptr<Content> content
+            )
+
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+      auto target_path = mac_params.get(0)->asValue<string>();
+
+
+      // make MacroOnLoad
+      auto macro_on_load =
+          make_shared<MacroOnLoad>(
+            [content, target_path](LoaderContext& ctx, shared_ptr<Node> const& node)->bool {
+              return true;
+            },
+            [content, target_path](LoaderContext& ctx, shared_ptr<Node> const& node)->sp<Content> {
+              // ready
+              auto owner_node = node->findAncestorNodeByObjectName("GameComponentGroup", ctx.node_loader_bundle);
+              unlikely (owner_node == null) {
+                CNT_LOG_ERR(content, "this macro must have an owner component (GameComponentGroup in its ancestry).");
+                return null;
+              }
+
+              auto cmp = dpc<GameComponent>(ctx.node_loadable_map->at(owner_node.get()));
+              unlikely (cmp == null) {
+                CNT_LOG_ERR(content, "owner component loadable is null");
+                return null;
+              }
+
+              auto target = cmp->findByNamePath<GameObject>(target_path);
+              unlikely (target == null) {
+                CNT_LOG_ERR(content, "cannot find Object with target path --- %s", target_path.c_str());
+                return null;
+              }
+
+              auto view = target->getTrait<View>("view");
+              unlikely (view == null) {
+                CNT_LOG_ERR(content, "Object has no view --- %s", target_path.c_str());
+                return null;
+              }
+
+              // case: Image
+              auto img = view->def<ImageViewDef>();
+              likely (img != null) {
+                auto result =
+                    make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+                auto& siz = img->image_size();
+                result->add(make_shared<Value>(Var(siz.x() * REAL(0.5)), content));
+                result->add(make_shared<Value>(Var(siz.y() * REAL(0.5)), content));
+                result->add(make_shared<Value>(Var(          REAL(0.1)), content));
+                return result;
+              }
+
+              // case: NinePatch
+              auto ninpch = view->def<NinePatchViewDef>();
+              likely (ninpch != null) {
+                auto result =
+                    make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+                auto& siz = ninpch->image_size();
+                result->add(make_shared<Value>(Var(siz.x() * REAL(0.5)), content));
+                result->add(make_shared<Value>(Var(siz.y() * REAL(0.5)), content));
+                result->add(make_shared<Value>(Var(          REAL(0.1)), content));
+                return result;
+              }
+
+              return null;
+            },
+            content->file_path(),
+            content->line_in_file(),
+            content->column_in_file()
+          );
+
+      return Var(macro_on_load);
+    '''

@@ -1,0 +1,69 @@
+auto loadable = params[0].as<NodeLoadable*>();  auto my_name = params[1].as<string>();  auto my_score = params[2].as<int>();  
+
+auto self = loadable->cast<Scene>();
+
+auto result_popup = self->findByNamePath("./*/ui/popup.result");
+unlikely (result_popup == null)
+  return null_var;
+
+
+App::project().pushTask<vector<RankItem>>(
+    [my_name, my_score](auto result) {
+      auto& rank_items = result->v;
+
+      // load rank_items
+      auto rank_sav_path = "saves/rank.sav";
+      likely (File::exists(rank_sav_path) == true) {
+        // load
+        shared_ptr<paw_print::Cursor> root;
+        {
+          string content;
+          File::readAll(rank_sav_path, content);
+
+          auto paw = paw_print::PawPrintLoader::loadText(rank_sav_path, content.c_str());
+          root = paw_print::PawPrint::root(paw);
+        }
+
+        // parse
+        for (int ei=0; ei<root->size(); ++ei) {
+          auto e = root->getElem(ei);
+          auto name  = e->getElem("name" )->get("");
+          auto score = e->getElem("score")->get(0);
+
+          rank_items.push_back({name, score});
+        }
+      }
+
+
+      // add my score and sort
+      rank_items.push_back({my_name, my_score});
+      std::sort(rank_items.begin(), rank_items.end(), [](RankItem const& a, RankItem const& b) { return a.score > b.score; });
+      unlikely (rank_items.size() > 10)
+        rank_items.resize(10);
+
+
+      // save rank_items
+      {
+        auto paw = make_shared<PawPrint>("rank.sav");
+        paw->beginSequence();
+          for (auto& itm : rank_items) {
+            paw->beginMap();
+              paw->pushKey("name" );  paw->pushString(itm.name );
+              paw->pushKey("score");  paw->pushSint4B(itm.score);
+            paw->endMap();
+          }
+        paw->endSequence();
+
+        auto serialized = PawPrint::root(paw)->serialize(rank_sav_path);
+        auto content = PawPrint::root(serialized)->toString();
+        fs::create_directory(DirInfo::root_dir() + "/saves");
+        File::writeAll(rank_sav_path, content.data());
+      }
+
+    },
+    [result_popup, my_score](auto result) {
+      // update
+      result_popup->callFunc("setRank", {Var(&result->v), Var(my_score)});
+    }
+);
+return null_var;

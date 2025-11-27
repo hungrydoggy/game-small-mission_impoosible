@@ -1,0 +1,416 @@
+ObjectFormat:
+  full_name: 'BulletBody'
+  groups: ['PhysicsBodyGroup', 'ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <physics/bullet/bullet_body.h>
+      #include <physics/bullet/bullet_joint.h>
+      #include <physics/bullet/bullet_joint_info.h>
+      #include <physics/_physics_joint_item.h>
+      #include <util/vector3.h>
+    '''
+  loadable_class: 'BulletBody'
+  attributes:
+    - AttributeFormat:
+      full_name: 'mass'
+      short_name: 'mas'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_mass = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'local_inertia'
+      short_name: 'ine'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              auto& ine = ctx->getData("vector3.val").v<Vector3>();
+              BulletWrapper::vector3ToBtVector3(ine, self->bt_body_info().m_localInertia);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'linear_damping'
+      short_name: 'lid'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_linearDamping = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'angular_damping'
+      short_name: 'and'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_angularDamping = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'friction'
+      short_name: 'fri'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_friction = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'rolling_friction'
+      short_name: 'rfr'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_rollingFriction = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'restitution'
+      short_name: 'res'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_restitution = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'linear_sleeping_threshold'
+      short_name: 'lis'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_linearSleepingThreshold = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'angular_sleeping_threshold'
+      short_name: 'ans'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_angularSleepingThreshold = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'additional_damping'
+      short_name: 'add'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_additionalDamping = content->cast<Value>()->var().as<bool>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'additional_damping_factor'
+      short_name: 'adf'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_additionalDampingFactor = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'additional_linear_damping_threshold_sqr'
+      short_name: 'ald'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_additionalLinearDampingThresholdSqr = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'additional_angular_damping_threshold_sqr'
+      short_name: 'aad'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_additionalAngularDampingThresholdSqr = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'additional_angular_damping_factor'
+      short_name: 'aaf'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->bt_body_info().m_additionalAngularDampingFactor = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'collision_flags'
+      short_name: 'flg'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto flg_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(flg_str);
+
+                      auto flg_p = Util::find(BulletBody::str_collisionflags_map(), flg_str);
+                      unlikely (flg_p == null) {
+                        LOG_ERR("unknown btCollisionObject::CollisionFlags --- %s", flg_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<BulletBody>();
+                      self->collision_flags(self->collision_flags() | *flg_p);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'collision_group'
+      short_name: 'grp'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto group_name = content->cast<Value>()->var().as<string>();
+                      Util::upper(group_name);
+
+                      auto self = loadable->cast<BulletBody>();
+                      self->collision_group(self->collision_group() | BulletBody::getCollisionGroupFromStr(group_name));
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'collision_mask'
+      short_name: 'msk'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto mask_name = content->cast<Value>()->var().as<string>();
+                      Util::upper(mask_name);
+
+                      auto self = loadable->cast<BulletBody>();
+                      self->collision_mask(self->collision_mask() | BulletBody::getCollisionGroupFromStr(mask_name));
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'joint_items'
+      short_name: 'jnt'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'PhysicsJointItem'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto joint_item = ctx->loadSubNodeAs<PhysicsJointItem>(node, content);
+                      unlikely (joint_item == null)
+                        return Var(false);
+
+
+                      auto jnt = make_shared<BulletJoint>();
+                      jnt->name                    (joint_item->name                    );
+                      jnt->opposite_path           (joint_item->opposite_path           );
+                      jnt->need_register_by_default(joint_item->need_register_by_default);
+
+                      jnt->bt_joint_info(dpc<BulletJointInfo>(joint_item->joint_info));
+
+
+                      auto self = loadable->cast<BulletBody>();
+                      self->addJoint(jnt);
+                      return Var(true);
+                    '''

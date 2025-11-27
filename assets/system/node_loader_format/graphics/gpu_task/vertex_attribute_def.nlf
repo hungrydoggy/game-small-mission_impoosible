@@ -1,0 +1,129 @@
+ObjectFormat:
+  full_name: 'VertexAttributeDef'
+  short_name: 'VertexAttribute'
+  guard_head: '#ifndef SERVER_ONLY'
+  guard_tail: '#endif'
+  include_part:
+    '''{
+      #include <gpu_task/_vertex_def.h>
+    '''
+  loadable_class: 'VertexDef::AttributeDef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'usage'
+      short_name: 'usg'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VertexDef::AttributeDef>();
+              self->usage = content->cast<Value>()->var().as<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'binding'
+      short_name: 'bnd'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VertexDef::AttributeDef>();
+              self->binding = content->cast<Value>()->var().as<uint32_t>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'location'
+      short_name: 'loc'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VertexDef::AttributeDef>();
+              self->location = content->cast<Value>()->var().as<uint32_t>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'format'
+      short_name: 'fmt'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto fmt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(fmt_str);
+
+              #if defined(USE_VULKAN)
+              auto fmt_p = Util::find(VulkanHelper::format_enm_map(), fmt_str);
+              unlikely (fmt_p == null) {
+                CNT_LOG_ERR(content, "unknown VulkanHelper::Format --- %s", fmt_str.c_str());
+                return Var(false);
+              }
+              #elif defined(USE_WEB_GPU)
+              auto fmt_p = Util::find(WebGpuHelper::vertexformat_enm_map(), fmt_str);
+              unlikely (fmt_p == null) {
+                CNT_LOG_ERR(content, "unknown WebGpuHelper::VertexFormat --- %s", fmt_str.c_str());
+                return Var(false);
+              }
+              #endif
+
+              auto self = loadable->cast<VertexDef::AttributeDef>();
+              self->format = *fmt_p;
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'offset'
+      short_name: 'ofs'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VertexDef::AttributeDef>();
+              self->offset = content->cast<Value>()->var().as<uint32_t>();
+              return Var(true);
+            '''

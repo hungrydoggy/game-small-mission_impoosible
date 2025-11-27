@@ -1,0 +1,45 @@
+SequenceFormat:
+  min_count: 2
+  max_count: 2
+  include_part:
+    '''{
+      #include <util/vector2.h>
+    '''
+  loadable_class: 'NodeLoadable'
+  elements:
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto value = Var(Vector2());
+              value.v<Vector2>().x(content->cast<Value>()->var().as<real>());
+
+              ctx->setData("vector2.val", value);
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& value = ctx->getDataRef("vector2.val");
+              value.v<Vector2>().y(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''

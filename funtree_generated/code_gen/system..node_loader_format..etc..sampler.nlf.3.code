@@ -1,0 +1,16 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+string wrs_str = content->cast<Value>()->var().as<string>();
+Util::upper(wrs_str);
+
+auto wrs_p = Util::find(Sampler::wrap_enm_map(), wrs_str);
+auto self = loadable->cast<Sampler>();
+self->wrap_s((wrs_p != null)? *wrs_p : Sampler::WrapOption::CLAMP_TO_EDGE);
+return Var(true);
+return null_var;

@@ -1,0 +1,14 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto& vec3 = ctx->getDataRef("quaternion.vec3").v<Vector3>();
+vec3.z(content->cast<Value>()->var().as<real>());
+
+ctx->setData("quaternion.val", Var(Quaternion(vec3 * math::kDeg2RadFactor)));
+return Var(true);
+return null_var;

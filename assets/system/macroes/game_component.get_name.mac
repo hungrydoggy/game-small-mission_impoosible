@@ -1,0 +1,67 @@
+MacroFormat:
+  full_name: 'GameComponent.getName'
+  short_name: 'Component.getName'
+  aliases: ['cmp.nam']
+  include_part: '{#include <game_component/game_component.h>'
+  formats:
+    - ValueFormat:
+      type: 'Value'
+      sub_type: 'string'
+      on_load:
+        '''{(
+              FormatContext* ctx,
+              shared_ptr<NodeLoadable> loadable,
+              shared_ptr<Node> node,
+              shared_ptr<Content> content
+            )
+
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+      auto target_path = mac_params.get(0)->asValue<string>();
+
+
+      // make MacroOnLoad
+      auto macro_on_load =
+          make_shared<MacroOnLoad>(
+            [content](LoaderContext& ctx, shared_ptr<Node> const& node)->bool {
+              return true;
+            },
+            [content, target_path](LoaderContext& ctx, shared_ptr<Node> const& node)->sp<Content> {
+              // ready
+              auto owner_node = node->findAncestorNodeByObjectName("GameComponentGroup", ctx.node_loader_bundle);
+              unlikely (owner_node == null) {
+                CNT_LOG_ERR(content, "this macro must have an owner component (GameComponentGroup in its ancestry).");
+                return null;
+              }
+
+              auto cmp = dpc<GameComponent>(ctx.node_loadable_map->at(owner_node.get()));
+              unlikely (cmp == null) {
+                CNT_LOG_ERR(content, "owner component loadable is null");
+                return null;
+              }
+
+              auto target = cmp->findByNamePath(target_path);
+              unlikely (target == null) {
+                CNT_LOG_ERR(content, "cannot find target path --- %s", target_path.c_str());
+                return null;
+              }
+
+              return make_shared<Value>(Var(target->name()), content);
+            },
+            content->file_path(),
+            content->line_in_file(),
+            content->column_in_file()
+          );
+
+      return Var(macro_on_load);
+    '''

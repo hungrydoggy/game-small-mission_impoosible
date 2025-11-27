@@ -1,0 +1,16 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto itm = ctx->loadSubNodeAs<VATStateItem>(node, content);
+unlikely (itm == null)
+  return Var(false);
+
+auto self = loadable->cast<VATStateSelector>();
+self->addState(itm->name, itm->vat_state);
+return Var(true);
+return null_var;

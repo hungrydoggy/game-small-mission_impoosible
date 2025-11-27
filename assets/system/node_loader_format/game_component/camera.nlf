@@ -1,0 +1,70 @@
+'@system/node_loader_format/game_component/game_component.nlf':
+  full_name: 'Camera'
+  short_name: 'Camera'
+  aliases: []
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_item.h>
+      #include <game_component/camera/camera.h>
+      #include <game_component/game_component.h>
+      #include <physics/bullet/bullet_body.h>
+      #include <physics/bullet/bullet_shape_info.h>
+      #include <physics/bullet/bullet_shape.h>
+      #include <resource/audio_clip/audio_clip.h>
+      #include <resource/resource_holder.h>
+      #include <sstream>
+      #include <util/util.h>
+    '''
+  loadable_class: 'Camera'
+  attributes+:
+    - AttributeFormat:
+      full_name: 'projection'
+      short_name: 'prj'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'Projection'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto info = ctx->loadSubNodeAs<ProjectionInfo>(node, content);
+              unlikely (info == null)
+                return Var(false);
+
+              auto self = loadable->cast<Camera>();
+              if (info->need_default == true) {
+                switch (info->projection_type) {
+                  case Camera::ProjectionType::ORTHOGONAL:
+                    self->setOrthogonal(*Project::active_project());
+                    return Var(true);
+                  case Camera::ProjectionType::PERSPECTIVE:
+                    self->setPerspective(*Project::active_project());
+                    return Var(true);
+                  default:
+                    return Var(false);
+                }
+                return Var(false);
+              }
+
+              switch (info->projection_type) {
+                case Camera::ProjectionType::ORTHOGONAL:
+                  self->setOrthogonal(
+                      info->left, info->right, info->top, info->bottom,
+                      info->near_v, info->far_v);
+                  return Var(true);
+                case Camera::ProjectionType::PERSPECTIVE:
+                  self->setPerspective(
+                      info->aspect_ratio, info->fov, info->near_v, info->far_v);
+                  return Var(true);
+                default:
+                  return Var(false);
+              }
+              return Var(true);
+            '''

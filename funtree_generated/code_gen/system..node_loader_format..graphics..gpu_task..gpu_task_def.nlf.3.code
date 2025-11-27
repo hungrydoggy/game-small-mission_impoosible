@@ -1,0 +1,16 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+auto dbl = ctx->loadSubNodeAs<ShaderDataBindDef>(node, content);
+unlikely (dbl == null)
+  return Var(false);
+
+auto self = loadable->cast<GpuTaskDef>();
+self->shader_data_bind_defs().push_back(*dbl);
+
+return Var(true);
+return null_var;

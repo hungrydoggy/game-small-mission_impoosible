@@ -1,0 +1,75 @@
+MacroFormat:
+  full_name: 'Condition.if'
+  short_name: 'if'
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'if'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'bool'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'then'
+          short_name: 'thn'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'any'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(1, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'else'
+          short_name: 'els'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'any'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(2, content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+      
+      auto condition = mac_params.get(0)->cast<Value>()->var().as<bool>();
+      return Var(mac_params.get((condition == true)? 1 : 2));
+    '''

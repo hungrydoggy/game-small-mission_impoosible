@@ -1,0 +1,84 @@
+MacroFormat:
+  full_name: 'Sequence.indexOf'
+  short_name: 'seq.idx'
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'sequence'
+          short_name: 'seq'
+          is_essential: true
+          formats:
+            - SequenceFormat:
+              min_count:  0
+              max_count: -1
+              elements:
+                - ElementFormat:
+                  formats:
+                    - ValueFormat:
+                      type: 'any'
+                      on_load:
+                        '''{(
+                              FormatContext* ctx,
+                              shared_ptr<NodeLoadable> loadable,
+                              shared_ptr<Node> node,
+                              shared_ptr<Content> content
+                            )
+
+                          auto self = dpc<Macro>(loadable);
+                          self->params.add(1, content);
+                          return Var(true);
+                        '''
+        - AttributeFormat:
+          full_name: 'value'
+          short_name: 'val'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      auto& val = mac_params.get(0)->cast<Value>()->var();
+
+      for (int mi=1; mi<mac_params.size(); ++mi) {
+        unlikely (mac_params.get(mi)->cast<Value>()->var() == val)
+          return Var(make_shared<Value>(Var(mi), content));
+      }
+
+      return Var(make_shared<Value>(Var(-1), content));
+    '''

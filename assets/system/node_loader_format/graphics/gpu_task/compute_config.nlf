@@ -1,0 +1,33 @@
+ObjectFormat:
+  full_name: 'ComputeConfig'
+  groups: ['GpuTaskConfigGroup']
+  guard_head: '#ifndef SERVER_ONLY'
+  guard_tail: '#endif'
+  include_part:
+    '''{
+      #include <gpu_task/_gpu_task_def_config.h>
+    '''
+  loadable_class: 'ComputeConfig'
+  attributes:
+    - AttributeFormat:
+      full_name: 'comp_shader_path'
+      short_name: 'csh'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto value = content->resolveFilePath(content->asValue<string>());
+
+              auto self = loadable->cast<ComputeConfig>();
+              self->comp_shader(Shader::RM::load(value));
+              return Var(self->comp_shader() != null);
+            '''

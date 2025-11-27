@@ -1,0 +1,58 @@
+Obj:
+  chl:
+    - '@objects/effect/bling.piece.obj':
+      dra: false
+      nam: '0'
+      pos: [-13, -15, 0]
+      scl: [0.9, 0.9, 1]
+    - '@objects/effect/bling.piece.obj':
+      dra: false
+      nam: '1'
+      pos: [24, 22, 0]
+      scl: [0.8, 0.8, 1]
+    - '@objects/effect/bling.piece.obj':
+      dra: false
+      nam: '2'
+      pos: [-22, 20, 0]
+    - '@objects/effect/bling.piece.obj':
+      dra: false
+      nam: '3'
+      pos: [20, -20, 0]
+  acl:
+    - ActionItem:
+      nam: 'show'
+      act:
+        Parallel:
+          chl:
+            '!seq.map':
+              src: ['./0', './1', './2', './3']
+              nod:
+                Sequence:
+                  chl:
+                    - AlphaTo:
+                      dur: 0
+                      tar: '$e'
+                      val: 0
+                    - SetDrawable:
+                      tar: '$e'
+                      val: true
+
+                    - Wait:
+                      dur: {'!*':['$i', 0.15]}
+                    - PlaySprite:
+                      tar: '$e'
+                      cnt: 2
+                    - AlphaTo:
+                      dur: 0.5
+                      tar: '$e'
+                      val: 1
+
+                    - Wait:
+                      dur: 0.1
+                    - AlphaTo:
+                      dur: 0.3
+                      tar: '$e'
+                      val: 0
+                    - SetDrawable:
+                      tar: '$e'
+                      val: false

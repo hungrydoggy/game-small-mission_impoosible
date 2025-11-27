@@ -1,0 +1,54 @@
+ObjectFormat:
+  full_name: 'GpuTaskItem'
+  guard_head: '#ifndef SERVER_ONLY'
+  guard_tail: '#endif'
+  include_part:
+    '''{
+      #include <gpu_task/gpu_task_runner.h>
+    '''
+  loadable_class: 'GpuTaskRunner::TaskItem'
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GpuTaskRunner::TaskItem>();
+              self->name = content->cast<Value>()->var().as<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'task_def'
+      short_name: 'tsd'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'GpuTaskDef'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto tsd = ctx->loadSubNodeAs<GpuTaskDef>(node, content);
+              unlikely (tsd == null)
+                return Var(false);
+
+              auto self = loadable->cast<GpuTaskRunner::TaskItem>();
+              self->task_def = tsd;
+
+              return Var(true);
+            '''

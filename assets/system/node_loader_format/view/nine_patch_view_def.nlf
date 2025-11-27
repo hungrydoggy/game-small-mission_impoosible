@@ -1,0 +1,408 @@
+ObjectFormat:
+  full_name: 'NinePatchViewDef'
+  short_name: 'NinePatchView'
+  aliases: ['NinePatch']
+  groups: ['ViewDefGroup', 'ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <util/lrtb.h>
+      #include <util/rectangle.h>
+      #include <view/nine_patch_view/nine_patch_view_def.h>
+    '''
+  loadable_class: 'NinePatchViewDef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'mesh_path'
+      short_name: 'msh'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->mesh_path(content->resolveFilePath(content->asValue<string>()));
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'texture_path'
+      short_name: 'tex'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ViewDef>();
+              self->texture_paths().resize(1);
+              self->texture_paths()[0] = content->resolveFilePath(content->asValue<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'sampler'
+      short_name: 'sam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'Sampler'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto sam = ctx->loadSubNodeAs<Sampler>(node, content);
+              unlikely (sam == null)
+                return Var(false);
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->sampler_keys().resize(1);
+              self->sampler_keys()[0] =
+                  SamplerKey{
+                      sam->mag_filter(),
+                      sam->min_filter(),
+                      sam->wrap_s    (),
+                      sam->wrap_t    (),
+                      sam->mip_levels(),
+                  };
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'lrtb_size'
+      short_name: 'lrt'
+      is_essential: true
+      formats:
+        - '@system/node_loader_format/common/lrtb_uint.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              auto& v = ctx->getDataRef("lrtb_uint.val").v<Lrtb<uint>>();
+              self->build_conf()->l_width (v.l());
+              self->build_conf()->r_width (v.r());
+              self->build_conf()->t_height(v.t());
+              self->build_conf()->b_height(v.b());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'l_ver_stretch_option'
+      short_name: 'lvs'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto opt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(opt_str);
+              auto opt_p = Util::find(NinePatchViewDef::stretch_enm_map(), opt_str);
+              unlikely (opt_p == null) {
+                LOG_ERR("unknown NinePatchViewDef::StretchOption --- %s", opt_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->l_ver_stretch_option(*opt_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'r_ver_stretch_option'
+      short_name: 'rvs'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto opt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(opt_str);
+              auto opt_p = Util::find(NinePatchViewDef::stretch_enm_map(), opt_str);
+              unlikely (opt_p == null) {
+                LOG_ERR("unknown NinePatchViewDef::StretchOption --- %s", opt_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->r_ver_stretch_option(*opt_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 't_hor_stretch_option'
+      short_name: 'ths'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto opt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(opt_str);
+              auto opt_p = Util::find(NinePatchViewDef::stretch_enm_map(), opt_str);
+              unlikely (opt_p == null) {
+                LOG_ERR("unknown NinePatchViewDef::StretchOption --- %s", opt_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->t_hor_stretch_option(*opt_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'b_hor_stretch_option'
+      short_name: 'bhs'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto opt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(opt_str);
+              auto opt_p = Util::find(NinePatchViewDef::stretch_enm_map(), opt_str);
+              unlikely (opt_p == null) {
+                LOG_ERR("unknown NinePatchViewDef::StretchOption --- %s", opt_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->b_hor_stretch_option(*opt_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'c_hor_stretch_option'
+      short_name: 'chs'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto opt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(opt_str);
+              auto opt_p = Util::find(NinePatchViewDef::stretch_enm_map(), opt_str);
+              unlikely (opt_p == null) {
+                LOG_ERR("unknown NinePatchViewDef::StretchOption --- %s", opt_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->c_hor_stretch_option(*opt_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'c_ver_stretch_option'
+      short_name: 'cvs'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto opt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(opt_str);
+              auto opt_p = Util::find(NinePatchViewDef::stretch_enm_map(), opt_str);
+              unlikely (opt_p == null) {
+                LOG_ERR("unknown NinePatchViewDef::StretchOption --- %s", opt_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->c_ver_stretch_option(*opt_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'horizontal_align'
+      short_name: 'hor'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto hor_str = content->cast<Value>()->var().as<string>();
+              Util::upper(hor_str);
+              auto hor_p = Util::find(HorizontalAlign::type_enum_map(), hor_str);
+              unlikely (hor_p == null) {
+                LOG_ERR("unknown HorizontalAlign::Type --- %s", hor_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->hor_align(*hor_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'vertical_align'
+      short_name: 'ver'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto ver_str = content->cast<Value>()->var().as<string>();
+              Util::upper(ver_str);
+              auto ver_p = Util::find(VerticalAlign::type_enum_map(), ver_str);
+              unlikely (ver_p == null) {
+                LOG_ERR("unknown VerticalAlign::Type --- %s", ver_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->ver_align(*ver_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'image_size'
+      short_name: 'siz'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector2.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->image_size(ctx->getData("vector2.val").v<Vector2>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'image_region'
+      short_name: 'reg'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/rectangle_uint.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->image_region(ctx->getData("rectangle_uint.val").v<Rectangle<uint>>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'hold_build_conf'
+      short_name: 'hbc'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->hold_build_conf(content->cast<Value>()->var().as<bool>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'material'
+      short_name: 'mat'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ViewDef>();
+              self->material_reg(StringRegistry::default_registry().lookUp(content->asValue<string>()));
+              return Var(true);
+            '''

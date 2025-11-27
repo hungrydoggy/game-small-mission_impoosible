@@ -1,0 +1,12 @@
+
+
+App::project().pushTask<sp<Scene>>(
+    [](auto result) {
+      result->v = fun_tree::NodeLoadable::load<Scene>("scenes/game.scn");
+    },
+    [](auto result) {
+      App::project().pushScene(result->v);
+      App::project().is_user_input_processable(true);
+    }
+);
+return null_var;

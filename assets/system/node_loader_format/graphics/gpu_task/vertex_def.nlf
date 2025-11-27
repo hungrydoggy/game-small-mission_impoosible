@@ -1,0 +1,60 @@
+ObjectFormat:
+  full_name: 'VertexDef'
+  short_name: 'Vertex'
+  guard_head: '#ifndef SERVER_ONLY'
+  guard_tail: '#endif'
+  include_part:
+    '''{
+      #include <gpu_task/_vertex_def.h>
+    '''
+  loadable_class: 'VertexDef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'vertex_bytes'
+      short_name: 'byt'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VertexDef>();
+              self->vertex_bytes(content->cast<Value>()->var().as<size_t>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'attribute_defs'
+      short_name: 'atl'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'VertexAttributeDef'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto atl = ctx->loadSubNodeAs<VertexDef::AttributeDef>(node, content);
+                      unlikely (atl == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<VertexDef>();
+                      self->att_defs().push_back(*atl);
+                      return Var(true);
+                    '''

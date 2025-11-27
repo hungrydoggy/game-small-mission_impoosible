@@ -1,0 +1,110 @@
+ObjectFormat:
+  full_name: 'Action.SetAction'
+  short_name: 'SetAction'
+  groups: ['ActionGroup']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_factory.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+
+      auto target_path = al->getData("target_path"           , "."  );
+      auto alo_path    = al->getData("action_list_owner_path", ""   );
+      auto name        = al->getData("name"                  , ""   );
+      auto need_wait   = al->getData("need_wait"             , false);
+
+      likely (alo_path == "")
+        alo_path = target_path;
+
+      al->action = action::SetAction(target_path, alo_path, name, need_wait);
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributesGroupFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'target_path'
+          short_name: 'tar'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = loadable->cast<ActionLoadable>();
+                  self->setData("target_path", content->cast<Value>()->var());
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'action_list_owner_path'
+          short_name: 'alp'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = loadable->cast<ActionLoadable>();
+                  self->setData("action_list_owner_path", content->cast<Value>()->var());
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'name'
+          short_name: 'nam'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = loadable->cast<ActionLoadable>();
+                  self->setData("name", content->cast<Value>()->var());
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'need_wait'
+          short_name: 'wai'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'bool'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = loadable->cast<ActionLoadable>();
+                  self->setData("need_wait", content->cast<Value>()->var());
+                  return Var(true);
+                '''

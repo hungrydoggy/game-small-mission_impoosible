@@ -1,0 +1,266 @@
+Scene:
+  ref:
+    'max_tile_count': {'$max_tile_count': 121}
+    'tile_w': {'$tile_w': 40}
+    'max_body_count': {'$max_body_count': 300}
+    'base_y': {'$base_y': -15}
+
+  dat:
+    'board_w'            : 5
+    'board_h'            : 5
+    'snake_speed_spt'    : 1 #0.5
+    'snake_acc_spt'      : 1.15
+    'snake_min_speed_spt': 0.15
+
+    'tile_w'        : '$tile_w'
+    'max_body_count': '$max_body_count'
+
+  fnc: '@scenes/game.scn.fnc'
+
+  nam: 'game scene'
+  gtr: '@gpu_tasks/game/runner.gtr'
+  phy:
+    Bullet:
+      scl: 0.02
+      gra: [0, -9.8, 0]
+  chl:
+    - Obj:
+      nam: 'state_obj'
+      acl:
+        - ActionItem:
+          nam: 'onDead'
+          act:
+            Sequence:
+              chl:
+                - SetInputProcessable:
+                  val: false
+                - Wait:
+                  dur: 1
+                - SetAction:
+                  tar: '/*/ui/popup.result'
+                  nam: 'show'
+    - Camera:
+      nam: 'camera'
+      pos: [0, 0, 4000]
+      prj:
+        Projection:
+          typ: 'orthogonal'
+      chl:
+        - Cmp:
+          nam:'ui'
+          pos: [0, 0, -1000]
+          chl:
+            - Obj:
+              nam: 'level'
+              pos: [-90, '!+':['$half_game_height', -22], 0]
+              scl: [0.75, 0.75, 1]
+              vie:
+                BitmapFontView:
+                  bmf: '$bmf_game_ui'
+                  txt: 'Level : '
+            - Obj:
+              nam: 'score'
+              pos: [70, '!+':['$half_game_height', -22], 0]
+              scl: [0.75, 0.75, 1]
+              vie:
+                BitmapFontView:
+                  bmf: '$bmf_game_ui'
+                  txt: 'Score : '
+
+            - Obj:
+              nam: 'press_any_key_to_start'
+              ref:
+                'spc': {'$spc': -1.07}
+                'txt': {'$txt': 'Press any key to go!'}
+              vie:
+                BitmapFontView:
+                  bmf: '$bmf_game_ui.bg'
+                  txt: '$txt'
+              chl:
+                - Obj:
+                  pos: [2, 0, -0.1]
+                  col: [0.3, 0.3, 0.3, 1]
+                  scl: [1.05, 1.05, 1]
+                  vie:
+                    BitmapFontView:
+                      bmf: '$bmf_game_ui.bg'
+                      spc: '$spc'
+                      txt: '$txt'
+                - Obj:
+                  pos: [2, -2, -0.2]
+                  col: [0.2, 0.2, 0.2, 1]
+                  scl: [1.05, 1.05, 1]
+                  vie:
+                    BitmapFontView:
+                      bmf: '$bmf_game_ui.bg'
+                      spc: '$spc'
+                      txt: '$txt'
+
+            - '@objects/popup/result.obj':
+              dra: false
+              nam: 'popup.result'
+              pos: [0, 0, 100]
+
+            - '@objects/game_scene/tab_pane.obj':
+              pos: [0, 0, 50]
+
+            #- '@objects/game_scene/controller.obj':
+            #  pos: ['!+':['$half_game_width', -130], '!+':['!-':'$half_game_height', 70], 10]
+
+
+    - Obj:
+      nam: 'bg'
+      pos: [0, 0, -1]
+      vie:
+        ImageView:
+          tex: 'textures/game_scene/bg.png'
+          siz: ['$game_width', 0]
+
+    - Cmp:
+      nam: 'tiles'
+      pos: [0, '$base_y', 0]
+      chl:
+        '!seq.map':
+          src: {'!seq.intSeq':{end: '$max_tile_count'}}
+          nod:
+            '@objects/common/selector.obj':
+              dra: false
+              chl:
+                - Obj:
+                  nam: '0'
+                  vie:
+                    ImageView:
+                      tex: 'textures/game_scene/tile.0.png'
+                      siz: ['$tile_w', 0]
+                - Obj:
+                  nam: '1'
+                  vie:
+                    ImageView:
+                      tex: 'textures/game_scene/tile.1.png'
+                      siz: ['$tile_w', 0]
+              acl:
+                - ActionItem:
+                  nam: 'show'
+                  act: '@actions/game_scene/show_tile.act'
+
+    - Cmp:
+      nam: 'walls'
+      pos: [0, '$base_y', 0.1]
+      chl:
+        '!seq.map':
+          src: {'!seq.intSeq':{end: '$max_tile_count'}}
+          nod:
+            Obj:
+              dra: false
+              vie:
+                ImageView:
+                  tex: 'textures/game_scene/wall.png'
+                  siz: ['$tile_w', 0]
+
+    - Cmp:
+      nam: 'snake'
+      pos: [0, '$base_y', 30]
+      chl:
+        - '@objects/common/selector.obj':
+          nam: 'face'
+          pos: [0, 0, 1]
+          chl:
+            '!seq.map':
+              src: ['happy', 'unhappy']
+              nod:
+                Obj:
+                  nam: '$e'
+                  pos: [0, '!*':['$tile_w', 0.17], 0]
+                  vie:
+                    ImageView:
+                      tex: {'!+':['textures/game_scene/snake.face.', $e, '.png']}
+                      siz: ['!*':['$tile_w', 0.8], 0]
+          acl:
+            - ActionItem:
+              nam: '%onInit'
+              act:
+                Repeat:
+                  cnt: -1
+                  chl:
+                    - MoveTo:
+                      tar: './happy'
+                      dur: 0.2
+                      val: {'!seq*':['!cmp.pos':'./happy', [0.5, 0.5, 1]]}
+                      int: OUT_QUAD
+                    - MoveTo:
+                      tar: './happy'
+                      dur: 0.2
+                      val: {'!cmp.pos':'./happy'}
+                      int: OUT_QUAD
+
+        - Cmp:
+          nam: 'body'
+          chl:
+            '!seq.map':
+              src: {'!seq.intSeq':{end:'$max_body_count'}}
+              nod:
+                Cmp:
+                  dra: false
+                  chl:
+                    - Obj:
+                      nam: 'img'
+                      pos: [0, '!*':['$tile_w', -0.225], 0]
+                      vie:
+                        ImageView:
+                          tex: {'!+':['textures/game_scene/snake.body.', '!toStr':{'!%':['$i', 2]}, '.png']}
+                          hor: center
+                          ver: bottom
+                          siz: ['!*':['$tile_w', 0.45], 0]
+
+    - Cmp:
+      nam: 'blings'
+      pos: [0, '$base_y', 1000]
+      chl:
+        '!seq.map':
+          src: {'!seq.intSeq':{end:10}}
+          nod:
+            '@objects/effect/bling.obj':
+              nam: {'!toStr':'$e'}
+              scl: [0.5, 0.5, 1]
+
+    - Cmp:
+      nam:'fruit'
+      pos: [0, '$base_y', 10]
+      chl:
+        - Obj:
+          nam:'apple'
+          chl:
+            - Obj:
+              nam: 'img'
+              pos: [0, 3, 0]
+              vie:
+                ImageView:
+                  tex: 'textures/game_scene/apple.png'
+                  siz: ['!*':['$tile_w', 0.8], 0]
+            - Obj:
+              nam:'txt'
+              pos: [0, -1, 0.1]
+              scl: [0.75, 0.75, 1]
+              vie:
+                BitmapFontView:
+                  bmf: '$bmf_apple_left'
+                  txt: '1'
+          acl:
+            - ActionItem:
+              nam: 'show'
+              act: '@actions/game_scene/show_item.act'
+        - Obj:
+          nam:'banana'
+          chl:
+            - Obj:
+              nam: 'img'
+              pos: [0, 3, 0]
+              vie:
+                ImageView:
+                  tex: 'textures/game_scene/banana.png'
+                  siz: ['!*':['$tile_w', 0.8], 0]
+          acl:
+            - ActionItem:
+              nam: 'show'
+              act: '@actions/game_scene/show_item.act'
+

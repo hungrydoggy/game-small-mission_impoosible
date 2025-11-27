@@ -1,0 +1,36 @@
+MacroFormat:
+  full_name: 'Sequence.pick'
+  short_name: 'seq.pick'
+  include_part: '{#include <util/random.h>'
+  formats:
+    - SequenceFormat:
+      min_count:  1
+      max_count: -1
+      elements:
+        - ElementFormat:
+          formats:
+            - ValueFormat:
+              type: 'any'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.add(content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      return Var(mac_params.get(DefaultRandomPocket::draw(0, mac_params.size()-1)));
+    '''

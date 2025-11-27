@@ -1,0 +1,79 @@
+MacroFormat:
+  full_name: 'String.format'
+  short_name: 'str.format'
+  include_part:
+    '''{
+      #include <util/util.h>
+    '''
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'format_string'
+          short_name: 'fmt'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'format_params'
+          short_name: 'par'
+          is_essential: false
+          dependencies: ['format_string']
+          formats:
+            - SequenceFormat:
+              min_count:  0
+              max_count: -1
+              elements:
+                - ElementFormat:
+                  formats:
+                    - ValueFormat:
+                      type: 'Value'
+                      sub_type: 'string'
+                      on_load:
+                        '''{(
+                              FormatContext* ctx,
+                              shared_ptr<NodeLoadable> loadable,
+                              shared_ptr<Node> node,
+                              shared_ptr<Content> content
+                            )
+
+                          auto self = loadable->cast<Macro>();
+                          self->params.add(content);
+                          return Var(true);
+                        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      // get params
+      auto fmt_str = mac_params.get(0)->asValue<string>();
+
+      vector<string> fmt_params;
+      for (size_t mi=1; mac_params.size(); ++mi)
+        fmt_params.push_back(mac_params.get(mi)->asValue<string>());
+
+
+      // make result
+      string formated;
+      Util::stringFormat(formated, fmt_str, fmt_params);
+      return Var(make_shared<Value>(Var(formated), content));
+    '''

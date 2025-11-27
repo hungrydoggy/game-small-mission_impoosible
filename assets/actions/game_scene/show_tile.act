@@ -1,0 +1,14 @@
+Sequence:
+  chl:
+    - AlphaTo:
+      dur: 0
+      val: 0
+    - SetDrawable:
+      val: true
+
+    - Parallel:
+      chl:
+        - AlphaTo:
+          dur: 0.3
+          val: 1
+          int: OUT_QUAD

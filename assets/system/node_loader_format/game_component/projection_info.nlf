@@ -1,0 +1,204 @@
+ObjectFormat:
+  full_name: 'Projection'
+  include_part:
+    '''{
+      #include <util/lrtb.h>
+      #include <game_component/camera/camera.h>
+    '''
+  loadable_class: 'ProjectionInfo'
+  attributes:
+    - AttributeFormat:
+      full_name: 'projection_type'
+      short_name: 'typ'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto typ_str = content->cast<Value>()->var().as<string>();
+              Util::upper(typ_str);
+
+              auto typ_p = Util::find(Camera::prjtyp_enm_map(), typ_str);
+              unlikely (typ_p == null) {
+                LOG_ERR("unknown Camera::ProjectionType --- %s", typ_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<ProjectionInfo>();
+              self->projection_type = *typ_p;
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'left'
+      short_name: 'lef'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ProjectionInfo>();
+              self->need_default = false;
+              self->left = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'right'
+      short_name: 'rig'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ProjectionInfo>();
+              self->need_default = false;
+              self->right = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'top'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ProjectionInfo>();
+              self->need_default = false;
+              self->top = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'bottom'
+      short_name: 'bot'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ProjectionInfo>();
+              self->need_default = false;
+              self->bottom = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'aspect_ratio'
+      short_name: 'asp'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ProjectionInfo>();
+              self->need_default = false;
+              self->aspect_ratio = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'fov'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ProjectionInfo>();
+              self->need_default = false;
+              self->fov = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'near_v'
+      short_name: 'nea'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ProjectionInfo>();
+              self->need_default = false;
+              self->near_v = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'far_v'
+      short_name: 'far'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ProjectionInfo>();
+              self->need_default = false;
+              self->far_v = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''

@@ -1,0 +1,68 @@
+ObjectFormat:
+  full_name: 'RotKeyFrame'
+  include_part:
+    '''{
+      #include <resource/bone_animation/bone_animation.h>
+      #include <util/quaternion.h>
+    '''
+  loadable_class: 'RotKeyFrame'
+  attributes:
+    - AttributeFormat:
+      full_name: 'time'
+      short_name: 'tim'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<RotKeyFrame>();
+              self->time(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'value'
+      short_name: 'val'
+      is_essential: true
+      formats:
+        - '@system/node_loader_format/common/quaternion.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<RotKeyFrame>();
+              self->value(ctx->getData("quaternion.val").v<Quaternion>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'interpolation'
+      short_name: 'int'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<RotKeyFrame>();
+              self->interpolation(Interpolation::getFromString(content->cast<Value>()->var().as<string>()));
+              return Var(true);
+            '''
+
+

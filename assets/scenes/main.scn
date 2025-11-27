@@ -1,0 +1,109 @@
+Scene:
+  nam: 'main_scene'
+  gtr: '@gpu_tasks/game/runner.gtr'
+  phy:
+    Bullet:
+      scl: 0.02
+      gra: [0, -9.8, 0]
+  chl:
+    - Obj:
+      nam: 'state_obj'
+      acl:
+        - ActionItem:
+          nam:'%onInit'
+          act:
+            '@actions/main_scene/show.act'
+
+    - Camera:
+      nam: 'camera'
+      pos: [0, 0, 4000]
+      prj:
+        Projection:
+          typ: 'orthogonal'
+
+    - Object:
+      nam: 'bg'
+      pos: [0, 0, -1]
+      vie:
+        ImageView:
+          tex: 'textures/main_scene/bg.png'
+          siz: [0, '$game_height']
+
+    - Object:
+      nam: 'title'
+      pos: [0, 120, 1]
+      col: [1, 1, 1, 0]
+      vie:
+        ImageView:
+          tex: 'textures/main_scene/txt.title.png'
+          hor: center
+          ver: center
+          siz: [350, 0]
+
+    - Object:
+      nam: 'btn.start'
+      pos: [0, -15, 1]
+      col: [1, 1, 1, 0]
+      vie:
+        ImageView:
+          tex: 'textures/main_scene/btn.start.png'
+          hor: center
+          ver: center
+          siz: [160, 0]
+      bdy:
+        BulletBody:
+          mas: 0
+          msk: ['%pick']
+      shp:
+        - BulletBox:
+          hsz: {'!shp.hszFromImg':'.'}
+      acl:
+        - ActionItem:
+          nam: '%onPointDown.1'
+          act:
+            Sequence:
+              chl:
+                - SetInputProcessable:
+                  val: false
+                - Script:
+                  scr:
+                    '''{
+                      App::project().pushTask<sp<Scene>>(
+                          [](auto result) {
+                            result->v = fun_tree::NodeLoadable::load<Scene>("scenes/game.scn");
+                          },
+                          [](auto result) {
+                            App::project().pushScene(result->v);
+                            App::project().is_user_input_processable(true);
+                          }
+                      );
+                    '''
+                - ScaleTo:
+                  dur: 0.1
+                  val: [1.1, 1.1, 1]
+                  int: OUT_QUAD
+                - ScaleTo:
+                  dur: 0.1
+                  val: [1, 1, 1]
+                  int: IN_QUAD
+
+    - Object:
+      nam: 'snake'
+      pos: [0, -140, 0.2]
+      col: [1, 1, 1, 0]
+      vie:
+        ImageView:
+          tex: 'textures/main_scene/snake.png'
+          hor: center
+          ver: center
+          siz: [200, 0]
+    - Object:
+      nam: 'snake.shadow'
+      pos: [0, -195, 0.1]
+      col: [1, 1, 1, 0]
+      vie:
+        ImageView:
+          tex: 'textures/main_scene/snake.shadow.png'
+          hor: center
+          ver: center
+          siz: [200, 0]

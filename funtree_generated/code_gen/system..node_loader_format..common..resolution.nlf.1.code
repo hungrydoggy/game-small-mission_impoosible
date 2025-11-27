@@ -1,0 +1,15 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+ctx->setData("resolution.val.w", Var(content->cast<Value>()->var().as<int>()));
+
+ctx->removeData("resolution.val.base_axis");
+ctx->removeData("resolution.val.axis_size");
+
+return Var(true);
+return null_var;

@@ -1,0 +1,11 @@
+auto loadable = params[0].as<NodeLoadable*>();  
+
+auto self = loadable->cast<Scene>();
+
+auto& gs = self->getDataRef("game_state").v<sp<GameState>>();
+auto& gd = self->getDataRef("game_data" ).v<sp<GameData >>();
+
+gd->ui_level_cmp->setText("Level: " + to_string(gs->level));
+gd->ui_score_cmp->setText("Score: " + to_string(gs->score));
+gd->ui_press_any_key_to_start_cmp->is_drawable_self(gs->play_state == PlayState::READY_TO_START);
+return null_var;

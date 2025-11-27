@@ -1,0 +1,9 @@
+BitmapFont :
+  cpd :
+    2
+  fnt :
+    "fonts/noto_sans/kr/6_bold.ttf"
+  siz :
+    15
+  chr :
+    " 0123456789AKQJ"

@@ -1,0 +1,40 @@
+'@system/node_loader_format/game_component/game_object.nlf':
+  full_name: 'NetworkObject'
+  short_name: 'NetObject'
+  aliases: ['NetObj']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_item.h>
+      #include <game_component/object/network_object.h>
+      #include <physics/bullet/bullet_body.h>
+      #include <physics/bullet/bullet_shape_info.h>
+      #include <physics/bullet/bullet_shape.h>
+      #include <resource/audio_clip/audio_clip.h>
+      #include <resource/resource_holder.h>
+      #include <sstream>
+      #include <util/util.h>
+    '''
+  loadable_class: 'NetworkObject'
+  attributes+:
+    - AttributeFormat:
+      full_name: 'synced_manager_name'
+      short_name: 'mnm'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<NetworkObject>();
+              self->synced_manager_name(content->asValue<string>());
+
+              return Var(true);
+            '''

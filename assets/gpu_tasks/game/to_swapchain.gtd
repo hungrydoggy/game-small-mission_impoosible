@@ -1,0 +1,55 @@
+GpuTaskDef:
+  nam: 'to_swapchain'
+  crt: DRAW
+  cnf:
+    GraphicsConfig:
+      tpl: TRIANGLE_LIST
+      vsh: 'shaders/game/to_swapchain.vert'
+      fsh: 'shaders/game/to_swapchain.frag'
+      vtd:
+        VertexDef:
+          byt: 8
+          atl:
+            - VertexAttributeDef:
+              usg: POSITION
+              bnd: 0
+              loc: 0
+              fmt: R32G32_SFLOAT
+              ofs: 0
+      dop:
+        DrawOption:
+          unu:
+            - DEPTH_TEST
+      att:
+        - SwapchainAttachment:
+          ccv: [0, 0, 0, 1]
+
+  dbl:
+    - '@./common/global_data.sdb'
+
+    - ShaderDataBindDef:
+      nam: color_sampler
+      set: 0
+      bnd: 1
+      dtp: SAMPLER
+      stf:
+        - FRAGMENT_BIT
+      len: 1
+
+    - ShaderDataBindDef:
+      nam: opaque_color_texture
+      set: 0
+      bnd: 2
+      dtp: SAMPLED_IMAGE
+      stf:
+        - FRAGMENT_BIT
+      len: 1
+
+    - ShaderDataBindDef:
+      nam: transparent_color_texture
+      set: 0
+      bnd: 3
+      dtp: SAMPLED_IMAGE
+      stf:
+        - FRAGMENT_BIT
+      len: 1

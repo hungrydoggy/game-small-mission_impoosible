@@ -1,0 +1,14 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+auto eva = ctx->loadSubNodeAs<ExtraVmpAllocItem>(node, content);
+unlikely (eva == null)
+  return Var(false);
+
+auto self = loadable->cast<GpuTaskDef>();
+self->extra_vmp_alloc_items().push_back(*eva);
+return null_var;

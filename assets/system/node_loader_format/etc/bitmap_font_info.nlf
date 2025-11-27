@@ -1,0 +1,146 @@
+ObjectFormat:
+  full_name: 'BitmapFont'
+  include_part:
+    '''{
+      #include <resource/bitmap_font/bitmap_font.h>
+    '''
+  loadable_class: 'BitmapFontInfo'
+  attributes:
+    - AttributeFormat:
+      full_name: 'font_path'
+      short_name: 'fnt'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontInfo>();
+              self->font_path = content->resolveFilePath(content->asValue<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'path_suffix'
+      short_name: 'sfx'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontInfo>();
+              self->path_suffix = content->cast<Value>()->var().as<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'font_size'
+      short_name: 'siz'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontInfo>();
+              self->font_size = content->cast<Value>()->var().as<int>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'char_padding'
+      short_name: 'cpd'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontInfo>();
+              self->char_padding = content->cast<Value>()->var().as<short>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'align_padding'
+      short_name: 'pad'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/lrtb_real.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontInfo>();
+              self->align_padding = ctx->getData("lrtb_real.val").v<Lrtb<real>>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'line_height_scale'
+      short_name: 'lin'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontInfo>();
+              self->line_height_scale = content->cast<Value>()->var().as<real>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'characters'
+      short_name: 'chr'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontInfo>();
+              self->characters = content->cast<Value>()->var().as<string>();
+              return Var(true);
+            '''

@@ -1,0 +1,63 @@
+ObjectFormat:
+  ref:
+    'action_name' : {'$action_name' : 'Sequence'}
+
+  full_name: {'!+':['Action.', '$action_name']}
+  short_name: '$action_name'
+  groups: ['ActionGroup']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/_interpolation.h>
+      #include <action/action_factory.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      auto& chl = al->getData("children").v<vector<shared_ptr<Action>>>();
+      al->action = action::Sequence(chl);
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'children'
+      short_name: 'chl'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'ActionGroup'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<ActionLoadable>();
+                      unlikely (self->hasData("children") == false)
+                        self->setData("children", Var(vector<shared_ptr<Action>>()));
+
+                      auto& chl = self->getDataRef("children").v<vector<shared_ptr<Action>>>();
+
+
+                      auto action_loader = ctx->loadSubNodeAs<ActionLoadable>(node, content);
+                      unlikely (action_loader == null)
+                        return Var(false);
+
+                      chl.push_back(action_loader->action);
+                      return Var(true);
+                    '''

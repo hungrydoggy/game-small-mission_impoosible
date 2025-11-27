@@ -1,0 +1,13 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto self = loadable->cast<Sampler>();
+self->mip_levels(content->cast<Value>()->var().as<uint>());
+
+return Var(true);
+return null_var;

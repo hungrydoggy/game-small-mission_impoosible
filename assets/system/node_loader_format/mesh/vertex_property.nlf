@@ -1,0 +1,76 @@
+ObjectFormat:
+  full_name: 'VertexProperty'
+  include_part:
+    '''{
+      #include <resource/mesh/_vertex_property.h>
+    '''
+  loadable_class: 'VertexProperty'
+  attributes:
+    - AttributeFormat:
+      full_name: 'usage'
+      short_name: 'usg'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VertexProperty>();
+              self->usage(content->cast<Value>()->var().as<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'type'
+      short_name: 'typ'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto typ_str = content->cast<Value>()->var().as<string>();
+              Util::upper(typ_str);
+              auto typ_p = Util::find(VertexProperty::type_enum_map(), typ_str);
+              unlikely (typ_p == null) {
+                CNT_LOG_ERR(content, "unknown VertexProperty::Type --- %s", typ_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<VertexProperty>();
+              self->type(*typ_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'length'
+      short_name: 'len'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VertexProperty>();
+              self->length(content->cast<Value>()->var().as<ushort>());
+              return Var(true);
+            '''

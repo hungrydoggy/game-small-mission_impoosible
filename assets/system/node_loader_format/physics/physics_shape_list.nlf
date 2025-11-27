@@ -1,0 +1,41 @@
+ObjectFormat:
+  full_name: 'PhysicsShapeList'
+  aliases: ['ShapeList']
+  groups: ['ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <physics/physics_shape.h>
+    '''
+  loadable_class: 'PhysicsShapeList'
+  attributes:
+    - AttributeFormat:
+      full_name: 'shapes'
+      short_name: 'shp'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'BulletShapeGroup'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto shp_info = ctx->loadSubNodeAs<BulletShapeInfo>(node, content);
+                      unlikely (shp_info == null)
+                        return Var(false);
+
+                      auto shp = make_shared<BulletShape>();
+                      shp->bt_shape_info(shp_info);
+
+                      auto self = loadable->cast<PhysicsShapeList>();
+                      self->shapes().push_back(shp);
+                      return Var(true);
+                    '''

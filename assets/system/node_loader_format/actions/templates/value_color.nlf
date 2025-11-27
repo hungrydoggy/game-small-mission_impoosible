@@ -1,0 +1,83 @@
+SequenceFormat:
+  min_count: 4
+  max_count: 4
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <common/color/color.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  elements:
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionLoadable>();
+              auto value = Var(Color());
+              self->setData("value", value);
+              value.v<Color>().r(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionLoadable>();
+              auto& value = self->getDataRef("value");
+              value.v<Color>().g(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionLoadable>();
+              auto& value = self->getDataRef("value");
+              value.v<Color>().b(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionLoadable>();
+              auto& value = self->getDataRef("value");
+              value.v<Color>().a(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''

@@ -1,0 +1,55 @@
+ObjectFormat:
+  full_name: 'CellActionCallItem'
+  short_name: 'CellActionItem'
+  include_part:
+    '''{
+      #include <view/sprite_view/_cell_action_call_info.h>
+    '''
+  loadable_class: 'CellActionCallInfo'
+  attributes:
+    - AttributeFormat:
+      full_name: 'cell_index'
+      short_name: 'idx'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<CellActionCallInfo>();
+              self->cell_index = content->cast<Value>()->var().as<size_t>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'action'
+      short_name: 'act'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'ActionGroup'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto action_loader = ctx->loadSubNodeAs<ActionLoadable>(node, content);
+              unlikely (action_loader == null)
+                return Var(false);
+
+              auto self = loadable->cast<CellActionCallInfo>();
+              self->action = action_loader->action;
+              return Var(true);
+            '''
+
+

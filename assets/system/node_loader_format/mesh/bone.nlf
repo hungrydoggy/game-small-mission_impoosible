@@ -1,0 +1,84 @@
+ObjectFormat:
+  full_name: 'Bone'
+  include_part:
+    '''{
+      #include <resource/mesh/_bone.h>
+    '''
+  loadable_class: 'Bone'
+  attributes:
+    - AttributeFormat:
+      full_name: 'sid'
+      short_name: 'sid'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<Bone>();
+              self->sid(content->cast<Value>()->var().as<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<Bone>();
+              self->name(content->cast<Value>()->var().as<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'transform_matrix'
+      short_name: 'trm'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/matrix.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<Bone>();
+              self->transform_matrix(ctx->getData("matrix.val").v<Matrix>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'inv_bind_matrix'
+      short_name: 'ibm'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/matrix.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<Bone>();
+              self->inv_bind_matrix(ctx->getData("matrix.val").v<Matrix>());
+              return Var(true);
+            '''

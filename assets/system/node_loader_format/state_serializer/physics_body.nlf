@@ -1,0 +1,91 @@
+ObjectFormat:
+  full_name: 'PhysicsBodySerializer'
+  short_name: 'PhysicsBodySttSer'
+  aliases: ['BodySttSer']
+  groups: ['StateSerializerGroup']
+  include_part:
+    '''{
+      #include <common/state_serializer/state_serializer.h>
+    '''
+  loadable_class: 'StateSerializerNodeLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+      auto self = loadable->cast<StateSerializerNodeLoadable>();
+
+      self->on_serialize_func =
+          [](GameComponent* cmp, string const& name, vector<byte>& buffer) {
+            auto body = KV(null, dynamic_cast<GameObject*>(cmp), template getTrait<PhysicsBody>("physics_body"));
+            unlikely (body == null) {
+              LOG_ERR("need PhysicsBody --- %s", cmp->makePath().c_str());
+              return false;
+            }
+
+            Serializer::serializeByAuto((byte)body->is_registered(), buffer);
+
+            auto bullet_body = dynamic_cast<BulletBody*>(body.get());
+            likely (bullet_body != null) {
+              Serializer::serializeByAuto(string("bt"), buffer);
+              auto linear_velocity  = bullet_body->bt_body()->getLinearVelocity ();
+              auto angular_velocity = bullet_body->bt_body()->getAngularVelocity();
+              Serializer::serializeByAuto(linear_velocity , buffer);
+              Serializer::serializeByAuto(angular_velocity, buffer);
+            }
+
+            return true;
+          };
+
+      self->on_deserialize_func =
+          [](GameComponent* cmp, string const& name, byte const*& buffer) {
+            auto body = KV(null, dynamic_cast<GameObject*>(cmp), template getTrait<PhysicsBody>("physics_body"));
+            unlikely (body == null) {
+              LOG_ERR("need PhysicsBody --- %s", cmp->makePath().c_str());
+              return false;
+            }
+
+            byte is_registered;  Serializer::deserializeByAuto(is_registered, buffer);
+            likely (is_registered == true)
+              body->registerToPhysics();
+            else
+              body->unregisterFromPhysics();
+
+            string physics_type;  Serializer::deserializeByAuto(physics_type, buffer);
+            likely (physics_type == "bt") {
+              btVector3 linear_velocity;   Serializer::deserializeByAuto(linear_velocity , buffer);
+              btVector3 angular_velocity;  Serializer::deserializeByAuto(angular_velocity, buffer);
+
+              auto bullet_body = dynamic_cast<BulletBody*>(body.get());
+              bullet_body->bt_body()->setLinearVelocity (linear_velocity );
+              bullet_body->bt_body()->setAngularVelocity(angular_velocity);
+              bullet_body->bt_body()->activate();
+            }
+
+            return true;
+          };
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              self->name = content->asValue<string>();
+              return Var(true);
+            '''

@@ -1,0 +1,24 @@
+auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<Node>>();  auto loadable = params[2].as<shared_ptr<NodeLoadable>>();  
+
+
+
+
+
+auto self = loadable->cast<StateSerializerNodeLoadable>();
+
+self->on_serialize_func =
+    [](GameComponent* cmp, string const& name, vector<byte>& buffer) {
+      Serializer::serializeByAuto(cmp->color(), buffer);
+
+      return true;
+    };
+
+self->on_deserialize_func =
+    [](GameComponent* cmp, string const& name, byte const*& buffer) {
+      { Color v; Serializer::deserializeByAuto(v, buffer); cmp->color(v); }
+
+      return true;
+    };
+
+return Var(true);
+return null_var;

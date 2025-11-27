@@ -1,0 +1,108 @@
+ObjectFormat:
+  full_name: 'VideoMemoryPack'
+  include_part:
+    '''{
+      #include <common/video_memory_pack/video_memory_pack.h>
+    '''
+  loadable_class: 'VideoMemoryPack_LoadableInfo'
+  attributes:
+    - AttributeFormat:
+      full_name: 'type'
+      short_name: 'typ'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto typ_str = content->cast<Value>()->var().as<string>();
+              Util::upper(typ_str);
+
+              auto typ_p = Util::find(VideoMemoryPack::typ_enm_map(), typ_str);
+              unlikely (typ_p == null) {
+                LOG_ERR("unknown VideoMemoryPack::Type --- %s", typ_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<VideoMemoryPack_LoadableInfo>();
+              self->type = *typ_p;
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'property'
+      short_name: 'prp'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto prp_str = content->cast<Value>()->var().as<string>();
+              Util::upper(prp_str);
+
+              auto prp_p = Util::find(VideoMemoryPack::vmpprop_enm_map(), prp_str);
+              unlikely (prp_p == null) {
+                LOG_ERR("unknown VideoMemoryPack::Property --- %s", prp_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<VideoMemoryPack_LoadableInfo>();
+              self->property = *prp_p;
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'size_mb'
+      short_name: 'siz'
+      aliases: ['size']
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VideoMemoryPack_LoadableInfo>();
+              self->size_mb = content->cast<Value>()->var().as<uint>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'extra_size_mb'
+      short_name: 'esz'
+      aliases: ['extra_size']
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VideoMemoryPack_LoadableInfo>();
+              self->extra_size_mb = content->cast<Value>()->var().as<uint>();
+              return Var(true);
+            '''

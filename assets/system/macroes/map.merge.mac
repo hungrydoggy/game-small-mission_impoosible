@@ -1,0 +1,44 @@
+MacroFormat:
+  full_name: 'Map.merge'
+  short_name: 'map.merge'
+  formats:
+    - SequenceFormat:
+      min_count:  0
+      max_count: -1
+      elements:
+        - ElementFormat:
+          formats:
+            - ValueFormat:
+              type: 'Map'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.add(content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      auto merged = make_shared<Map>(content->file_path(), content->line_in_file(), content->column_in_file());
+      for (size_t mi=0; mi<mac_params.size(); ++mi) {
+        auto m = dpc<Map>(mac_params.get(mi));
+        for (auto& k : m->keys()) {
+          auto v = m->get(k);
+          merged->setOrAdd(k, v);
+        }
+      }
+
+      return Var(merged);
+    '''

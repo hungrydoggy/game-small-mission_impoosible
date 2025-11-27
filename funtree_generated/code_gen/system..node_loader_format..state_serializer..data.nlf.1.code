@@ -1,0 +1,57 @@
+auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<Node>>();  auto loadable = params[2].as<shared_ptr<NodeLoadable>>();  
+
+
+
+
+
+
+auto self = loadable->cast<StateSerializerNodeLoadable>();
+
+// get keys
+unlikely (self->hasData("keys") == false)
+  self->setData("keys", vector<string>{});
+
+auto& keys = self->getData("keys").v<vector<string>>();
+
+
+// set funcs
+self->on_serialize_func =
+    [keys](GameComponent* cmp, string const& name, vector<byte>& buffer) {
+      unlikely (keys.size() > 0) {
+        Serializer::serializeByAuto((ushort)keys.size(), buffer);
+        for (auto& k : keys) {
+          Serializer::serializeByAuto(k              , buffer);
+          Serializer::serializeByAuto(cmp->getData(k), buffer);
+        }
+      }else {
+        auto& data_map = cmp->data_map();
+        Serializer::serializeByAuto((ushort)data_map.size(), buffer);
+        for (auto& itr : data_map) {
+          Serializer::serializeByAuto(itr.first , buffer);
+          Serializer::serializeByAuto(itr.second, buffer);
+        }
+      }
+
+      return true;
+    };
+
+self->on_deserialize_func =
+    [](GameComponent* cmp, string const& name, byte const*& buffer) {
+      ushort count;
+      Serializer::deserializeByAuto(count, buffer);
+
+      for (ushort di=0; di<count; ++di) {
+        string k;
+        Serializer::deserializeByAuto(k, buffer);
+
+        Var v;
+        Serializer::deserializeByAuto(v, buffer);
+
+        cmp->setData(k, v);
+      }
+
+      return true;
+    };
+
+return Var(true);
+return null_var;

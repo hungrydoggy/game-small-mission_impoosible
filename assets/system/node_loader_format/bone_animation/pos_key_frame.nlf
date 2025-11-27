@@ -1,0 +1,68 @@
+ObjectFormat:
+  full_name: 'PosKeyFrame'
+  include_part:
+    '''{
+      #include <resource/bone_animation/bone_animation.h>
+      #include <util/vector3.h>
+    '''
+  loadable_class: 'PosKeyFrame'
+  attributes:
+    - AttributeFormat:
+      full_name: 'time'
+      short_name: 'tim'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PosKeyFrame>();
+              self->time(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'value'
+      short_name: 'val'
+      is_essential: true
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PosKeyFrame>();
+              self->value(ctx->getData("vector3.val").v<Vector3>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'interpolation'
+      short_name: 'int'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<PosKeyFrame>();
+              self->interpolation(Interpolation::getFromString(content->cast<Value>()->var().as<string>()));
+              return Var(true);
+            '''
+
+

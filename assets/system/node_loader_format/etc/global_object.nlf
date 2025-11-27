@@ -1,0 +1,8 @@
+ObjectFormat:
+  full_name: 'GlobalObject'
+  include_part:
+    '''{
+      #include <etc/global_object.h>
+    '''
+  loadable_class: 'GlobalObject'
+  attributes: []

@@ -1,0 +1,89 @@
+ObjectFormat:
+  full_name: 'PhysicsJointItem'
+  short_name: 'JointItem'
+  include_part:
+    '''{
+      #include <physics/_physics_joint_item.h>
+    '''
+  loadable_class: 'PhysicsJointItem'
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PhysicsJointItem>();
+              self->name = content->asValue<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'opposite_path'
+      short_name: 'opp'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PhysicsJointItem>();
+              self->opposite_path = content->asValue<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'need_register_by_default'
+      short_name: 'reg'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PhysicsJointItem>();
+              self->need_register_by_default = content->asValue<bool>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'joint'
+      short_name: 'jnt'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'PhysicsJointGroup'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PhysicsJointItem>();
+              self->joint_info = ctx->loadSubNodeAs<PhysicsJointInfo>(node, content);
+              return Var(true);
+            '''

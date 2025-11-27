@@ -1,0 +1,26 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto sample_count = content->asValue<int>();
+auto sam_str = std::to_string(sample_count) + "_BIT";
+
+auto sam_p = Util::find(GpuHelper::samplecount_enm_map(), sam_str);
+unlikely (sam_p == null) {
+  CNT_LOG_ERR(content, "unknown GpuHelper::SampleCountFlagBits --- %s", sam_str.c_str());
+  return Var(false);
+}
+
+auto self = loadable->cast<AttachmentInfo>();
+#if defined(USE_VULKAN)
+self->desc.samples = *sam_p;
+#elif defined(USE_WEB_GPU)
+self->samples = *sam_p;
+#endif
+
+return Var(true);
+return null_var;

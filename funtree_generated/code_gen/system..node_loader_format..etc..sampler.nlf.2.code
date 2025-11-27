@@ -1,0 +1,16 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+string mnf_str = content->cast<Value>()->var().as<string>();
+Util::upper(mnf_str);
+
+auto mnf_p = Util::find(Sampler::filter_enm_map(), mnf_str);
+auto self = loadable->cast<Sampler>();
+self->min_filter((mnf_p != null)? *mnf_p : Sampler::Filter::LINEAR);
+return Var(true);
+return null_var;

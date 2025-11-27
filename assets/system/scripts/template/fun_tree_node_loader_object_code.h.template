@@ -1,0 +1,56 @@
+#ifndef AUTO_GENERATED_FUN_TREE_NODE_LOADER_OBJECT_CODE_%$define_name$%_H_
+#define AUTO_GENERATED_FUN_TREE_NODE_LOADER_OBJECT_CODE_%$define_name$%_H_
+
+
+%$guard_head$%
+
+
+#include <common/loader/fun_tree/_node_loader.h>
+
+
+namespace appetizer {
+
+
+using std::shared_ptr;
+
+
+class GAMECONTENT_API %$class_name$% : public fun_tree::NodeLoader {
+public: // inner types
+  using Content       = fun_tree::Content;
+  using Format        = fun_tree::node_loader_format::Format;
+  using Node          = fun_tree::Node;
+  using NodeLoadable  = fun_tree::NodeLoadable;
+  using LoaderContext = fun_tree::LoaderContext;
+
+
+public: // methods
+  string const& loadable_class () const override;
+
+  bool isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) override;
+
+
+private: // methods
+  shared_ptr<fun_tree::node_loader_format::Format> const&  _getFormat () override;
+
+  bool _preLoad (
+      LoaderContext& ctx,
+      shared_ptr<Node> const& node,
+      shared_ptr<NodeLoadable> const& loadable
+  ) override;
+
+  bool _postLoad (
+      LoaderContext& ctx,
+      shared_ptr<Node> const& node,
+      shared_ptr<NodeLoadable> const& loadable
+  ) override;
+
+};
+
+
+}
+
+
+%$guard_tail$%
+
+
+#endif  // ifndef AUTO_GENERATED_FUN_TREE_NODE_LOADER_OBJECT_CODE_%$define_name$%_H_

@@ -1,0 +1,29 @@
+ObjectFormat:
+  full_name: 'ActionStateDataRef'
+  short_name: 'ActionDataRef'
+  include_part:
+    '''{
+      #include <action/_action_state_data_ref.h>
+    '''
+  loadable_class: 'ActionStateDataRef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'key'
+      aliases: ['name', 'nam']
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionStateDataRef>();
+              self->key = content->asValue<string>();
+              return Var(true);
+            '''

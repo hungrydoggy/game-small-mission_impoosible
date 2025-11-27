@@ -1,0 +1,14 @@
+ShaderDataBindDef:
+  nam: global_data
+  set: 0
+  bnd: 0
+  dtp: UNIFORM_BUFFER
+  stf:
+    - VERTEX_BIT
+    - FRAGMENT_BIT
+  len: 1
+  byt: 80
+  usg:
+    - TRANSFER_DST_BIT
+    - UNIFORM_BUFFER_BIT
+  prp: STATIC_STAGED

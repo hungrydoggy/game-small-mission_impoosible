@@ -1,0 +1,79 @@
+SequenceFormat:
+  min_count: 4
+  max_count: 4
+  include_part:
+    '''{
+      #include <common/color/color.h>
+    '''
+  loadable_class: 'NodeLoadable'
+  elements:
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto value = Var(Color());
+              value.v<Color>().r(content->cast<Value>()->var().as<real>());
+
+              ctx->setData("color.val", value);
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& value = ctx->getDataRef("color.val");
+              value.v<Color>().g(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& value = ctx->getDataRef("color.val");
+              value.v<Color>().b(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& value = ctx->getDataRef("color.val");
+              value.v<Color>().a(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''

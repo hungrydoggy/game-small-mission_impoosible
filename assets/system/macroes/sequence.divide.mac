@@ -1,0 +1,112 @@
+MacroFormat:
+  full_name: 'Sequence.divide'
+  short_name: 'seq.divide'
+  aliases: ['seq./', 'seq/']
+  formats:
+    - SequenceFormat:
+      min_count:  1
+      max_count: -1
+      elements:
+        - ElementFormat:
+          formats:
+            - SequenceFormat:
+              min_count:  1
+              max_count: -1
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = dpc<Macro>(loadable);
+
+                  auto& seq = self->getDataRef("seq").v<vector<Var>>();
+                  self->params.add(make_shared<Value>(Var(seq), content));
+
+                  seq.clear();
+                  return Var(true);
+                '''
+              elements:
+                - ElementFormat:
+                  formats:
+                    - ValueFormat:
+                      type: 'Value'
+                      sub_type: 'number'
+                      on_load:
+                        '''{(
+                              FormatContext* ctx,
+                              shared_ptr<NodeLoadable> loadable,
+                              shared_ptr<Node> node,
+                              shared_ptr<Content> content
+                            )
+                          auto self = dpc<Macro>(loadable);
+
+                          // data part
+                          unlikely (self->hasData("seq") == false)
+                            self->setData("seq", vector<Var>{});
+
+                          auto& seq = self->getDataRef("seq").v<vector<Var>>();
+
+
+                          // add part
+                          seq.push_back(content->cast<Value>()->var());
+                          return Var(true);
+                        '''
+                    - ValueFormat:
+                      type: 'Value'
+                      sub_type: 'string'
+                      on_load:
+                        '''{(
+                              FormatContext* ctx,
+                              shared_ptr<NodeLoadable> loadable,
+                              shared_ptr<Node> node,
+                              shared_ptr<Content> content
+                            )
+                          auto self = dpc<Macro>(loadable);
+
+                          // data part
+                          unlikely (self->hasData("seq") == false)
+                            self->setData("seq", vector<Var>{});
+
+                          auto& seq = self->getDataRef("seq").v<vector<Var>>();
+
+
+                          // add part
+                          seq.push_back(content->cast<Value>()->var());
+                          return Var(true);
+                        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+
+      // compute
+      vector<Var> result = mac_params.get(0)->asValue<vector<Var>>();
+      for (size_t pi=1; pi<mac_params.size(); ++pi) {
+        auto& p = mac_params.get(pi);
+        unlikely (p == null)
+          continue;
+
+        auto& vars = p->getValueRef<vector<Var>>();
+        for (size_t vi=0; vi<vars.size(); ++vi) {
+          likely (vi < result.size())
+            result[vi] = result[vi] / vars[vi];
+          else
+            result.push_back(vars[vi]);
+        }
+      }
+
+
+      // make result
+      auto seq = make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+      for (auto& v : result)
+        seq->add(make_shared<Value>(v, content));
+
+      return Var(seq);
+    '''

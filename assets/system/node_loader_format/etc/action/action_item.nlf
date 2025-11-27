@@ -1,0 +1,54 @@
+ObjectFormat:
+  full_name: 'ActionItem'
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_item.h>
+      #include <game_component/game_component.h>
+    '''
+  loadable_class: 'ActionItem'
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionItem>();
+              self->name = content->cast<Value>()->var().as<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'action'
+      short_name: 'act'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'ActionGroup'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto action_loader = ctx->loadSubNodeAs<ActionLoadable>(node, content);
+              unlikely (action_loader == null)
+                return Var(false);
+
+              auto self = loadable->cast<ActionItem>();
+              self->action = action_loader->action;
+              return Var(true);
+            '''

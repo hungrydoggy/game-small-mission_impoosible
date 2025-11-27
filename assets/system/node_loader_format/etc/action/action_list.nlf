@@ -1,0 +1,38 @@
+ObjectFormat:
+  full_name: 'ActionList'
+  groups: ['ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <action/action_item.h>
+      #include <action/action_list.h>
+    '''
+  loadable_class: 'ActionList'
+  attributes:
+    - AttributeFormat:
+      full_name: 'items'
+      short_name: 'itm'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'ActionItem'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto itm = ctx->loadSubNodeAs<ActionItem>(node, content);
+                      unlikely (itm == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<ActionList>();
+                      self->add(itm->name, itm->action);
+                      return Var(true);
+                    '''

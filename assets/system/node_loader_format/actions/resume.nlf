@@ -1,0 +1,14 @@
+'@system/node_loader_format/actions/pause.nlf':
+  full_name: 'Action.Resume'
+  short_name: 'Resume'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      al->action = action::Resume(al->getData("target_path", "."), al->getData("name").as<string>());
+      return Var(true);
+    '''

@@ -1,0 +1,129 @@
+
+
+using namespace appetizer;
+
+using std::to_string;
+namespace fs = std::filesystem;
+
+
+enum class PlayState {
+  READY_TO_START,
+  PLAYING,
+  PAUSED,
+  DEAD,
+};
+
+
+struct BoardCoord {
+  int x = 0;
+  int y = 0;
+};
+
+enum class SnakeActionType {
+  TURN_LEFT,
+  TURN_RIGHT,
+  EAT_APPLE,
+  EAT_BANANA,
+};
+
+struct SnakeAction {
+  SnakeActionType type;
+  BoardCoord pos;
+};
+
+
+struct GameData;
+
+
+struct GameState {
+  PlayState play_state;
+
+  byte board_w = 10;
+  byte board_h = 10;
+  bool need_tile_show_action = false;
+
+  int level = 1;
+  int apple_left = 1;
+  int score = 0;
+
+  double snake_speed_spt     = 1.0;  // spt means second per tile
+  double snake_acc_spt       = 1.5;
+  double snake_min_speed_spt = 0.25;
+
+  byte snake_length = 2;
+  BoardCoord snake_head_pos;
+  BoardCoord snake_velocity;
+  vector<SnakeAction> snake_action_history;
+
+  vector<BoardCoord> wall_poses;
+
+  BoardCoord apple_pos;
+  BoardCoord banana_pos;
+
+
+  sp<fun_tree::Content> convertToMap ();
+  void setByMap (sp<fun_tree::Content> const& map);
+
+  int getSnakeDirIdx () {
+    // up, right, down, left
+    return
+        ((snake_velocity.x == 0)? 0 : (3 - (snake_velocity.x + 1)))
+        + ((snake_velocity.y == 0)? 0 : (2 - (snake_velocity.y + 1)));
+  }
+
+  bool isOnBoard (BoardCoord const& pos) {
+    return pos.x >= 0 && pos.x < board_w && pos.y >= 0 && pos.y < board_h;
+  }
+
+  bool isOnWall (BoardCoord const& pos);
+
+  void speedUp (GameData* gd);
+
+  void levelUp ();
+};
+
+
+struct GameData {
+  real tile_w = REAL(40.0);
+
+  KeyEventType last_key_type;
+
+  GameObject*    ui_level_cmp;
+  GameObject*    ui_score_cmp;
+  GameComponent* ui_press_any_key_to_start_cmp;
+
+  GameComponent* tiles_cmp;
+  vector<GameObject*> tiles;
+
+  GameComponent* walls_cmp;
+  vector<GameComponent*> walls;
+
+  GameComponent* snake_face_cmp;
+
+  GameComponent* snake_body_cmp;
+  vector<GameComponent*> snake_bodies;
+
+  vector<BoardCoord> snake_body_poses;
+
+  GameObject* apple_cmp;
+  GameObject* banana_cmp;
+
+  vector<GameObject*> blings;
+  int next_bling_idx = 0;
+
+  double elapsed_time;
+  int await_action_count;
+
+
+  void processInput (GameState* gs);
+
+  void updateSnake (GameState* gs);
+
+  bool isOnBody (BoardCoord const& pos, bool skip_tail=false);
+
+  void placeApple (Scene* scene, GameState* gs);
+  void placeBanana (Scene* scene, GameState* gs);
+};
+
+
+static auto action_state_gid = StringRegistry::default_registry().lookUp("action_state");

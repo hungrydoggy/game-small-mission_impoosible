@@ -1,0 +1,22 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto self = loadable->cast<ActionLoadable>();
+unlikely (self->hasData("children") == false)
+  self->setData("children", Var(vector<shared_ptr<Action>>()));
+
+auto& chl = self->getDataRef("children").v<vector<shared_ptr<Action>>>();
+
+
+auto action_loader = ctx->loadSubNodeAs<ActionLoadable>(node, content);
+unlikely (action_loader == null)
+  return Var(false);
+
+chl.push_back(action_loader->action);
+return Var(true);
+return null_var;

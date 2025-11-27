@@ -1,0 +1,77 @@
+ObjectFormat:
+  full_name: 'StencilOption'
+  include_part:
+    '''{
+      #include <common/draw_option/draw_option.h>
+    '''
+  loadable_class: 'StencilOption'
+  attributes:
+    - AttributeFormat:
+      full_name: 'function'
+      short_name: 'fun'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'StencilFunction'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto func = ctx->loadSubNodeAs<StencilFunction>(node, content);
+              unlikely (func == null)
+                return Var(false);
+
+              auto self = loadable->cast<StencilOption>();
+              self->func = *func;
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'operator'
+      short_name: 'opr'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'StencilOperator'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto op = ctx->loadSubNodeAs<StencilOperator>(node, content);
+              unlikely (op == null)
+                return Var(false);
+
+              auto self = loadable->cast<StencilOption>();
+              self->op = *op;
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'write_mask'
+      short_name: 'msk'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<StencilOption>();
+              self->mask = content->cast<Value>()->var().as<uint>();
+              return Var(true);
+            '''

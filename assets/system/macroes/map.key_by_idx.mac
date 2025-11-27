@@ -1,0 +1,59 @@
+MacroFormat:
+  full_name: 'Map.getKeyByIndex'
+  short_name: 'map.keyByIdx'
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'map'
+          short_name: 'map'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Map'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'index'
+          short_name: 'idx'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(1, content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+      auto map = dpc<Map>(mac_params.get(0));
+      auto& keys = map->keys();
+      auto idx = mac_params.get(1)->asValue<size_t>();
+
+      return (idx < keys.size())? Var(keys.at(idx)) : null_var;
+    '''

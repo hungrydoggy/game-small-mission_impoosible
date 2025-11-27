@@ -1,0 +1,41 @@
+Sequence:
+  chl:
+    - SetInputProcessable:
+      val: false
+    - Wait:
+      dur: 1
+
+    - Sequence:
+      chl:
+        '!seq.map':
+          src: ['/snake', '/snake.shadow', '/title', '/btn.start']
+          nod:
+            AlphaTo:
+              tar: '$e'
+              dur: 0
+              val: 0
+
+    - Parallel:
+      chl:
+        '!seq.map':
+          src: ['/snake', '/snake.shadow']
+          nod:
+            AlphaTo:
+              tar: '$e'
+              dur: 0.5
+              val: 1
+              int: OUT_QUAD
+
+    - Sequence:
+      chl:
+        '!seq.map':
+          src: ['/title', '/btn.start']
+          nod:
+            AlphaTo:
+              tar: '$e'
+              dur: 0.5
+              val: 1
+              int: OUT_QUAD
+
+    - SetInputProcessable:
+      val: true

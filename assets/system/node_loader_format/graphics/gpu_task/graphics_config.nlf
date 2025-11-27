@@ -1,0 +1,518 @@
+ObjectFormat:
+  full_name: 'GraphicsConfig'
+  groups: ['GpuTaskConfigGroup']
+  guard_head: '#ifndef SERVER_ONLY'
+  guard_tail: '#endif'
+  include_part:
+    '''{
+      #include <gpu_task/_gpu_task_def_config.h>
+    '''
+  loadable_class: 'GraphicsConfig'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto self = loadable->cast<GraphicsConfig>();
+
+
+      // viewport
+      unlikely (self->hasData("viewport_vec") == true) {
+        auto& viewport_vec = self->getDataRef("viewport_vec").v<vector<real>>();
+
+      #if defined(USE_VULKAN)
+        VkViewport viewport;
+        auto vw = viewport_vec[2];
+        auto vh = viewport_vec[3];
+        viewport.x = viewport_vec[0];
+        viewport.y = viewport_vec[1] + vh;
+        viewport.width  =  vw;
+        viewport.height = -vh;
+        viewport.minDepth = viewport_vec[4];
+        viewport.maxDepth = viewport_vec[5];
+      #elif defined(USE_WEB_GPU)
+        WebGpuHelper::Viewport viewport{
+            viewport_vec[0],
+            viewport_vec[1],
+            viewport_vec[2],
+            viewport_vec[3],
+            viewport_vec[4],
+            viewport_vec[5],
+        };
+      #endif
+
+        self->viewport(viewport);
+      }
+
+
+      // scissor
+      unlikely (self->hasData("scissor_vec") == true) {
+        auto& scissor_vec = self->getDataRef("scissor_vec").v<vector<int>>();
+
+      #if defined(USE_VULKAN)
+        VkRect2D scissor;
+        scissor.offset = {       scissor_vec[0],       scissor_vec[1] };
+        scissor.extent = { (uint)scissor_vec[2], (uint)scissor_vec[3] };
+      #elif defined(USE_WEB_GPU)
+        Rectangle<uint> scissor;
+        scissor.set(scissor_vec[0], scissor_vec[1], scissor_vec[2], scissor_vec[3]);
+      #endif
+
+        self->scissor(scissor);
+      }
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'topology'
+      short_name: 'tpl'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto tpl_str = content->cast<Value>()->var().as<string>();
+              Util::upper(tpl_str);
+
+              auto tpl_p = Util::find(GpuHelper::topology_enm_map(), tpl_str);
+              unlikely (tpl_p == null) {
+                CNT_LOG_ERR(content, "unknown GpuHelper::PrimitiveTopology --- %s", tpl_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<GraphicsConfig>();
+              self->topology(*tpl_p);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'draw_option'
+      short_name: 'dop'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'DrawOption'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto dop = ctx->loadSubNodeAs<DrawOption>(node, content);
+              unlikely (dop == null)
+                return Var(false);
+
+              auto self = loadable->cast<GraphicsConfig>();
+              self->draw_option(*dop);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'vert_shader_path'
+      short_name: 'vsh'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto value = content->resolveFilePath(content->asValue<string>());
+
+              auto self = loadable->cast<GraphicsConfig>();
+              self->vert_shader(Shader::RM::load(value));
+              return Var(self->vert_shader() != null);
+            '''
+    - AttributeFormat:
+      full_name: 'frag_shader_path'
+      short_name: 'fsh'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto value = content->resolveFilePath(content->asValue<string>());
+
+              auto self = loadable->cast<GraphicsConfig>();
+              self->frag_shader(Shader::RM::load(value));
+              return Var(self->frag_shader() != null);
+            '''
+    - AttributeFormat:
+      full_name: 'vert_def'
+      short_name: 'vtd'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'VertexDef'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto vtd = ctx->loadSubNodeAs<VertexDef>(node, content);
+              unlikely (vtd == null)
+                return Var(false);
+
+              auto self = loadable->cast<GraphicsConfig>();
+              self->vert_def(*vtd);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'vertex_vmp_property'
+      short_name: 'vvp'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto prp_str = content->cast<Value>()->var().as<string>();
+              Util::upper(prp_str);
+
+              auto prp_p = Util::find(VideoMemoryPack::vmpprop_enm_map(), prp_str);
+              unlikely (prp_p == null) {
+                CNT_LOG_ERR(content, "unknown VideoMemoryPack::Property --- %s", prp_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<GraphicsConfig>();
+              self->vert_vmp_property(*prp_p);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'index_vmp_property'
+      short_name: 'ivp'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto prp_str = content->cast<Value>()->var().as<string>();
+              Util::upper(prp_str);
+
+              auto prp_p = Util::find(VideoMemoryPack::vmpprop_enm_map(), prp_str);
+              unlikely (prp_p == null) {
+                CNT_LOG_ERR(content, "unknown VideoMemoryPack::Property --- %s", prp_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<GraphicsConfig>();
+              self->indx_vmp_property(*prp_p);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'vertex_vmp_add_usage_flags'
+      short_name: 'vaf'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto usg_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(usg_str);
+
+                      auto usg_p = Util::find(GpuHelper::bufferusageflag_enm_map(), usg_str);
+                      unlikely (usg_p == null) {
+                        LOG_ERR("unknown GpuHelper::BufferUsageFlags --- %s", usg_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<GraphicsConfig>();
+                      self->vert_vmp_add_usage_flags(
+                          self->vert_vmp_add_usage_flags() | *usg_p
+                      );
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'index_vmp_add_usage_flags'
+      short_name: 'iaf'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto usg_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(usg_str);
+
+                      auto usg_p = Util::find(GpuHelper::bufferusageflag_enm_map(), usg_str);
+                      unlikely (usg_p == null) {
+                        LOG_ERR("unknown GpuHelper::BufferUsageFlags --- %s", usg_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<GraphicsConfig>();
+                      self->indx_vmp_add_usage_flags(
+                          self->indx_vmp_add_usage_flags() | *usg_p
+                      );
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'viewport'
+      short_name: 'vpr'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 6
+          max_count: 6
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'number'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<GraphicsConfig>();
+                      unlikely (self->hasData("viewport_vec") == false)
+                        self->setData("viewport_vec", vector<real>{});
+
+                      auto& viewport_vec = self->getDataRef("viewport_vec").v<vector<real>>();
+
+                      auto value = content->cast<Value>()->var().as<real>();
+                      viewport_vec.push_back(value);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'scissor'
+      short_name: 'scs'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 4
+          max_count: 4
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'number'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<GraphicsConfig>();
+                      unlikely (self->hasData("scissor_vec") == false)
+                        self->setData("scissor_vec", vector<int>{});
+
+                      auto& scissor_vec = self->getDataRef("scissor_vec").v<vector<int>>();
+
+                      auto value = content->cast<Value>()->var().as<int>();
+                      scissor_vec.push_back(value);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'attachments'
+      short_name: 'att'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count:  0
+          max_count: -1
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'AttachmentGroup'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto att = ctx->loadSubNodeAs<AttachmentInfo>(node, content);
+                      unlikely (att == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<GraphicsConfig>();
+                      self->attachment_infos().push_back(*att);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'custom_create_framebuffer_attachment_func'
+      short_name: 'create_fb_att_func'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Code'  # (GraphicsConfig* cnf, GpuTaskCreateContext& ctx, int framebuffer_attachment_idx)
+                        # -> shared_ptr<FrameBufferAttachment>
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto code = content->cast<Code>();
+              auto code_handle =
+                  CodeHandle{
+                    .file_path_id = PathRegistry::lookUp(code->file_path()),
+                    .code_idx     = code->index(),
+                  };
+
+
+              auto self = loadable->cast<GraphicsConfig>();
+              self->custom_create_framebuffer_attachment_func(
+                  [code_handle](GraphicsConfig* cnf, GpuTaskCreateContext& ctx, int fb_att_idx) {
+                    auto fb_att_v = code_handle.execute({Var(cnf), Var(&ctx), Var(fb_att_idx)});
+                    return fb_att_v.v<shared_ptr<FrameBufferAttachment>>();
+                  }
+              );
+
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'custom_bind_vertex_buffer_func'
+      short_name: 'bind_vert_buff_func'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Code'  # (GpuTask* task, GpuTaskMemory* memory, GpuHelper::Binder* binder)
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto code = content->cast<Code>();
+              auto code_handle =
+                  CodeHandle{
+                    .file_path_id = PathRegistry::lookUp(code->file_path()),
+                    .code_idx     = code->index(),
+                  };
+
+
+              auto self = loadable->cast<GraphicsConfig>();
+              self->custom_bind_vertex_buffer_func(
+                  [code_handle](GpuTask const* task, GpuTaskMemory const& memory, GpuHelper::Binder& binder) {
+                    code_handle.execute({Var(no_const(task)), Var(no_const(&memory)), Var(&binder)});
+                  }
+              );
+
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'custom_bind_index_buffer_func'
+      short_name: 'bind_indx_buff_func'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Code'  # (GpuTask* task, GpuTaskMemory* memory, GpuHelper::Binder* binder)
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto code = content->cast<Code>();
+              auto code_handle =
+                  CodeHandle{
+                    .file_path_id = PathRegistry::lookUp(code->file_path()),
+                    .code_idx     = code->index(),
+                  };
+
+
+              auto self = loadable->cast<GraphicsConfig>();
+              self->custom_bind_index_buffer_func(
+                  [code_handle](GpuTask const* task, GpuTaskMemory const& memory, GpuHelper::Binder& binder) {
+                    code_handle.execute({Var(no_const(task)), Var(no_const(&memory)), Var(&binder)});
+                  }
+              );
+
+
+              return Var(true);
+            '''

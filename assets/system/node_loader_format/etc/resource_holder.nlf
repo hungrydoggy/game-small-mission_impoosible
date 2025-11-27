@@ -1,0 +1,44 @@
+ObjectFormat:
+  full_name: 'ResourceHolder'
+  groups: ['ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <resource/audio_clip/audio_clip.h>
+      #include <resource/resource_holder.h>
+    '''
+  loadable_class: 'ResourceHolder'
+  attributes:
+    - AttributeFormat:
+      full_name: 'resources'
+      short_name: 'rsc'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<ResourceHolder>();
+
+                      auto path = content->resolveFilePath(content->asValue<string>());
+                      auto ext = Util::getExtFromPath(path, false);
+                      if (ext == "wav" || ext == "mp3") {
+                        auto clip = ResourceManager<AudioClip>::load(path);
+                        self->add(clip);
+                      }else {
+                        CNT_LOG_ERR(content, "unhandled resource ext --- %s", ext.c_str());
+                        return Var(false);
+                      }
+
+                      return Var(true);
+                    '''

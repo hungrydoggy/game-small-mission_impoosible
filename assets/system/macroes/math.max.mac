@@ -1,0 +1,48 @@
+MacroFormat:
+  full_name: 'Math.max'
+  short_name: 'math.max'
+  aliases: ['max']
+  formats:
+    - SequenceFormat:
+      min_count:  1
+      max_count: -1
+      elements:
+        - ElementFormat:
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = dpc<Macro>(loadable);
+                  self->params.add(content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+      Var result = mac_params.get(0)->cast<Value>()->var();
+      for (size_t pi=1; pi<mac_params.size(); ++pi) {
+        auto& p = mac_params.get(pi);
+        unlikely (p == null)
+          continue;
+
+        auto& pv = p->cast<Value>()->var();
+        unlikely (pv > result)
+          result = pv;
+      }
+
+      return Var(dpc<Content>(make_shared<Value>(result, content)));
+    '''
+
+

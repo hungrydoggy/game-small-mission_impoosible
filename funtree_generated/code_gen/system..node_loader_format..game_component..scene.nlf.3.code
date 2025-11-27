@@ -1,0 +1,19 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+#ifndef SERVER_ONLY
+auto gtr = ctx->loadSubNodeAs<GpuTaskRunner>(node, content);
+unlikely (gtr == null)
+  return Var(false);
+
+auto self = loadable->cast<Scene>();
+self->gpu_task_runner(gtr);
+#endif
+
+return Var(true);
+return null_var;

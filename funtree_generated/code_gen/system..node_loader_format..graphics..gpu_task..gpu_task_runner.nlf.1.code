@@ -1,0 +1,16 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+auto inf = ctx->loadSubNodeAs<GpuTaskRunner::TaskItem>(node, content);
+unlikely (inf == null)
+  return Var(false);
+
+auto self = loadable->cast<GpuTaskRunner>();
+self->addTaskDef(inf->name, inf->task_def);
+
+return Var(true);
+return null_var;

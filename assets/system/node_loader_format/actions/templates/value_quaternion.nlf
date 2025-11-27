@@ -1,0 +1,86 @@
+SequenceFormat:
+  min_count: 3
+  max_count: 4
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <util/vector3.h>
+      #include <util/quaternion.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  elements:
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionLoadable>();
+              auto value = Var(Vector3());
+              self->setData("value", value);
+              value.v<Vector3>().x(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionLoadable>();
+              auto& value = self->getDataRef("value");
+              value.v<Vector3>().y(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionLoadable>();
+              auto& vec3 = self->getDataRef("value").v<Vector3>();
+              vec3.z(content->cast<Value>()->var().as<real>());
+
+              self->setData("value", Var(Quaternion(vec3)));
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionLoadable>();
+              auto& vec3 = self->getData("value").v<Vector3>();
+              self->setData("value", Var(Quaternion(vec3.x(), vec3.y(), vec3.z(), content->cast<Value>()->var().as<real>())));
+              return Var(true);
+            '''

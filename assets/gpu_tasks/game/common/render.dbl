@@ -1,0 +1,51 @@
+%Envelope%:
+  val:
+    '!seq.concat':
+      -
+        - '@./global_data.sdb':
+          stf:
+            - VERTEX_BIT
+
+        - ShaderDataBindDef:
+          nam: scene_data
+          set: 0
+          bnd: 1
+          dtp: READONLY_STORAGE_BUFFER
+          stf:
+            - VERTEX_BIT
+          len: 1
+          byt: 64
+          usg:
+            - TRANSFER_DST_BIT
+            - STORAGE_BUFFER_BIT
+          prp: STATIC_STAGED
+
+        - '@./obj_buff.sdb':
+          dtp: 'READONLY_STORAGE_BUFFER'
+          set: 1
+          bnd: 0
+          stf:
+            - VERTEX_BIT
+            - FRAGMENT_BIT
+
+      - '!seq.map':
+        src: {'!seq.intSeq':{'start':1, 'end':5}}
+        nod:
+          ShaderDataBindDef:
+            nam: {'!+':['sampler_', '!toStr':'$i']}
+            set: 1
+            bnd: '$e'
+            dtp: SAMPLER
+            stf:
+              - VERTEX_BIT
+              - FRAGMENT_BIT
+
+      -
+        - ShaderDataBindDef:
+          nam: 'texture_array'
+          set: 1
+          bnd: 5
+          dtp: SAMPLED_IMAGE_ARRAY
+          stf:
+            - VERTEX_BIT
+            - FRAGMENT_BIT

@@ -1,0 +1,16 @@
+auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<Node>>();  auto loadable = params[2].as<shared_ptr<NodeLoadable>>();  
+
+
+
+
+
+
+auto al = loadable->cast<ActionLoadable>();
+al->action = action::PlaySound(
+    al->getData("target_path", "."),
+    al->getData("sound_path" , ""),
+    al->getData("volume"     , REAL(1.0)),
+    al->getData("mode"       , AudioSource::Mode::FORWARD)
+);
+return Var(true);
+return null_var;

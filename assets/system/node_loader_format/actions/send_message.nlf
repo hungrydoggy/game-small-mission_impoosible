@@ -1,0 +1,115 @@
+ObjectFormat:
+  full_name: 'Action.SendMessage'
+  short_name: 'SendMessage'
+  groups: ['ActionGroup']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_factory.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      al->action = action::SendMessage(
+          al->getData("target_path", "."),
+          al->getData("dst_path"   , "."),
+          al->getData("name"       , ""),
+          al->getData("params"     , vector<Var>{})
+      );
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'target_path'
+      short_name: 'tar'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("target_path", content->cast<Value>()->var());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'dst_path'
+      short_name: 'dst'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("dst_path", content->cast<Value>()->var());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("name", content->cast<Value>()->var());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'params'
+      short_name: 'par'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'any'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<ActionLoadable>();
+                      unlikely (self->hasData("params") == false)
+                        self->setData("params", Var(vector<Var>{}));
+
+                      auto& msg_params = self->getDataRef("params").v<vector<Var>>();
+                      msg_params.push_back(content->cast<Value>()->var());
+
+                      return Var(true);
+                    '''

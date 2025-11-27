@@ -1,0 +1,19 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto shp_info = ctx->loadSubNodeAs<BulletShapeInfo>(node, content);
+unlikely (shp_info == null)
+  return Var(false);
+
+auto shp = make_shared<BulletShape>();
+shp->bt_shape_info(shp_info);
+
+auto self = loadable->cast<PhysicsShapeList>();
+self->shapes().push_back(shp);
+return Var(true);
+return null_var;

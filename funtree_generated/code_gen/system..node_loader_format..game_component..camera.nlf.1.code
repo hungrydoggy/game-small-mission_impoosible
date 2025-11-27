@@ -1,0 +1,42 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto info = ctx->loadSubNodeAs<ProjectionInfo>(node, content);
+unlikely (info == null)
+  return Var(false);
+
+auto self = loadable->cast<Camera>();
+if (info->need_default == true) {
+  switch (info->projection_type) {
+    case Camera::ProjectionType::ORTHOGONAL:
+      self->setOrthogonal(*Project::active_project());
+      return Var(true);
+    case Camera::ProjectionType::PERSPECTIVE:
+      self->setPerspective(*Project::active_project());
+      return Var(true);
+    default:
+      return Var(false);
+  }
+  return Var(false);
+}
+
+switch (info->projection_type) {
+  case Camera::ProjectionType::ORTHOGONAL:
+    self->setOrthogonal(
+        info->left, info->right, info->top, info->bottom,
+        info->near_v, info->far_v);
+    return Var(true);
+  case Camera::ProjectionType::PERSPECTIVE:
+    self->setPerspective(
+        info->aspect_ratio, info->fov, info->near_v, info->far_v);
+    return Var(true);
+  default:
+    return Var(false);
+}
+return Var(true);
+return null_var;

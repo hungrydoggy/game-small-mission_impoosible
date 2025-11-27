@@ -1,0 +1,78 @@
+SequenceFormat:
+  min_count: 2
+  max_count: 4
+  include_part:
+    '''{
+      #include <vector>
+    '''
+  loadable_class: 'NodeLoadable'
+
+  elements:
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              ctx->setData("resolution.val.w", Var(content->cast<Value>()->var().as<int>()));
+
+              ctx->removeData("resolution.val.base_axis");
+              ctx->removeData("resolution.val.axis_size");
+
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              ctx->setData("resolution.val.h", Var(content->cast<Value>()->var().as<int>()));
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              ctx->setData("resolution.val.base_axis", Var(content->cast<Value>()->var().as<string>()));
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              ctx->setData("resolution.val.axis_size", Var(content->cast<Value>()->var().as<uint>()));
+              return Var(true);
+            '''

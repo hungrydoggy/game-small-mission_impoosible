@@ -1,0 +1,14 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto self = loadable->cast<VAT>();
+auto pos  = ctx->getData("pos" , REAL(-1.0));
+auto name = ctx->getData("name", "");
+self->addMarker(pos, name);
+return Var(true);
+return null_var;

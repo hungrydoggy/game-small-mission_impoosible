@@ -1,0 +1,52 @@
+'@system/node_loader_format/actions/rotate_to.nlf':
+  full_name: 'Action.RotateBy'
+  short_name: 'RotateBy'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      auto interp = Interpolation::getFromString(al->getData("interpolation", "linear"));
+      unlikely (interp == null) {
+        LOG_ERR("unknown interpolation --- %s", al->getData("interpolation", "").c_str());
+        return Var(false);
+      }
+
+
+      Quaternion value;
+      likely (al->getData("value").type() == VarContent<Vector3>::Type()) {
+        auto v = al->getData("value").v<Vector3>();
+        v.x(math::deg2Rad(v.x()));
+        v.y(math::deg2Rad(v.y()));
+        v.z(math::deg2Rad(v.z()));
+        value = Quaternion(v);
+      }else if (al->getData("value").type() == VarContent<Quaternion>::Type()) {
+        value = al->getData("value").v<Quaternion>();
+
+      }else if (al->getData("value").type() == VarContent<ActionStateDataRef>::Type()) {
+        al->action =
+            action::RotateBy_withDataRef(
+              al->getData("target_path", "."),
+              al->getData("duration"   , 0.0),
+              al->getData("value"      ).v<ActionStateDataRef>().key,
+              interp
+            );
+
+      }else {
+        LOG_ERR("value must be Vector3 or Quaternion or ActionStateDataRef");
+        return Var(false);
+      }
+
+      al->action =
+          action::RotateBy(
+            al->getData("target_path", "."),
+            al->getData("duration"   , 0.0),
+            value,
+            interp
+          );
+
+      return Var(true);
+    '''

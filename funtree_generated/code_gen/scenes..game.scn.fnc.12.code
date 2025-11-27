@@ -1,0 +1,15 @@
+auto loadable = params[0].as<NodeLoadable*>();  auto x = params[1].as<real>();  auto y = params[2].as<real>();  
+
+auto self = loadable->cast<Scene>();
+
+auto& gs = self->getDataRef("game_state").v<sp<GameState>>();
+auto& gd = self->getDataRef("game_data" ).v<sp<GameData >>();
+
+auto b = gd->blings[gd->next_bling_idx];
+b->setAction(null, "");
+b->x(x);
+b->y(y);
+b->setAction("show");
+
+gd->next_bling_idx = (gd->next_bling_idx + 1) % gd->blings.size();
+return null_var;

@@ -1,0 +1,36 @@
+MacroFormat:
+  full_name: 'Math.abs'
+  short_name: 'math.abs'
+  aliases: ['abs']
+  formats:
+    - ValueFormat:
+      type: 'Value'
+      sub_type: 'number'
+      on_load:
+        '''{(
+              FormatContext* ctx,
+              shared_ptr<NodeLoadable> loadable,
+              shared_ptr<Node> node,
+              shared_ptr<Content> content
+            )
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      Var v = mac_params.get(0)->cast<Value>()->var();
+      unlikely (v < 0)
+        v = -v;
+
+      return Var(make_shared<Value>(v, content));
+    '''
+
+

@@ -1,0 +1,62 @@
+SequenceFormat:
+  min_count: 3
+  max_count: 3
+  include_part:
+    '''{
+      #include <util/vector3.h>
+    '''
+  loadable_class: 'NodeLoadable'
+  elements:
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto value = Var(Vector3());
+              value.v<Vector3>().x(content->cast<Value>()->var().as<real>());
+
+              ctx->setData("vector3.val", value);
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& value = ctx->getDataRef("vector3.val");
+              value.v<Vector3>().y(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& value = ctx->getDataRef("vector3.val");
+              value.v<Vector3>().z(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''

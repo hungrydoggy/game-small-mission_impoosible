@@ -1,0 +1,281 @@
+ObjectFormat:
+  full_name: 'ShaderDataBindDef'
+  short_name: 'ShaderDataBind'
+  guard_head: '#ifndef SERVER_ONLY'
+  guard_tail: '#endif'
+  include_part:
+    '''{
+      #include <gpu_task/_shader_data_bind_def.h>
+    '''
+  loadable_class: 'ShaderDataBindDef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->name = content->cast<Value>()->var().as<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'set_idx'
+      short_name: 'set'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->set_idx = content->cast<Value>()->var().as<uint>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'binding_idx'
+      short_name: 'bnd'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->binding_idx = content->cast<Value>()->var().as<uint>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'desc_type'
+      short_name: 'dtp'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto dtp_str = content->cast<Value>()->var().as<string>();
+              Util::upper(dtp_str);
+
+              auto dtp_p = Util::find(GpuHelper::desctype_enm_map(), dtp_str);
+              unlikely (dtp_p == null) {
+                CNT_LOG_ERR(content, "unknown GpuHelper::DescriptorType --- %s", dtp_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->desc_type = *dtp_p;
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'stage_flags'
+      short_name: 'stf'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto stf_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(stf_str);
+
+                      auto stf_p = Util::find(GpuHelper::shaderstageflag_enm_map(), stf_str);
+                      unlikely (stf_p == null) {
+                        CNT_LOG_ERR(content, "unknown GpuHelper::ShaderStageFlags --- %s", stf_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<ShaderDataBindDef>();
+                      self->stage_flags |= *stf_p;
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'arr_len'
+      short_name: 'len'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #if defined(USE_VULKAN)
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->arr_len = content->cast<Value>()->var().as<size_t>();
+              #endif
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'bytes'
+      short_name: 'byt'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->bytes = content->cast<Value>()->var().as<size_t>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'usage'
+      short_name: 'usg'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto usg_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(usg_str);
+
+                      auto usg_p = Util::find(GpuHelper::bufferusageflag_enm_map(), usg_str);
+                      unlikely (usg_p == null) {
+                        CNT_LOG_ERR(content, "unknown GpuHelper::BufferUsageFlags --- %s", usg_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<ShaderDataBindDef>();
+                      self->vmp_usage |= *usg_p;
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'property'
+      short_name: 'prp'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto prp_str = content->cast<Value>()->var().as<string>();
+              Util::upper(prp_str);
+
+              auto prp_p = Util::find(VideoMemoryPack::vmpprop_enm_map(), prp_str);
+              unlikely (prp_p == null) {
+                CNT_LOG_ERR(content, "unknown VideoMemoryPack::Property --- %s", prp_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->vmp_property = *prp_p;
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'use_same_buffer_with'
+      short_name: 'usb'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->use_same_buffer_with = content->cast<Value>()->var().as<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'need_fill'
+      short_name: 'fil'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->need_fill = content->cast<Value>()->var().as<bool>();
+              return Var(true);
+            '''

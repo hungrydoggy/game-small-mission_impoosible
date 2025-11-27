@@ -1,0 +1,59 @@
+ObjectFormat:
+  full_name: 'FiniteStateMachine'
+  short_name: 'FSM'
+  aliases: ['Fsm']
+  groups: ['ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <fsm/finite_state_machine.h>
+    '''
+  loadable_class: 'FiniteStateMachine'
+  attributes:
+    - AttributeFormat:
+      full_name: 'start_state'
+      short_name: 'sta'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<FiniteStateMachine>();
+              self->setData("start_state", content->cast<Value>()->var());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'states'
+      short_name: 'stt'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'FiniteStateMachineState'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto stt = ctx->loadSubNodeAs<FSMState>(node, content);
+                      unlikely (stt == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<FiniteStateMachine>();
+                      self->addState(stt);
+                      return Var(true);
+                    '''

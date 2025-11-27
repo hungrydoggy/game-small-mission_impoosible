@@ -1,0 +1,39 @@
+'@system/node_loader_format/actions/move_x_to.nlf':
+  ref:
+    'action_name': 'MoveYBy'
+
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      auto interp = Interpolation::getFromString(al->getData("interpolation", "linear"));
+      unlikely (interp == null) {
+        LOG_ERR("unknown interpolation --- %s", al->getData("interpolation", "").c_str());
+        return Var(false);
+      }
+
+
+      unlikely (al->getData("value").type() == Var::Type<ActionStateDataRef>()) {
+        al->action =
+            action::MoveYBy_withDataRef(
+              al->getData("target_path", "."),
+              al->getData("duration"   , 0.0),
+              al->getData("value"      ).v<ActionStateDataRef>().key,
+              interp
+            );
+      }else {
+        al->action =
+            action::MoveYBy(
+              al->getData("target_path", "."),
+              al->getData("duration"   , 0.0),
+              al->getData("value"      ).v<real>(),
+              interp
+            );
+      }
+
+      return Var(true);
+    '''

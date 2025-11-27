@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto self = loadable->cast<ActionLoadable>();
+unlikely (self->hasData("params") == false)
+  self->setData("params", Var(vector<Var>{}));
+
+auto& msg_params = self->getDataRef("params").v<vector<Var>>();
+msg_params.push_back(content->cast<Value>()->var());
+
+return Var(true);
+return null_var;

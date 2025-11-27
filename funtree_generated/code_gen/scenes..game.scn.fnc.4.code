@@ -1,0 +1,7 @@
+auto loadable = params[0].as<NodeLoadable*>();  auto state_content = params[1].as<sp<Content>>();  
+
+auto self = loadable->cast<Scene>();
+
+auto& gs = self->getDataRef("game_state").v<sp<GameState>>();
+gs->setByMap(state_content);
+return null_var;

@@ -1,0 +1,99 @@
+ObjectFormat:
+  full_name: 'BulletShapeInfo_Cylinder'
+  short_name: 'BulletShapeCylinder'
+  aliases: ['BulletCylinder']
+  groups: ['PhysicsShapeGroup', 'BulletShapeGroup']
+  include_part:
+    '''{
+      #include <physics/bullet/shape_info/_cylinder.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>
+    '''
+  loadable_class: 'BulletShapeInfo_Cylinder'
+  attributes:
+    - AttributeFormat:
+      full_name: 'position'
+      short_name: 'pos'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletShapeInfo_Cylinder>();
+              self->offset_pos = ctx->getData("vector3.val").v<Vector3>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'rotation'
+      short_name: 'rot'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/quaternion.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletShapeInfo_Cylinder>();
+              self->offset_rot = ctx->getData("quaternion.val").v<Quaternion>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'axis'
+      short_name: 'axs'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+
+              auto axs_str = content->asValue<string>();
+              Util::upper(axs_str);
+
+              auto axis_p = Util::find(TypesUtil::axis_enm_map, axs_str);
+              unlikely (axis_p == null) {
+                LOG_ERR("invalid Axis --- %s", axs_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<BulletShapeInfo_Cylinder>();
+              self->axis = *axis_p;
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'half_size'
+      short_name: 'hsz'
+      is_essential: true
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletShapeInfo_Cylinder>();
+              auto& half_size = ctx->getData("vector3.val").v<Vector3>();
+              BulletWrapper::vector3ToBtVector3(half_size, self->half_extents);
+              return Var(true);
+            '''

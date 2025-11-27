@@ -1,0 +1,54 @@
+ObjectFormat:
+  full_name: 'VertexAnimationTextureStateItem'
+  short_name: 'VATStateItem'
+  include_part:
+    '''{
+      #include <etc/vertex_animation_texture/vertex_animation_texture_state.h>
+      #include <etc/vertex_animation_texture/vertex_animation_texture_state_item.h>
+    '''
+  loadable_class: 'VertexAnimationTextureStateItem'
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VATStateItem>();
+              self->name = content->asValue<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'vertex_animation_texture_state'
+      short_name: 'vst'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'VertexAnimationTextureStateGroup'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto vs = ctx->loadSubNodeAs<VertexAnimationTextureState>(node, content);
+              unlikely (vs == null)
+                return Var(false);
+
+              auto self = loadable->cast<VATStateItem>();
+              self->vat_state = vs;
+              return Var(true);
+            '''

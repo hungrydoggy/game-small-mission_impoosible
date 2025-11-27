@@ -1,0 +1,116 @@
+ObjectFormat:
+  full_name: 'DataStateSerializer'
+  short_name: 'DataSttSer'
+  groups: ['StateSerializerGroup']
+  include_part:
+    '''{
+      #include <common/state_serializer/state_serializer.h>
+    '''
+  loadable_class: 'StateSerializerNodeLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto self = loadable->cast<StateSerializerNodeLoadable>();
+
+      // get keys
+      unlikely (self->hasData("keys") == false)
+        self->setData("keys", vector<string>{});
+
+      auto& keys = self->getData("keys").v<vector<string>>();
+
+
+      // set funcs
+      self->on_serialize_func =
+          [keys](GameComponent* cmp, string const& name, vector<byte>& buffer) {
+            unlikely (keys.size() > 0) {
+              Serializer::serializeByAuto((ushort)keys.size(), buffer);
+              for (auto& k : keys) {
+                Serializer::serializeByAuto(k              , buffer);
+                Serializer::serializeByAuto(cmp->getData(k), buffer);
+              }
+            }else {
+              auto& data_map = cmp->data_map();
+              Serializer::serializeByAuto((ushort)data_map.size(), buffer);
+              for (auto& itr : data_map) {
+                Serializer::serializeByAuto(itr.first , buffer);
+                Serializer::serializeByAuto(itr.second, buffer);
+              }
+            }
+
+            return true;
+          };
+
+      self->on_deserialize_func =
+          [](GameComponent* cmp, string const& name, byte const*& buffer) {
+            ushort count;
+            Serializer::deserializeByAuto(count, buffer);
+
+            for (ushort di=0; di<count; ++di) {
+              string k;
+              Serializer::deserializeByAuto(k, buffer);
+
+              Var v;
+              Serializer::deserializeByAuto(v, buffer);
+
+              cmp->setData(k, v);
+            }
+
+            return true;
+          };
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              self->name = content->asValue<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'keys'
+      short_name: 'key'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<StateSerializerNodeLoadable>();
+                      unlikely (self->hasData("keys") == false)
+                        self->setData("keys", vector<string>{});
+
+                      auto& keys = self->getDataRef("keys").v<vector<string>>();
+                      keys.push_back(content->asValue<string>());
+
+                      return Var(true);
+                    '''

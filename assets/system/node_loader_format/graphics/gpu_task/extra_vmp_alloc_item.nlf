@@ -1,0 +1,114 @@
+ObjectFormat:
+  full_name: 'ExtraVmpAllocItem'
+  guard_head: '#ifndef SERVER_ONLY'
+  guard_tail: '#endif'
+  include_part:
+    '''{
+      #include <gpu_task/_gpu_task_def_config.h>
+    '''
+  loadable_class: 'ExtraVmpAllocItem'
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ExtraVmpAllocItem>();
+              self->name = content->cast<Value>()->var().as<string>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'usage'
+      short_name: 'usg'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto usg_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(usg_str);
+
+                      auto usg_p = Util::find(GpuHelper::bufferusageflag_enm_map(), usg_str);
+                      unlikely (usg_p == null) {
+                        LOG_ERR("unknown GpuHelper::BufferUsageFlags --- %s", usg_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<ExtraVmpAllocItem>();
+                      self->vmp_usage |= *usg_p;
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'property'
+      short_name: 'prp'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto prp_str = content->cast<Value>()->var().as<string>();
+              Util::upper(prp_str);
+
+              auto prp_p = Util::find(VideoMemoryPack::vmpprop_enm_map(), prp_str);
+              unlikely (prp_p == null) {
+                CNT_LOG_ERR(content, "unknown VideoMemoryPack::Property --- %s", prp_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<ExtraVmpAllocItem>();
+              self->vmp_property = *prp_p;
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'bytes'
+      short_name: 'byt'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ExtraVmpAllocItem>();
+              self->bytes = content->cast<Value>()->var().as<size_t>();
+              return Var(true);
+            '''

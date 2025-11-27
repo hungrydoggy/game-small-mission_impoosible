@@ -1,0 +1,11 @@
+auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<Node>>();  auto loadable = params[2].as<shared_ptr<NodeLoadable>>();  
+
+
+
+
+
+
+auto al = loadable->cast<ActionLoadable>();
+al->action = action::SetUpdatable(al->getData("target_path", "."), al->getData("value").as<bool>());
+return Var(true);
+return null_var;

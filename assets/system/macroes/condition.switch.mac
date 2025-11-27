@@ -1,0 +1,154 @@
+MacroFormat:
+  full_name: 'Condition.switch'
+  short_name: 'switch'
+  include_part:
+    '''{
+      #include <util/util.h>
+    '''
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'switch'
+          short_name: 'swt'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'bool'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'case_map'
+          short_name: 'cas'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Map'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(1, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'default'
+          short_name: 'def'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'any'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(2, content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      // swt
+      auto& swt = mac_params.get(0)->cast<Value>()->var();
+      uint swt_type = 0;
+      likely (swt.isBool() == true)
+        swt_type = VarContentTypes::BOOL;
+      else if (swt.isNumber() == true)
+        swt_type = VarContentTypes::NUMBER;
+      else if (swt.isString() == true)
+        swt_type = VarContentTypes::STRING;
+      else {
+        CNT_LOG_ERR(content, "unhandled swt type --- %u", swt.type());
+        return Var(Null<Content>::sp());
+      }
+
+      // case map
+      auto case_map = mac_params.get(1)->cast<Map>();
+      for (auto& case_key : case_map->keys()) {
+
+        switch (swt_type) {
+          case VarContentTypes::BOOL:
+            unlikely (Util::isBoolString(case_key) == false)
+              continue;
+            unlikely (Util::stringToBool(case_key) == swt.as<bool>())
+              return Var(case_map->get(case_key));
+            break;
+
+          case VarContentTypes::NUMBER:
+            unlikely (Util::isDoubleString(case_key) == false)
+              continue;
+            unlikely (Util::stringToDouble(case_key) == swt.as<double>())
+              return Var(case_map->get(case_key));
+            break;
+
+          case VarContentTypes::STRING:
+            unlikely (case_key == swt.as<string>())
+              return Var(case_map->get(case_key));
+            break;
+
+          default:
+            CNT_LOG_ERR(content, "unhandled swt type --- %u", swt_type);
+            return Var(Null<Content>::sp());
+        }
+      }
+
+      // default
+      return Var(mac_params.get(2));
+    '''

@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto skf = ctx->loadSubNodeAs<SclKeyFrame>(node, content);
+unlikely (skf == null)
+  return Var(false);
+
+auto self = loadable->cast<BoneKeyFrameInfo>();
+self->scl_key_frames().push_back(*skf);
+
+return Var(true);
+return null_var;

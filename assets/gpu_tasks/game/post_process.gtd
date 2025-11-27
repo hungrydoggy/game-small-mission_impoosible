@@ -1,0 +1,65 @@
+GpuTaskDef:
+  nam: 'post_process'
+  crt: DRAW
+  cnf:
+    GraphicsConfig:
+      tpl: TRIANGLE_LIST
+      vsh: 'shaders/game/post_process.vert'
+      fsh: 'shaders/game/post_process.frag'
+      vtd:
+        VertexDef:
+          byt: 8
+          atl:
+            - VertexAttributeDef:
+              usg: POSITION
+              bnd: 0
+              loc: 0
+              fmt: R32G32_SFLOAT
+              ofs: 0
+      dop:
+        DrawOption:
+          unu:
+            - DEPTH_TEST
+          bln:
+            - BlendOption:
+              sfc: SRC_ALPHA
+              dfc: ONE_MINUS_SRC_ALPHA
+              eqa: ADD
+      vpr: [0, 0, '$screen_width', '$screen_height', 0, 1]
+      scs: [0, 0, '$screen_width', '$screen_height']
+      att:
+        - ColorAttachment:
+          usf: ['SAMPLED_BIT']
+          ccv: [0, 0, 0, 1]
+
+  dbl:
+    - '@./common/global_data.sdb':
+      stf:
+        - FRAGMENT_BIT
+
+    - ShaderDataBindDef:
+      nam: color_sampler
+      set: 1
+      bnd: 0
+      dtp: SAMPLER
+      stf:
+        - FRAGMENT_BIT
+      len: 1
+
+    - ShaderDataBindDef:
+      nam: accumulator_texture
+      set: 1
+      bnd: 1
+      dtp: SAMPLED_IMAGE
+      stf:
+        - FRAGMENT_BIT
+      len: 1
+
+    - ShaderDataBindDef:
+      nam: coverage_texture
+      set: 1
+      bnd: 2
+      dtp: SAMPLED_IMAGE
+      stf:
+        - FRAGMENT_BIT
+      len: 1

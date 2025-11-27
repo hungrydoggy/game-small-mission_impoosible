@@ -1,0 +1,21 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto typ_str = content->cast<Value>()->var().as<string>();
+Util::upper(typ_str);
+
+auto typ_p = Util::find(Camera::prjtyp_enm_map(), typ_str);
+unlikely (typ_p == null) {
+  LOG_ERR("unknown Camera::ProjectionType --- %s", typ_str.c_str());
+  return Var(false);
+}
+
+auto self = loadable->cast<ProjectionInfo>();
+self->projection_type = *typ_p;
+return Var(true);
+return null_var;

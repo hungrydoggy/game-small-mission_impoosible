@@ -1,0 +1,67 @@
+MacroFormat:
+  full_name: 'Sequence.get'
+  short_name: 'seq.get'
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'sequence'
+          short_name: 'seq'
+          is_essential: true
+          formats:
+            - SequenceFormat:
+              min_count:  0
+              max_count: -1
+              elements:
+                - ElementFormat:
+                  formats:
+                    - ValueFormat:
+                      type: 'any'
+                      on_load:
+                        '''{(
+                              FormatContext* ctx,
+                              shared_ptr<NodeLoadable> loadable,
+                              shared_ptr<Node> node,
+                              shared_ptr<Content> content
+                            )
+
+                          auto self = dpc<Macro>(loadable);
+                          self->params.add(1, content);
+                          return Var(true);
+                        '''
+        - AttributeFormat:
+          full_name: 'index'
+          short_name: 'idx'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      auto idx = mac_params.get(0)->asValue<size_t>() + 1;
+
+      unlikely (idx >= mac_params.size())
+        return null_var;
+
+      return Var(mac_params.get(idx));
+    '''

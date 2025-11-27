@@ -1,0 +1,10 @@
+ShaderDataBindDef:
+  nam: obj_buff
+  dtp: 'READONLY_STORAGE_BUFFER'
+  len: 1
+  byt:
+    '!multiply': [192, '$kMaxObjectCount']
+  usg:
+    - TRANSFER_DST_BIT
+    - STORAGE_BUFFER_BIT
+  prp: STATIC_STAGED

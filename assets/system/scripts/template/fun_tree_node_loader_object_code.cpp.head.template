@@ -1,0 +1,75 @@
+%$guard_head$%
+
+#include "./%$path_head$%.h"
+
+#include <common/path_registry/path_registry.h>
+#include <common/loader/fun_tree/fun_tree_format.h>
+#include <common/loader/fun_tree/fun_tree.h>
+#include <util/var.h>
+
+%$include_part$%
+
+
+%$neck_part$%
+
+
+namespace appetizer {
+
+
+using namespace fun_tree;
+using namespace fun_tree::node_loader_format;
+
+using std::make_shared;
+
+
+
+__attribute__((constructor))
+static void ___NodeLoaderBundleRegisterer___ () {
+
+  NodeLoaderBundle::default_bundle().registerLoader(
+      vector<string>{%$loader_names$%},
+      vector<string>{%$groups$%},
+      make_shared<%$class_name$%>(),
+      true
+  );
+}
+
+
+
+string const& %$class_name$%::loadable_class () const {
+  static string cls = "%$loadable_class$%";
+  return cls;
+}
+
+
+bool %$class_name$%::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<%$loadable_class$%>(loadable) != null;
+}
+
+
+bool %$class_name$%::_preLoad (
+    LoaderContext& ctx,
+    shared_ptr<Node> const& node,
+    shared_ptr<NodeLoadable> const& loadable
+) {
+  auto super_ok = fun_tree::NodeLoader::_preLoad(ctx, node, loadable);
+  if (super_ok == false)
+    return false;
+
+  %$pre_load_part$%
+}
+
+
+bool %$class_name$%::_postLoad (
+    LoaderContext& ctx,
+    shared_ptr<Node> const& node,
+    shared_ptr<NodeLoadable> const& loadable
+) {
+  auto super_ok = fun_tree::NodeLoader::_postLoad(ctx, node, loadable);
+  if (super_ok == false)
+    return false;
+
+  %$post_load_part$%
+}
+
+

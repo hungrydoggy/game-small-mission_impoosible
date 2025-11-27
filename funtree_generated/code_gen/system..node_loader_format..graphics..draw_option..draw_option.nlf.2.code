@@ -1,0 +1,21 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+auto ena_typ_str = content->cast<Value>()->var().as<string>();
+Util::upper(ena_typ_str);
+
+auto ena_typ_p = Util::find(DrawOption::str_enable_map(), ena_typ_str);
+unlikely (ena_typ_p == null) {
+  LOG_ERR("unknown DrawOption::EnableType --- %s", ena_typ_str.c_str());
+  return Var(false);
+}
+
+auto self = loadable->cast<DrawOption>();
+self->unuse(*ena_typ_p);
+
+return Var(true);
+return null_var;

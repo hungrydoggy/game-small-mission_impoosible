@@ -1,0 +1,51 @@
+ObjectFormat:
+  full_name: 'FrameEvent'
+  include_part:
+    '''{
+      #include <resource/bone_animation/bone_animation.h>
+      #include <util/quaternion.h>
+    '''
+  loadable_class: 'FrameEvent'
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<FrameEvent>();
+              self->name(content->cast<Value>()->var().as<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'time'
+      short_name: 'tim'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<FrameEvent>();
+              self->time(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+
+

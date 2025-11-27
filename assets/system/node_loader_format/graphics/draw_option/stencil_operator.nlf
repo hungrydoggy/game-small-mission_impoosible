@@ -1,0 +1,101 @@
+ObjectFormat:
+  full_name: 'StencilOperator'
+  include_part:
+    '''{
+      #include <common/draw_option/draw_option.h>
+    '''
+  loadable_class: 'StencilOperator'
+  attributes:
+    - AttributeFormat:
+      full_name: 'when_stencil_fails'
+      short_name: 'stf'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto op_str = content->cast<Value>()->var().as<string>();
+              Util::upper(op_str);
+
+              auto op_p = Util::find(StencilOperator::str_optyp_map(), op_str);
+              unlikely (op_p == null) {
+                LOG_ERR("unknown StencilOperator::opcType --- %s", op_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<StencilOperator>();
+              self->when_stencil_fails = *op_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'when_depth_fails'
+      short_name: 'dpf'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto op_str = content->cast<Value>()->var().as<string>();
+              Util::upper(op_str);
+
+              auto op_p = Util::find(StencilOperator::str_optyp_map(), op_str);
+              unlikely (op_p == null) {
+                LOG_ERR("unknown StencilOperator::opcType --- %s", op_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<StencilOperator>();
+              self->when_depth_fails = *op_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'when_depth_pass'
+      short_name: 'dpp'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto op_str = content->cast<Value>()->var().as<string>();
+              Util::upper(op_str);
+
+              auto op_p = Util::find(StencilOperator::str_optyp_map(), op_str);
+              unlikely (op_p == null) {
+                LOG_ERR("unknown StencilOperator::opcType --- %s", op_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<StencilOperator>();
+              self->when_depth_pass = *op_p;
+              #endif
+
+              return Var(true);
+            '''

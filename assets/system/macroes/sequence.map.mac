@@ -1,0 +1,240 @@
+MacroFormat:
+  full_name: 'Sequence.map'
+  short_name: 'seq.map'
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'source'
+          short_name: 'src'
+          is_essential: true
+          formats:
+            - SequenceFormat:
+              min_count:  0
+              max_count: -1
+              elements:
+                - ElementFormat:
+                  formats:
+                    - ValueFormat:
+                      type: 'any'
+                      on_load:
+                        '''{(
+                              FormatContext* ctx,
+                              shared_ptr<NodeLoadable> loadable,
+                              shared_ptr<Node> node,
+                              shared_ptr<Content> content
+                            )
+                          // (processed on pre_embody) this is result sequence
+                          return Var(true);
+                        '''
+        - AttributeFormat:
+          full_name: 'node'
+          short_name: 'nod'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'any'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  // (processed on pre_embody)
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'element_ref_name'
+          short_name: 'enm'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  // (processed on pre_embody)
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'index_ref_name'
+          short_name: 'idx'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  // (processed on pre_embody)
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'count_ref_name'
+          short_name: 'cnt'
+          is_essential: false
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  // (processed on pre_embody)
+                  return Var(true);
+                '''
+    # case: already embodied
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'result'
+          short_name: 'res'
+          is_essential: true
+          formats:
+            - SequenceFormat:
+              min_count:  0
+              max_count: -1
+              elements:
+                - ElementFormat:
+                  formats:
+                    - ValueFormat:
+                      type: 'any'
+                      on_load:
+                        '''{(
+                              FormatContext* ctx,
+                              shared_ptr<NodeLoadable> loadable,
+                              shared_ptr<Node> node,
+                              shared_ptr<Content> content
+                            )
+                          auto self = dpc<Macro>(loadable);
+                          self->params.add(content);
+                          return Var(true);
+                        '''
+  pre_embody:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> call_params,
+          EmbodyFunc embody_func
+        )
+
+      auto par_map = call_params->cast<Map>();
+
+      auto res = KOR(par_map->get("result"), par_map->get("res"));
+      unlikely (res != null)
+        return Var(true);
+
+
+      // embody ref_name params
+      auto enm_cnt = embody_func(node, KOR(par_map->get("element_ref_name"), par_map->get("enm")));
+      auto idx_cnt = embody_func(node, KOR(par_map->get("index_ref_name"  ), par_map->get("idx")));
+      auto cnt_cnt = embody_func(node, KOR(par_map->get("count_ref_name"  ), par_map->get("cnt")));
+
+      enm_cnt = KOR(enm_cnt, make_shared<Value>(Var("e"  ), call_params));
+      idx_cnt = KOR(idx_cnt, make_shared<Value>(Var("i"  ), call_params));
+      cnt_cnt = KOR(cnt_cnt, make_shared<Value>(Var("cnt"), call_params));
+
+      unlikely (
+          enm_cnt->type() != Content::Type::VALUE ||
+          idx_cnt->type() != Content::Type::VALUE ||
+          cnt_cnt->type() != Content::Type::VALUE
+      ) {
+        return Var(true);
+      }
+
+
+      // get source sequence
+      auto src_seq = dpc<Sequence>(embody_func(node, KOR(par_map->get("source"), par_map->get("src"))));
+      unlikely (src_seq == null)
+        return Var(true);
+
+
+      // get node content
+      auto nod_cnt = KOR(par_map->get("node"), par_map->get("nod"));
+      unlikely (nod_cnt == null)
+        return Var(true);
+      
+
+      // make result sequence
+      auto result_seq =
+          make_shared<Sequence>(call_params->file_path(), call_params->line_in_file(), call_params->column_in_file());
+      {
+        auto elm_ref_name = enm_cnt->cast<Value>()->var().as<string>();
+        auto idx_ref_name = idx_cnt->cast<Value>()->var().as<string>();
+        auto cnt_ref_name = cnt_cnt->cast<Value>()->var().as<string>();
+        for (size_t si=0; si<src_seq->size(); ++si) {
+
+          auto src = src_seq->get(si);
+
+          // make ref_map of Envelope
+          auto ref_map =
+              make_shared<Map>(call_params->file_path(), call_params->line_in_file(), call_params->column_in_file());
+          ref_map->add(elm_ref_name, src);
+          ref_map->add(idx_ref_name, make_shared<Value>(Var(si             ), call_params));
+          ref_map->add(cnt_ref_name, make_shared<Value>(Var(src_seq->size()), call_params));
+
+          // make att_map of Envelope
+          auto att_map =
+              make_shared<Map>(call_params->file_path(), call_params->line_in_file(), call_params->column_in_file());
+          att_map->add("ref", ref_map);
+          att_map->add("val", nod_cnt);
+
+          // make Envelope
+          auto envelope =
+              make_shared<Object>(
+                "%Envelope%",
+                att_map,
+                call_params->file_path(),
+                call_params->line_in_file(),
+                call_params->column_in_file()
+              );
+          envelope->need_embody(true);
+
+          // add envelope to result
+          result_seq->add(embody_func(node, envelope));
+        }
+      }
+
+
+      // update params
+      par_map->clear();
+      par_map->setOrAdd("res", result_seq);
+
+
+      return Var(true);
+    '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      // make result
+      auto result = make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+      for (size_t mi=0; mi<mac_params.size(); ++mi)
+        result->add(mac_params.get(mi));
+
+
+      return Var(result);
+    '''

@@ -1,0 +1,126 @@
+ObjectFormat:
+  full_name: 'Action.RotateTo'
+  short_name: 'RotateTo'
+  groups: ['ActionGroup']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/_action_state_data_ref.h>
+      #include <action/_interpolation.h>
+      #include <action/action_factory.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      auto interp = Interpolation::getFromString(al->getData("interpolation", "linear"));
+      unlikely (interp == null) {
+        LOG_ERR("unknown interpolation --- %s", al->getData("interpolation", "").c_str());
+        return Var(false);
+      }
+
+
+      Quaternion value;
+      likely (al->getData("value").type() == VarContent<Vector3>::Type()) {
+        auto v = al->getData("value").v<Vector3>();
+        v.x(math::deg2Rad(v.x()));
+        v.y(math::deg2Rad(v.y()));
+        v.z(math::deg2Rad(v.z()));
+        value = Quaternion(v);
+      }else if (al->getData("value").type() == VarContent<Quaternion>::Type()) {
+        value = al->getData("value").v<Quaternion>();
+
+      }else if (al->getData("value").type() == VarContent<ActionStateDataRef>::Type()) {
+        al->action =
+            action::RotateTo_withDataRef(
+              al->getData("target_path", "."),
+              al->getData("duration"   , 0.0),
+              al->getData("value"      ).v<ActionStateDataRef>().key,
+              interp
+            );
+
+      }else {
+        LOG_ERR("value must be Vector3 or Quaternion or ActionStateDataRef");
+        return Var(false);
+      }
+
+      al->action =
+          action::RotateTo(
+            al->getData("target_path", "."),
+            al->getData("duration"   , 0.0),
+            value,
+            interp
+          );
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'target_path'
+      short_name: 'tar'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("target_path", content->cast<Value>()->var());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'duration'
+      short_name: 'dur'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("duration", content->cast<Value>()->var().as<double>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'value'
+      short_name: 'val'
+      is_essential: true
+      formats:
+        - '@system/node_loader_format/actions/templates/value_vector3.nlf'
+        - '@system/node_loader_format/actions/templates/value_quaternion.nlf'
+    - AttributeFormat:
+      full_name: 'interpolation'
+      short_name: 'int'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("interpolation", content->cast<Value>()->var());
+              return Var(true);
+            '''

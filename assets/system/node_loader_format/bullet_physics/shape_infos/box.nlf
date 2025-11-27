@@ -1,0 +1,68 @@
+ObjectFormat:
+  full_name: 'BulletShapeInfo_Box'
+  short_name: 'BulletShapeBox'
+  aliases: ['BulletBox']
+  groups: ['PhysicsShapeGroup', 'BulletShapeGroup']
+  include_part:
+    '''{
+      #include <physics/bullet/shape_info/_box.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>
+    '''
+  loadable_class: 'BulletShapeInfo_Box'
+  attributes:
+    - AttributeFormat:
+      full_name: 'position'
+      short_name: 'pos'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletShapeInfo_Box>();
+              self->offset_pos = ctx->getData("vector3.val").v<Vector3>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'rotation'
+      short_name: 'rot'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/quaternion.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletShapeInfo_Box>();
+              self->offset_rot = ctx->getData("quaternion.val").v<Quaternion>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'half_size'
+      short_name: 'hsz'
+      is_essential: true
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletShapeInfo_Box>();
+              auto& half_size = ctx->getData("vector3.val").v<Vector3>();
+              BulletWrapper::vector3ToBtVector3(half_size, self->half_extents);
+              return Var(true);
+            '''

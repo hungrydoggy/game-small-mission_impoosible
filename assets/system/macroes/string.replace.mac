@@ -1,0 +1,91 @@
+MacroFormat:
+  full_name: 'String.replace'
+  short_name: 'str.replace'
+  include_part:
+    '''{
+      #include <util/util.h>
+    '''
+  formats:
+    - MapFormat:
+      attributes:
+        - AttributeFormat:
+          full_name: 'string'
+          short_name: 'str'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(0, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'from'
+          short_name: 'frm'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(1, content);
+                  return Var(true);
+                '''
+        - AttributeFormat:
+          full_name: 'to'
+          is_essential: true
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'string'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(2, content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      // get params
+      auto str = mac_params.get(0)->asValue<string>();
+      auto frm = mac_params.get(1)->asValue<string>();
+      auto to  = mac_params.get(2)->asValue<string>();
+
+
+      // make result
+      auto replaced = Util::replace(str, frm, to);
+
+      auto result = make_shared<Value>(Var(replaced), content);
+
+      return Var(result);
+    '''

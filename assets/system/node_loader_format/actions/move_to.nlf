@@ -1,0 +1,135 @@
+ObjectFormat:
+  ref:
+    'action_name' : {'$action_name' : 'MoveTo'}
+    'value_format': {'$value_format': '@system/node_loader_format/actions/templates/value_vector3.nlf'}
+
+  full_name: {'!+':['Action.', '$action_name']}
+  short_name: '$action_name'
+  groups: ['ActionGroup']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/_action_state_data_ref.h>
+      #include <action/_interpolation.h>
+      #include <action/action_factory.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      auto interp = Interpolation::getFromString(al->getData("interpolation", "linear"));
+      unlikely (interp == null) {
+        LOG_ERR("unknown interpolation --- %s", al->getData("interpolation", "").c_str());
+        return Var(false);
+      }
+
+
+      unlikely (al->getData("value").type() == Var::Type<ActionStateDataRef>()) {
+        al->action =
+            action::MoveTo_withDataRef(
+              al->getData("target_path", "."),
+              al->getData("duration"   , 0.0),
+              al->getData("value"      ).v<ActionStateDataRef>().key,
+              interp
+            );
+      }else {
+        al->action =
+            action::MoveTo(
+              al->getData("target_path", "."),
+              al->getData("duration"   , 0.0),
+              al->getData("value"      ).v<Vector3>(),
+              interp
+            );
+      }
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'target_path'
+      short_name: 'tar'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("target_path", content->cast<Value>()->var());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'duration'
+      short_name: 'dur'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("duration", content->cast<Value>()->var().as<double>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'value'
+      short_name: 'val'
+      is_essential: true
+      formats:
+        - '$value_format'
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'ActionStateDataRef'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto asdr = ctx->loadSubNodeAs<ActionStateDataRef>(node, content);
+              unlikely (asdr == null)
+                return Var(false);
+
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("value", *asdr);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'interpolation'
+      short_name: 'int'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("interpolation", content->cast<Value>()->var());
+              return Var(true);
+            '''

@@ -1,0 +1,34 @@
+MacroFormat:
+  full_name: 'Map.keys'
+  short_name: 'map.keys'
+  formats:
+    - ValueFormat:
+      type: 'Map'
+      on_load:
+        '''{(
+              FormatContext* ctx,
+              shared_ptr<NodeLoadable> loadable,
+              shared_ptr<Node> node,
+              shared_ptr<Content> content
+            )
+
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+      auto map = dpc<Map>(mac_params.get(0));
+
+      auto seq = make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+      for (auto& k : map->keys())
+        seq->add(make_shared<Value>(Var(k), content));
+
+      return Var(seq);
+    '''

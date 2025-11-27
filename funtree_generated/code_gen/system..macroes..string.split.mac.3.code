@@ -1,0 +1,24 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+
+
+auto& mac_params = self->params;
+
+// get params
+auto str = mac_params.get(0)->asValue<string>();
+auto sep = mac_params.get(1)->asValue<string>();
+
+
+// make result
+vector<string> splited;
+Util::split(str, sep[0], splited);
+
+auto result = make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+for (auto& sp : splited)
+  result->add(make_shared<Value>(Var(sp), content));
+
+return Var(result);
+return null_var;

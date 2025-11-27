@@ -1,0 +1,4 @@
+auto self = params[0].as<GameObject*>();  auto world_pos = params[1].as<Vector3>();  
+
+self->sendMessage("/", MessageType::COMMON, "onTabPane", {Var(world_pos)});
+return null_var;

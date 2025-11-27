@@ -1,0 +1,46 @@
+MacroFormat:
+  full_name: 'Operator.modulo'
+  short_name: 'modulo'
+  aliases: ['%']
+  formats:
+    - SequenceFormat:
+      min_count:  1
+      max_count: -1
+      elements:
+        - ElementFormat:
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = dpc<Macro>(loadable);
+                  self->params.add(content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+      auto result = mac_params.get(0)->asValue<int>();
+      for (size_t pi=1; pi<mac_params.size(); ++pi) {
+        auto& p = mac_params.get(pi);
+        unlikely (p == null)
+          continue;
+
+        result = result % p->asValue<int>();
+      }
+
+      return Var(dpc<Content>(make_shared<Value>(Var(result), content)));
+    '''
+
+

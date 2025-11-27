@@ -1,0 +1,35 @@
+SequenceFormat:
+  min_count: 16
+  max_count: 16
+  include_part:
+    '''{
+      #include <util/matrix.h>
+    '''
+  loadable_class: 'NodeLoadable'
+  elements:
+    - ElementFormat:
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              unlikely (ctx->hasData("matrix.val") == false) {
+                ctx->setData("matrix.val", Var(Matrix()));
+                ctx->setData("matrix.idx", Var((size_t)0));
+              }
+
+              auto& value = ctx->getDataRef("matrix.val");
+              auto  idx   = ctx->getData("matrix.idx", (size_t)0);
+
+              value.v<Matrix>().setByIdx(idx, content->cast<Value>()->var().as<real>());
+
+              ctx->setData("matrix.idx", idx+1);
+              return Var(true);
+            '''

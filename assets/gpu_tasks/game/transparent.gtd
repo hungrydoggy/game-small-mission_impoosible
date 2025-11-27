@@ -1,0 +1,55 @@
+GpuTaskDef:
+  nam: 'transparent'
+  ref:
+    'kMaxObjectCount':
+      '$kMaxObjectCount' : 100
+
+    'kMaxDynamicIndexCount': {'!*': ['$kMaxObjectCount', 9]}
+
+  crt: DRAW_INDEXED_INDIRECT
+  cnf:
+    GraphicsConfig:
+      tpl: TRIANGLE_LIST
+      vsh: 'shaders/game/opaque.vert'
+      fsh: 'shaders/game/transparent.frag'
+      vaf:
+        - STORAGE_BUFFER_BIT
+      iaf:
+        - STORAGE_BUFFER_BIT
+      vtd: '@./common/render_vertex_def.sdb'
+      dop:
+        DrawOption:
+          use:
+            - DEPTH_TEST
+          bln:
+            - BlendOption:
+              sfc: SRC_ALPHA
+              dfc: ONE_MINUS_SRC_ALPHA
+              eqa: ADD
+              saf: ONE
+              daf: ONE_MINUS_SRC_ALPHA
+              aeq: ADD
+          dpt:
+            DepthOption:
+              msk: false
+      vpr: [0, 0, '$screen_width', '$screen_height', 0, 1]
+      scs: [0, 0, '$screen_width', '$screen_height']
+      att:
+        - ColorAttachment:
+          usf: ['SAMPLED_BIT']
+          ccv: [0, 0, 0, 0]
+        - AttachmentRef:
+          nam: 'opaque_depth'
+          lop: LOAD
+      bind_vert_buff_func:
+        '''{(GpuTask* task, GpuTaskMemory* memory, GpuHelper::Binder* binder)
+          auto& vmp = memory->getVideoMemoryPack(GpuHelper::current_frame(), {"dynamic_vertex_buff"});
+          binder->bindVertexBuffer(vmp->buffer(), 0);
+        '''
+      bind_indx_buff_func:
+        '''{(GpuTask* task, GpuTaskMemory* memory, GpuHelper::Binder* binder)
+          auto& vmp = memory->getVideoMemoryPack(GpuHelper::current_frame(), {"dynamic_index_buff"});
+          binder->bindIndexBuffer(vmp->buffer(), 0);
+        '''
+
+  dbl: '@./common/render.dbl'

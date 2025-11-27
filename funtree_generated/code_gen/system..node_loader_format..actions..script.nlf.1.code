@@ -1,0 +1,13 @@
+auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<Node>>();  auto loadable = params[2].as<shared_ptr<NodeLoadable>>();  
+
+
+
+
+
+
+auto al = loadable->cast<ActionLoadable>();
+auto script         = al->getData("script"        , (ScriptFunc)null);
+auto reverse_script = al->getData("reverse_script", (ScriptFunc)null);
+al->action = action::Script(script, reverse_script);
+return Var(true);
+return null_var;

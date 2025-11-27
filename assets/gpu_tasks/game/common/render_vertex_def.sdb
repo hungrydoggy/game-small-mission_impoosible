@@ -1,0 +1,21 @@
+VertexDef:
+  byt: 32
+  atl:
+    - VertexAttributeDef:
+      usg: POSITION
+      bnd: 0
+      loc: 0
+      fmt: R32G32B32_SFLOAT
+      ofs: 0
+    - VertexAttributeDef:
+      usg: ST
+      bnd: 0
+      loc: 1
+      fmt: R32G32_SFLOAT
+      ofs: 16
+    - VertexAttributeDef:
+      usg: OBJECT_IDX
+      bnd: 0
+      loc: 2
+      fmt: R32_UINT
+      ofs: 24

@@ -1,0 +1,5 @@
+auto task = params[0].as<GpuTask*>();  auto memory = params[1].as<GpuTaskMemory*>();  auto binder = params[2].as<GpuHelper::Binder*>();  
+
+auto& vmp = memory->getVideoMemoryPack(GpuHelper::current_frame(), {"dynamic_index_buff"});
+binder->bindIndexBuffer(vmp->buffer(), 0);
+return null_var;

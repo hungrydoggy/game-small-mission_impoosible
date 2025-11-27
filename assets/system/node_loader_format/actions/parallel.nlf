@@ -1,0 +1,16 @@
+'@system/node_loader_format/actions/sequence.nlf':
+  ref:
+    'action_name': 'Parallel'
+
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      auto& chl = al->getData("children").v<vector<shared_ptr<Action>>>();
+      al->action = action::Parallel(chl);
+      return Var(true);
+    '''

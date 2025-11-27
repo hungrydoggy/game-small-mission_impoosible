@@ -1,0 +1,138 @@
+ObjectFormat:
+  full_name: 'Mesh'
+  include_part:
+    '''{
+      #include <resource/mesh/mesh.h>
+    '''
+  loadable_class: 'Mesh'
+  attributes:
+    - AttributeFormat:
+      full_name: 'vertex_properties'
+      short_name: 'vpr'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'VertexProperty'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto vp = ctx->loadSubNodeAs<VertexProperty>(node, content);
+                      unlikely (vp == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<Mesh>();
+                      self->vertex_properties().push_back(*vp);
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'vertex_data'
+      short_name: 'vdt'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'number'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<Mesh>();
+                      self->vertex_data().push_back(content->cast<Value>()->var().as<float>());
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'indices'
+      short_name: 'idx'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'number'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<Mesh>();
+                      self->indices().push_back(content->cast<Value>()->var().as<uint>());
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'bind_shape_matrix'
+      short_name: 'bsm'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/matrix.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<Mesh>();
+              self->bind_shape_matrix(ctx->getData("matrix.val").v<Matrix>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'bones'
+      short_name: 'bon'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'Bone'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto bone = ctx->loadSubNodeAs<Bone>(node, content);
+                      unlikely (bone == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<Mesh>();
+                      self->bones().push_back(*bone);
+                      return Var(true);
+                    '''

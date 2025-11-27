@@ -1,0 +1,34 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto fmt_str = content->asValue<string>();
+Util::upper(fmt_str);
+
+#if defined(USE_VULKAN)
+auto fmt_p = Util::find(VulkanHelper::format_enm_map(), fmt_str);
+unlikely (fmt_p == null) {
+  CNT_LOG_ERR(content, "unknown VulkanHelper::Format --- %s", fmt_str.c_str());
+  return Var(false);
+}
+#elif defined(USE_WEB_GPU)
+auto fmt_p = Util::find(WebGpuHelper::textureformat_enm_map(), fmt_str);
+unlikely (fmt_p == null) {
+  CNT_LOG_ERR(content, "unknown WebGpuHelper::TextureFormat --- %s", fmt_str.c_str());
+  return Var(false);
+}
+#endif
+
+auto self = loadable->cast<AttachmentInfo>();
+#if defined(USE_VULKAN)
+  self->desc.format = *fmt_p;
+#elif defined(USE_WEB_GPU)
+  self->format = *fmt_p;
+#endif
+
+return Var(true);
+return null_var;

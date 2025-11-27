@@ -1,0 +1,252 @@
+ObjectFormat:
+  full_name: 'BlendOption'
+  include_part:
+    '''{
+      #include <common/draw_option/draw_option.h>
+    '''
+  loadable_class: 'BlendOptionInfo'
+  attributes:
+    - AttributeFormat:
+      full_name: 'enable'
+      short_name: 'ena'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              #ifndef SERVER_ONLY
+              auto self = loadable->cast<BlendOptionInfo>();
+              self->enable = content->cast<Value>()->var().as<bool>();
+              #endif
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'src_factor'
+      short_name: 'sfc'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto factor_str = content->cast<Value>()->var().as<string>();
+              Util::upper(factor_str);
+
+              auto factor_p = Util::find(BlendOption::str_factor_map(), factor_str);
+              unlikely (factor_p == null) {
+                LOG_ERR("unknown BlendOption::FactorType --- %s", factor_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<BlendOptionInfo>();
+              self->src_factor = *factor_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'dst_factor'
+      short_name: 'dfc'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto factor_str = content->cast<Value>()->var().as<string>();
+              Util::upper(factor_str);
+
+              auto factor_p = Util::find(BlendOption::str_factor_map(), factor_str);
+              unlikely (factor_p == null) {
+                LOG_ERR("unknown BlendOption::FactorType --- %s", factor_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<BlendOptionInfo>();
+              self->dst_factor = *factor_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'equation'
+      short_name: 'eqa'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto equation_str = content->cast<Value>()->var().as<string>();
+              Util::upper(equation_str);
+
+              auto equation_p = Util::find(BlendOption::str_equation_map(), equation_str);
+              unlikely (equation_p == null) {
+                LOG_ERR("unknown BlendOption::EquationType --- %s", equation_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<BlendOptionInfo>();
+              self->equation = *equation_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'src_alpha_factor'
+      short_name: 'saf'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto factor_str = content->cast<Value>()->var().as<string>();
+              Util::upper(factor_str);
+
+              auto factor_p = Util::find(BlendOption::str_factor_map(), factor_str);
+              unlikely (factor_p == null) {
+                LOG_ERR("unknown BlendOption::FactorType --- %s", factor_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<BlendOptionInfo>();
+              self->src_alpha_factor = *factor_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'dst_alpha_factor'
+      short_name: 'daf'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto factor_str = content->cast<Value>()->var().as<string>();
+              Util::upper(factor_str);
+
+              auto factor_p = Util::find(BlendOption::str_factor_map(), factor_str);
+              unlikely (factor_p == null) {
+                LOG_ERR("unknown BlendOption::FactorType --- %s", factor_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<BlendOptionInfo>();
+              self->dst_alpha_factor = *factor_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'alpha_equation'
+      short_name: 'aeq'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto equation_str = content->cast<Value>()->var().as<string>();
+              Util::upper(equation_str);
+
+              auto equation_p = Util::find(BlendOption::str_equation_map(), equation_str);
+              unlikely (equation_p == null) {
+                LOG_ERR("unknown BlendOption::EquationType --- %s", equation_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<BlendOptionInfo>();
+              self->alpha_equation = *equation_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'masks'
+      short_name: 'msk'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      #ifndef SERVER_ONLY
+                      auto mask_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(mask_str);
+
+                      auto mask_p = Util::find(BlendOption::str_mask_map(), mask_str);
+                      unlikely (mask_p == null) {
+                        LOG_ERR("unknown BlendOption::ColorComponentMaskType --- %s", mask_str.c_str());
+                        return Var(false);
+                      }
+
+                      auto self = loadable->cast<BlendOptionInfo>();
+                      self->mask |= *mask_p;
+                      #endif
+
+                      return Var(true);
+                    '''

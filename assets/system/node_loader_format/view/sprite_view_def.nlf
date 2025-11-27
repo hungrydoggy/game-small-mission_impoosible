@@ -1,0 +1,91 @@
+ObjectFormat:
+  full_name: 'SpriteViewDef'
+  short_name: 'SpriteView'
+  aliases: ['Sprite']
+  groups: ['ViewDefGroup', 'ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <view/sprite_view/sprite_view_def.h>
+    '''
+  loadable_class: 'SpriteViewDef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'repeat_count'
+      short_name: 'cnt'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<SpriteViewDef>();
+              self->repeat_count(content->cast<Value>()->var().as<ushort>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'cells'
+      short_name: 'cel'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'CellDef'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto cel = ctx->loadSubNodeAs<CellDef>(node, content);
+                      unlikely (cel == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<SpriteViewDef>();
+                      self->build_conf()->cell_defs().push_back(*cel);
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'cell_action_list'
+      short_name: 'acl'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'CellActionCallItem'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto aci = ctx->loadSubNodeAs<CellActionCallInfo>(node, content);
+                      unlikely (aci == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<SpriteViewDef>();
+                      self->cellidx_action_map_ref()[aci->cell_index] = aci->action;
+                      return Var(true);
+                    '''

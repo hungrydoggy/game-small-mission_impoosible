@@ -1,0 +1,54 @@
+Repeat:
+  cnt: 0
+  chl:
+    - MoveTo:
+      dur: 2
+      val: [100, 100, 0]
+    - Wait:
+      dur: 1
+    - MoveBy:
+      dur: 2
+      val: [50, -50, 0]
+    - Parallel:
+      chl:
+        - RotateTo:
+          dur: 2
+          val: [0, 0, 180]
+        - MoveTo:
+          dur: 2
+          val: [0, 0, 0]
+        - ScaleBy:
+          dur: 1
+          val: [0.5, 0.5, 0]
+
+    - PlaySound:
+      pth: 'audio_clips/gain_0.wav'
+
+    - RotateBy:
+      dur: 1
+      val: [0, 0, -180]
+    - SendMessage:
+      dst: '/'
+      nam: 'test'
+      par:
+        - 'abc'
+        - 123
+    - ScaleTo:
+      dur: 1
+      val: [1, 1, 1]
+    - Parallel:
+      chl:
+        - MoveXBy:
+          dur: 1
+          val: 100
+          int: out_quad
+        - MoveYBy:
+          dur: 1
+          val: -100
+          int: in_quad
+    - Script:
+      scr:
+        '''{
+          LOG("end");
+          return null_var;
+        '''

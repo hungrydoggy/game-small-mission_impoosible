@@ -1,0 +1,22 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+
+
+auto& mac_params = self->params;
+
+// get params
+auto fmt_str = mac_params.get(0)->asValue<string>();
+
+vector<string> fmt_params;
+for (size_t mi=1; mac_params.size(); ++mi)
+  fmt_params.push_back(mac_params.get(mi)->asValue<string>());
+
+
+// make result
+string formated;
+Util::stringFormat(formated, fmt_str, fmt_params);
+return Var(make_shared<Value>(Var(formated), content));
+return null_var;

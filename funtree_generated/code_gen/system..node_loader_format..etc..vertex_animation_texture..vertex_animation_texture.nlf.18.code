@@ -1,0 +1,25 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto self = loadable->cast<VAT>();
+self->addCenterPointTransform({
+    Vector3(
+      ctx->getData("pos.x" , REAL(0.0)),
+      ctx->getData("pos.y" , REAL(0.0)),
+      ctx->getData("pos.z" , REAL(0.0))
+    ),
+    Quaternion(
+      ctx->getData("rot.x" , REAL(0.0)),
+      ctx->getData("rot.y" , REAL(0.0)),
+      ctx->getData("rot.z" , REAL(0.0)),
+      ctx->getData("rot.w" , REAL(0.0))
+    ),
+    ctx->getData("scl" , REAL(1.0))
+});
+return Var(true);
+return null_var;

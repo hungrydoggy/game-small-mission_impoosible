@@ -1,0 +1,21 @@
+ObjectFormat:
+  full_name: 'Action.Empty'
+  short_name: 'Empty'
+  groups: ['ActionGroup']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_factory.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+      auto al = loadable->cast<ActionLoadable>();
+      al->action = action::Empty();
+      return Var(true);
+    '''
+  attributes: []

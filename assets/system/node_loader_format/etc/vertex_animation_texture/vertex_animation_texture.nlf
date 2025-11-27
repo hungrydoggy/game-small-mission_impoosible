@@ -1,0 +1,324 @@
+ObjectFormat:
+  full_name : 'VertexAnimationTexture'
+  short_name: 'VAT'
+  include_part:
+    '''{
+      #include <etc/vertex_animation_texture/vertex_animation_texture.h>
+      #include <resource/texture/texture.h>
+    '''
+  loadable_class: 'VertexAnimationTexture'
+  attributes:
+    - AttributeFormat:
+      full_name: 'texture_paths'
+      short_name: 'tex'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 1
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Value'
+                  sub_type: 'string'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<VAT>();
+                      self->addTexturePath(content->resolveFilePath(content->asValue<string>()));
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'offset'
+      short_name: 'ofs'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VAT>();
+              self->offset(ctx->getData("vector3.val").v<Vector3>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'scale'
+      short_name: 'scl'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VAT>();
+              self->scale(content->asValue<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'duration'
+      short_name: 'dur'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VAT>();
+              self->duration(content->asValue<double>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'time_scale'
+      short_name: 'tsc'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VAT>();
+              self->time_scale(content->asValue<double>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'repeat_count'
+      short_name: 'cnt'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VAT>();
+
+              unlikely (content->asValue<int>() < 0)
+                self->repeat_count(VAT::kInfinityRepeatCount);
+              else
+                self->repeat_count(content->asValue<ushort>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'markers'
+      short_name: 'mrk'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - SequenceFormat:
+                  min_count: 2
+                  max_count: 2
+                  elements:
+                    - ElementFormat:
+                      formats:
+                        - ValueFormat:
+                          type: 'Value'
+                          sub_type: 'number'
+                          on_load:
+                            '''{(
+                                  FormatContext* ctx,
+                                  shared_ptr<NodeLoadable> loadable,
+                                  shared_ptr<Node> node,
+                                  shared_ptr<Content> content
+                                )
+
+                              auto self = loadable->cast<VAT>();
+                              ctx->setData("pos", content->asValue<real>());
+                              return Var(true);
+                            '''
+                    - ElementFormat:
+                      formats:
+                        - ValueFormat:
+                          type: 'Value'
+                          sub_type: 'string'
+                          on_load:
+                            '''{(
+                                  FormatContext* ctx,
+                                  shared_ptr<NodeLoadable> loadable,
+                                  shared_ptr<Node> node,
+                                  shared_ptr<Content> content
+                                )
+
+                              auto self = loadable->cast<VAT>();
+                              ctx->setData("name", content->asValue<string>());
+                              return Var(true);
+                            '''
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<VAT>();
+                      auto pos  = ctx->getData("pos" , REAL(-1.0));
+                      auto name = ctx->getData("name", "");
+                      self->addMarker(pos, name);
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'center_point_transforms'
+      short_name: 'cpt'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - SequenceFormat:
+                  min_count: 8
+                  max_count: 8
+                  elements:
+                    - ElementFormat:
+                      formats:
+                        - ValueFormat:
+                          type: 'Value'
+                          sub_type: 'number'
+                          on_load:
+                            '''{(FormatContext* ctx, ,, shared_ptr<Content> content)
+
+                              ctx->setData("pos.x", content->asValue<real>());
+                              return Var(true);
+                            '''
+                    - ElementFormat:
+                      formats:
+                        - ValueFormat:
+                          type: 'Value'
+                          sub_type: 'number'
+                          on_load:
+                            '''{(FormatContext* ctx, ,, shared_ptr<Content> content)
+
+                              ctx->setData("pos.y", content->asValue<real>());
+                              return Var(true);
+                            '''
+                    - ElementFormat:
+                      formats:
+                        - ValueFormat:
+                          type: 'Value'
+                          sub_type: 'number'
+                          on_load:
+                            '''{(FormatContext* ctx, ,, shared_ptr<Content> content)
+
+                              ctx->setData("pos.z", content->asValue<real>());
+                              return Var(true);
+                            '''
+                    - ElementFormat:
+                      formats:
+                        - ValueFormat:
+                          type: 'Value'
+                          sub_type: 'number'
+                          on_load:
+                            '''{(FormatContext* ctx, ,, shared_ptr<Content> content)
+
+                              ctx->setData("rot.x", content->asValue<real>());
+                              return Var(true);
+                            '''
+                    - ElementFormat:
+                      formats:
+                        - ValueFormat:
+                          type: 'Value'
+                          sub_type: 'number'
+                          on_load:
+                            '''{(FormatContext* ctx, ,, shared_ptr<Content> content)
+
+                              ctx->setData("rot.y", content->asValue<real>());
+                              return Var(true);
+                            '''
+                    - ElementFormat:
+                      formats:
+                        - ValueFormat:
+                          type: 'Value'
+                          sub_type: 'number'
+                          on_load:
+                            '''{(FormatContext* ctx, ,, shared_ptr<Content> content)
+
+                              ctx->setData("rot.z", content->asValue<real>());
+                              return Var(true);
+                            '''
+                    - ElementFormat:
+                      formats:
+                        - ValueFormat:
+                          type: 'Value'
+                          sub_type: 'number'
+                          on_load:
+                            '''{(FormatContext* ctx, ,, shared_ptr<Content> content)
+
+                              ctx->setData("rot.w", content->asValue<real>());
+                              return Var(true);
+                            '''
+                    - ElementFormat:
+                      formats:
+                        - ValueFormat:
+                          type: 'Value'
+                          sub_type: 'number'
+                          on_load:
+                            '''{(FormatContext* ctx, ,, shared_ptr<Content> content)
+
+                              ctx->setData("scl", content->asValue<real>());
+                              return Var(true);
+                            '''
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<VAT>();
+                      self->addCenterPointTransform({
+                          Vector3(
+                            ctx->getData("pos.x" , REAL(0.0)),
+                            ctx->getData("pos.y" , REAL(0.0)),
+                            ctx->getData("pos.z" , REAL(0.0))
+                          ),
+                          Quaternion(
+                            ctx->getData("rot.x" , REAL(0.0)),
+                            ctx->getData("rot.y" , REAL(0.0)),
+                            ctx->getData("rot.z" , REAL(0.0)),
+                            ctx->getData("rot.w" , REAL(0.0))
+                          ),
+                          ctx->getData("scl" , REAL(1.0))
+                      });
+                      return Var(true);
+                    '''

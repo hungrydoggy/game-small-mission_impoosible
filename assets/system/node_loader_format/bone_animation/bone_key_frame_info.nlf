@@ -1,0 +1,123 @@
+ObjectFormat:
+  full_name: 'BoneKeyFrameInfo'
+  include_part:
+    '''{
+      #include <resource/bone_animation/bone_animation.h>
+    '''
+  loadable_class: 'BoneKeyFrameInfo'
+  attributes:
+    - AttributeFormat:
+      full_name: 'bone_name'
+      short_name: 'nam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BoneKeyFrameInfo>();
+              self->bone_name(content->cast<Value>()->var().as<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'pos_key_frames'
+      short_name: 'pkf'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'PosKeyFrame'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto pkf = ctx->loadSubNodeAs<PosKeyFrame>(node, content);
+                      unlikely (pkf == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<BoneKeyFrameInfo>();
+                      self->pos_key_frames().push_back(*pkf);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'rot_key_frames'
+      short_name: 'rkf'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'RotKeyFrame'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto rkf = ctx->loadSubNodeAs<RotKeyFrame>(node, content);
+                      unlikely (rkf == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<BoneKeyFrameInfo>();
+                      self->rot_key_frames().push_back(*rkf);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'scl_key_frames'
+      short_name: 'skf'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'SclKeyFrame'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto skf = ctx->loadSubNodeAs<SclKeyFrame>(node, content);
+                      unlikely (skf == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<BoneKeyFrameInfo>();
+                      self->scl_key_frames().push_back(*skf);
+
+                      return Var(true);
+                    '''
+
+

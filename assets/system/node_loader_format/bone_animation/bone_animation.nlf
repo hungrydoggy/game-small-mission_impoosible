@@ -1,0 +1,120 @@
+ObjectFormat:
+  full_name: 'BoneAnimation'
+  include_part:
+    '''{
+      #include <resource/bone_animation/bone_animation.h>
+    '''
+  loadable_class: 'BoneAnimation'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto self = loadable->cast<BoneAnimation>();
+
+      real end_time = 0;
+      for (auto &bkf : self->bone_key_frame_infos()) {
+        for (auto &kf : bkf.pos_key_frames())
+          end_time = math::max(kf.time(), end_time);
+        for (auto &kf : bkf.rot_key_frames())
+          end_time = math::max(kf.time(), end_time);
+        for (auto &kf : bkf.scl_key_frames())
+          end_time = math::max(kf.time(), end_time);
+      }
+
+      auto& eventname_time_map = self->eventname_time_map();
+      eventname_time_map.clear();
+      for (auto &e : self->events())
+        eventname_time_map[e.name()] = e.time();
+
+      self->end_time(end_time);
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BoneAnimation>();
+              self->name(content->cast<Value>()->var().as<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'bone_key_frame_infos'
+      short_name: 'bkf'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'BoneKeyFrameInfo'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto bkfi = ctx->loadSubNodeAs<BoneKeyFrameInfo>(node, content);
+                      unlikely (bkfi == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<BoneAnimation>();
+                      self->bone_key_frame_infos().push_back(*bkfi);
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'events'
+      short_name: 'evn'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'FrameEvent'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto frame_event = ctx->loadSubNodeAs<FrameEvent>(node, content);
+                      unlikely (frame_event == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<BoneAnimation>();
+                      self->events().push_back(*frame_event);
+
+                      return Var(true);
+                    '''
+
+

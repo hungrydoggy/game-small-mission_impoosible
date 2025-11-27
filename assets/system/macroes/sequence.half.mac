@@ -1,0 +1,53 @@
+MacroFormat:
+  full_name: 'Sequence.half'
+  short_name: 'seq.half'
+  formats:
+    - SequenceFormat:
+      min_count:  1
+      max_count: -1
+      elements:
+        - ElementFormat:
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+
+                  auto self = dpc<Macro>(loadable);
+                  self->params.add(content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+
+      // compute
+      vector<Var> result;
+      for (size_t pi=0; pi<mac_params.size(); ++pi) {
+        auto& p = mac_params.get(pi);
+        unlikely (p == null)
+          continue;
+
+        result.push_back(p->cast<Value>()->var() / Var(2));
+      }
+
+
+      // make result
+      auto seq = make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+      for (auto& v : result)
+        seq->add(make_shared<Value>(v, content));
+
+      return Var(seq);
+    '''

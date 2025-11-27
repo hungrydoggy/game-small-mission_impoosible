@@ -1,0 +1,80 @@
+'@system/node_loader_format/game_component/game_component.nlf':
+  full_name: 'PointLight'
+  short_name: 'PointLight'
+  aliases: []
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_item.h>
+      #include <game_component/light/point/point_light.h>
+      #include <game_component/game_component.h>
+      #include <physics/bullet/bullet_body.h>
+      #include <physics/bullet/bullet_shape_info.h>
+      #include <physics/bullet/bullet_shape.h>
+      #include <resource/audio_clip/audio_clip.h>
+      #include <resource/resource_holder.h>
+      #include <sstream>
+      #include <util/util.h>
+    '''
+  loadable_class: 'PointLight'
+  attributes+:
+    - AttributeFormat:
+      full_name: 'constant'
+      short_name: 'con'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PointLight>();
+              self->constant(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'linear'
+      short_name: 'lin'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PointLight>();
+              self->linear(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'quadratic'
+      short_name: 'qua'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PointLight>();
+              self->quadratic(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''

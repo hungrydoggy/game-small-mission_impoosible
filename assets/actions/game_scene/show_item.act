@@ -1,0 +1,21 @@
+Sequence:
+  chl:
+    - AlphaTo:
+      dur: 0
+      val: 0
+    - MoveYBy:
+      dur: 0
+      val: 20
+    - SetDrawable:
+      val: true
+
+    - Parallel:
+      chl:
+        - AlphaTo:
+          dur: 0.2
+          val: 1
+          int: OUT_QUAD
+        - MoveYBy:
+          dur: 0.2
+          val: -20
+          int: IN_QUAD

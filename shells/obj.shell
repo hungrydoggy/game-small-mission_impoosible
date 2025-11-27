@@ -1,0 +1,15 @@
+Scene:
+  amb: [1, 1, 1, 1]
+  gtr: '@gpu_tasks/game/runner.gtr'
+  phy:
+    Bullet:
+      scl: 0.02
+      gra: [0, -9.8, 0]
+  chl: 
+    - Camera:
+      nam: 'camera'
+      pos: [0, 0, 4000]
+      prj:
+        Projection:
+          typ: 'orthogonal'
+    - '$this'

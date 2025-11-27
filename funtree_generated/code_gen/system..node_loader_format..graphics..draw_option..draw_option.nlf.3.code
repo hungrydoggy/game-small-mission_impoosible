@@ -1,0 +1,32 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+#ifndef SERVER_ONLY
+auto bopt = ctx->loadSubNodeAs<BlendOptionInfo>(node, content);
+unlikely (bopt == null)
+  return Var(false);
+
+auto self = loadable->cast<DrawOption>();
+
+auto idx = self->blend_option.size();
+self->blend_option.resize(idx + 1);
+
+self->blend_option.setFactors(
+    idx,
+    bopt->src_factor,
+    bopt->dst_factor,
+    bopt->src_alpha_factor,
+    bopt->dst_alpha_factor
+);
+self->blend_option.setEquation(idx, bopt->equation, bopt->alpha_equation);
+self->blend_option.setMask(idx, bopt->mask);
+
+#endif
+
+return Var(true);
+return null_var;

@@ -1,0 +1,15 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto self = loadable->cast<AttachmentInfo>();
+
+auto value = content->cast<Value>()->var().as<uint>();
+self->setData("stencil_clear_value", value);
+
+return Var(true);
+return null_var;

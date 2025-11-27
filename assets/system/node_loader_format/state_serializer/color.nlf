@@ -1,0 +1,54 @@
+ObjectFormat:
+  full_name: 'ColorStateSerializer'
+  short_name: 'ColorSttSer'
+  groups: ['StateSerializerGroup']
+  include_part:
+    '''{
+      #include <common/state_serializer/state_serializer.h>
+    '''
+  loadable_class: 'StateSerializerNodeLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+      auto self = loadable->cast<StateSerializerNodeLoadable>();
+
+      self->on_serialize_func =
+          [](GameComponent* cmp, string const& name, vector<byte>& buffer) {
+            Serializer::serializeByAuto(cmp->color(), buffer);
+
+            return true;
+          };
+
+      self->on_deserialize_func =
+          [](GameComponent* cmp, string const& name, byte const*& buffer) {
+            { Color v; Serializer::deserializeByAuto(v, buffer); cmp->color(v); }
+
+            return true;
+          };
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              self->name = content->asValue<string>();
+              return Var(true);
+            '''

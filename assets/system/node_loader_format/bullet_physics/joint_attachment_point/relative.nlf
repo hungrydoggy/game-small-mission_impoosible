@@ -1,0 +1,51 @@
+ObjectFormat:
+  full_name: 'BulletRelativeJointAttachmentPoint'
+  short_name: 'BulletRelativeJointPoint'
+  groups: ['BulletJointAttachmentPointGroup']
+  include_part:
+    '''{
+      #include <physics/bullet/joint_attachment_point/relative.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>
+    '''
+  loadable_class: 'BulletRelativeJointAttachmentPoint'
+  attributes:
+    - AttributeFormat:
+      full_name: 'anchor_ratio_from_owner_to_opposite_'
+      short_name: 'anc'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletRelativeJointAttachmentPoint>();
+              self->anchor_ratio_from_owner_to_opposite(content->asValue<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'point_from_anchor'
+      short_name: 'pnt'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& pnt = ctx->getData("vector3.val").v<Vector3>();
+              auto self = loadable->cast<BulletRelativeJointAttachmentPoint>();
+              self->point_from_anchor(pnt);
+              return Var(true);
+            '''

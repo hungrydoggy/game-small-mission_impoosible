@@ -1,0 +1,46 @@
+MacroFormat:
+  full_name: 'Color.fromRgbaBytes'
+  short_name: 'rgba'
+  formats:
+    - SequenceFormat:
+      min_count: 4
+      max_count: 4
+      elements:
+        - ElementFormat:
+          formats:
+            - ValueFormat:
+              type: 'Value'
+              sub_type: 'number'
+              on_load:
+                '''{(
+                      FormatContext* ctx,
+                      shared_ptr<NodeLoadable> loadable,
+                      shared_ptr<Node> node,
+                      shared_ptr<Content> content
+                    )
+                  auto self = dpc<Macro>(loadable);
+                  self->params.add(content);
+                  return Var(true);
+                '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      auto& mac_params = self->params;
+
+      auto r = mac_params.get(0)->cast<Value>()->var().as<uint>() / REAL(255.0);
+      auto g = mac_params.get(1)->cast<Value>()->var().as<uint>() / REAL(255.0);
+      auto b = mac_params.get(2)->cast<Value>()->var().as<uint>() / REAL(255.0);
+      auto a = mac_params.get(3)->cast<Value>()->var().as<uint>() / REAL(255.0);
+
+      auto seq = make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+      seq->add(make_shared<Value>(Var(r), content));
+      seq->add(make_shared<Value>(Var(g), content));
+      seq->add(make_shared<Value>(Var(b), content));
+      seq->add(make_shared<Value>(Var(a), content));
+
+      return Var(seq);
+    '''

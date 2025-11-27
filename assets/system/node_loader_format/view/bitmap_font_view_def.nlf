@@ -1,0 +1,229 @@
+ObjectFormat:
+  full_name: 'BitmapFontViewDef'
+  short_name: 'BitmapFontView'
+  groups: ['ViewDefGroup', 'ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <view/bitmap_font_view/bitmap_font_view_def.h>
+    '''
+  loadable_class: 'BitmapFontViewDef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'bitmap_font'
+      short_name: 'bmf'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto bmf_path = content->resolveFilePath(content->asValue<string>());
+              auto bmf = BitmapFont::RM::get(bmf_path);
+              unlikely (bmf == null) {
+                LOG_ERR("bitmap_font is null ---- %s", bmf_path.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<BitmapFontViewDef>();
+              self->bitmap_font(bmf);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'sampler'
+      short_name: 'sam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'Sampler'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto sam = ctx->loadSubNodeAs<Sampler>(node, content);
+              unlikely (sam == null)
+                return Var(false);
+
+              auto self = loadable->cast<BitmapFontViewDef>();
+              self->sampler_keys().resize(1);
+              self->sampler_keys()[0] =
+                  SamplerKey{
+                      sam->mag_filter(),
+                      sam->min_filter(),
+                      sam->wrap_s    (),
+                      sam->wrap_t    (),
+                      sam->mip_levels(),
+                  };
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'horizontal_align'
+      short_name: 'hor'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto hor_str = content->cast<Value>()->var().as<string>();
+              Util::upper(hor_str);
+              auto hor_p = Util::find(HorizontalAlign::type_enum_map(), hor_str);
+              unlikely (hor_p == null) {
+                LOG_ERR("unknown HorizontalAlign::Type --- %s", hor_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<BitmapFontViewDef>();
+              self->hor_align(*hor_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'vertical_align'
+      short_name: 'ver'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto ver_str = content->cast<Value>()->var().as<string>();
+              Util::upper(ver_str);
+              auto ver_p = Util::find(VerticalAlign::type_enum_map(), ver_str);
+              unlikely (ver_p == null) {
+                LOG_ERR("unknown VerticalAlign::Type --- %s", ver_str.c_str());
+                return Var(false);
+              }
+
+              auto self = loadable->cast<BitmapFontViewDef>();
+              self->ver_align(*ver_p);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'line_height_scale'
+      short_name: 'lin'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontViewDef>();
+              self->line_height_scale(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'empty_line_height_scale'
+      short_name: 'eln'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontViewDef>();
+              self->empty_line_height_scale(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'letter_space'
+      short_name: 'spc'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontViewDef>();
+              self->letter_space(content->cast<Value>()->var().as<real>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'text'
+      short_name: 'txt'
+      is_essential: true
+      dependencies: ['bitmap_font', 'horizontal_align', 'vertical_align', 'line_height_scale', 'letter_space']
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BitmapFontViewDef>();
+              unlikely (self->bitmap_font() == null)
+                return Var(false);
+
+              self->text(content->cast<Value>()->var().as<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'material'
+      short_name: 'mat'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ViewDef>();
+              self->material_reg(StringRegistry::default_registry().lookUp(content->asValue<string>()));
+              return Var(true);
+            '''

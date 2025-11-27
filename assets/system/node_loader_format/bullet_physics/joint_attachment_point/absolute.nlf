@@ -1,0 +1,100 @@
+ObjectFormat:
+  full_name: 'BulletAbsoluteJointAttachmentPoint'
+  short_name: 'BulletAbsoluteJointPoint'
+  groups: ['BulletJointAttachmentPointGroup']
+  include_part:
+    '''{
+      #include <physics/bullet/joint_attachment_point/absolute.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>
+    '''
+  loadable_class: 'BulletAbsoluteJointAttachmentPoint'
+  attributes:
+    - AttributeFormat:
+      full_name: 'attachment_point_in_owner'
+      short_name: 'pow'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& pow = ctx->getData("vector3.val").v<Vector3>();
+              btVector3 result;
+              BulletWrapper::vector3ToBtVector3(pow, result);
+
+              auto self = loadable->cast<BulletAbsoluteJointAttachmentPoint>();
+              self->attachment_point_in_owner(result);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'attachment_orientation_in_owner'
+      short_name: 'oow'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/quaternion.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& oow = ctx->getData("quaternion.val").v<Quaternion>();
+              btQuaternion result;
+              BulletWrapper::quaternionToBtQuaternion(oow, result);
+
+              auto self = loadable->cast<BulletAbsoluteJointAttachmentPoint>();
+              self->attachment_orientation_in_owner(result);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'attachment_point_in_opposite'
+      short_name: 'pop'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& pop = ctx->getData("vector3.val").v<Vector3>();
+              btVector3 result;
+              BulletWrapper::vector3ToBtVector3(pop, result);
+
+              auto self = loadable->cast<BulletAbsoluteJointAttachmentPoint>();
+              self->attachment_point_in_opposite(result);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'attachment_orientation_in_opposite'
+      short_name: 'oop'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/quaternion.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto& oop = ctx->getData("quaternion.val").v<Quaternion>();
+              btQuaternion result;
+              BulletWrapper::quaternionToBtQuaternion(oop, result);
+
+              auto self = loadable->cast<BulletAbsoluteJointAttachmentPoint>();
+              self->attachment_orientation_in_opposite(result);
+              return Var(true);
+            '''

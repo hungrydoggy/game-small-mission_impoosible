@@ -1,0 +1,56 @@
+ObjectFormat:
+  full_name : 'VertexAnimationTextureState'
+  short_name: 'VATState'
+  aliases: ['VertexAnimationTextureStateSingle', 'VATStateSingle']
+  groups: ['ObjectTraitGroup', 'VertexAnimationTextureStateGroup']
+  include_part:
+    '''{
+      #include <etc/vertex_animation_texture/vertex_animation_texture.h>
+      #include <etc/vertex_animation_texture/vertex_animation_texture_state_single.h>
+    '''
+  loadable_class: 'VertexAnimationTextureStateSingle'
+  attributes:
+    - AttributeFormat:
+      full_name: 'vertex_animation_texture'
+      short_name: 'vat'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'VertexAnimationTexture'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto vat = ctx->loadSubNodeAs<VAT>(node, content);
+              unlikely (vat == null)
+                return Var(false);
+
+              auto self = loadable->cast<VATStateSingle>();
+              self->setVAT(vat);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'time_scale'
+      short_name: 'tsc'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VATStateSingle>();
+              self->time_scale(content->asValue<double>());
+              return Var(true);
+            '''

@@ -1,0 +1,116 @@
+GpuTaskDef:
+  ref:
+    'kMaxObjectCount':
+      '$kMaxObjectCount' : 100
+
+    'kMaxDynamicIndexCount': {'!*': ['$kMaxObjectCount', 9]}
+
+  crt: DISPATCH
+  cnf:
+    ComputeConfig:
+      csh: 'shaders/game/batch.comp'
+  dbl:
+    - ShaderDataBindDef:
+      nam: com_config
+      set: 0
+      bnd: 0
+      dtp: UNIFORM_BUFFER
+      stf:
+        - COMPUTE_BIT
+      len: 1
+      byt: 80
+      usg:
+        - TRANSFER_DST_BIT
+        - UNIFORM_BUFFER_BIT
+      prp: STATIC_STAGED
+
+    - '@gpu_tasks/game/common/obj_buff.sdb':
+      set: 0
+      bnd: 1
+      stf:
+        - COMPUTE_BIT
+      len: 1
+
+    - ShaderDataBindDef:
+      nam: ref_vertex_buff
+      set: 0
+      bnd: 2
+      usb: '%vertex_buffer'
+      dtp: READONLY_STORAGE_BUFFER
+      stf:
+        - COMPUTE_BIT
+      usg:
+        - TRANSFER_DST_BIT
+        - VERTEX_BUFFER_BIT
+        - STORAGE_BUFFER_BIT
+      prp: STATIC
+
+    - ShaderDataBindDef:
+      nam: ref_index_buff
+      set: 0
+      bnd: 3
+      usb: '%index_buffer'
+      dtp: READONLY_STORAGE_BUFFER
+      stf:
+        - COMPUTE_BIT
+      usg:
+        - TRANSFER_DST_BIT
+        - INDEX_BUFFER_BIT
+        - STORAGE_BUFFER_BIT
+      prp: STATIC
+
+    - ShaderDataBindDef:
+      nam: dynamic_vertex_buff
+      set: 0
+      bnd: 4
+      dtp: STORAGE_BUFFER
+      stf:
+        - COMPUTE_BIT
+      len: 1
+      byt: {'!*':['$kMaxDynamicIndexCount', 32]}
+      usg:
+        - VERTEX_BUFFER_BIT
+        - STORAGE_BUFFER_BIT
+      prp: STATIC
+
+    - ShaderDataBindDef:
+      nam: dynamic_index_buff
+      set: 0
+      bnd: 5
+      dtp: STORAGE_BUFFER
+      stf:
+        - COMPUTE_BIT
+      len: 1
+      byt: {'!*':['$kMaxDynamicIndexCount', 4]}
+      usg:
+        - INDEX_BUFFER_BIT
+        - STORAGE_BUFFER_BIT
+      prp: STATIC
+
+    - ShaderDataBindDef:
+      nam: opaque_draw_cmd_buffer
+      set: 1
+      bnd: 0
+      dtp: STORAGE_BUFFER
+      stf:
+        - COMPUTE_BIT
+      len: 1
+      byt: 20
+      usg:
+        - INDIRECT_BUFFER_BIT
+        - STORAGE_BUFFER_BIT
+      prp: STATIC
+
+    - ShaderDataBindDef:
+      nam: transparent_draw_cmd_buffer
+      set: 1
+      bnd: 1
+      dtp: STORAGE_BUFFER
+      stf:
+        - COMPUTE_BIT
+      len: 1
+      byt: 20
+      usg:
+        - INDIRECT_BUFFER_BIT
+        - STORAGE_BUFFER_BIT
+      prp: STATIC

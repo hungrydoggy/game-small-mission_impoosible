@@ -1,0 +1,69 @@
+ObjectFormat:
+  full_name: 'TextViewStateSerializer'
+  short_name: 'TextViewSttSer'
+  aliases: ['TextSttSer']
+  groups: ['StateSerializerGroup']
+  include_part:
+    '''{
+      #include <common/state_serializer/state_serializer.h>
+    '''
+  loadable_class: 'StateSerializerNodeLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+      auto self = loadable->cast<StateSerializerNodeLoadable>();
+
+      self->on_serialize_func =
+          [](GameComponent* cmp, string const& name, vector<byte>& buffer) {
+            auto view = KV(null, dynamic_cast<GameObject*>(cmp), template getTrait<View>("view"));
+            unlikely (view == null) {
+              LOG_ERR("need View --- %s", cmp->makePath().c_str());
+              return false;
+            }
+
+            Serializer::serializeByAuto(view->getText(), buffer);
+
+            return true;
+          };
+
+      self->on_deserialize_func =
+          [](GameComponent* cmp, string const& name, byte const*& buffer) {
+            auto view = KV(null, dynamic_cast<GameObject*>(cmp), template getTrait<View>("view"));
+            unlikely (view == null) {
+              LOG_ERR("need View --- %s", cmp->makePath().c_str());
+              return false;
+            }
+
+            string text;  Serializer::deserializeByAuto(text, buffer);
+
+            view->setText(text);
+
+            return true;
+          };
+
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              self->name = content->asValue<string>();
+              return Var(true);
+            '''

@@ -1,0 +1,268 @@
+'@system/node_loader_format/game_component/game_component.nlf':
+  full_name: 'GameObject'
+  short_name: 'Object'
+  aliases: ['Obj']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_item.h>
+      #include <action/action_list.h>
+      #include <action/action_state.h>
+      #include <game_component/object/game_object.h>
+      #include <game_component/game_component.h>
+      #include <physics/bullet/bullet_body.h>
+      #include <physics/bullet/bullet_shape_info.h>
+      #include <physics/bullet/bullet_shape.h>
+      #include <resource/audio_clip/audio_clip.h>
+      #include <resource/resource_holder.h>
+      #include <sstream>
+      #include <util/util.h>
+      #include <view/view.h>
+    '''
+  loadable_class: 'GameObject'
+  attributes+:
+    - AttributeFormat:
+      full_name: 'graphics_task_def_name'
+      short_name: 'tdn'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameObject>();
+              self->graphics_task_def_name(content->cast<Value>()->var().as<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'action_state'
+      short_name: 'acs'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'ActionState'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto acs = ctx->loadSubNodeAs<ActionState>(node, content);
+              unlikely (acs == null)
+                return Var(false);
+
+              auto self = loadable->cast<GameObject>();
+              self->addTrait(acs);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'action_list'
+      short_name: 'acl'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'ActionItem'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto itm = ctx->loadSubNodeAs<ActionItem>(node, content);
+                      unlikely (itm == null)
+                        return Var(false);
+
+                      unlikely (ctx->hasData("action_items") == false)
+                        ctx->setData("action_items", Var(vector<shared_ptr<ActionItem>>{}));
+
+                      ctx->getDataRef("action_items").v<vector<shared_ptr<ActionItem>>>().push_back(itm);
+                      return Var(true);
+                    '''
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameObject>();
+
+              // add ActionState trait if not added already
+              likely (self->hasTrait("action_state") == false) {
+                auto action_state = make_shared<ActionState>();
+                self->addTrait(action_state);
+              }
+
+              // add ActionList trait
+              auto action_list = make_shared<ActionList>();
+              for (auto& itm : ctx->getData("action_items").v<vector<shared_ptr<ActionItem>>>())
+                action_list->add(itm->name, itm->action);
+
+              self->addTrait(action_list);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'view_def'
+      short_name: 'vie'
+      aliases: ['view']
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'ViewDefGroup'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto view_def = ctx->loadSubNodeAs<ViewDef>(node, content);
+              unlikely (view_def == null)
+                return Var(false);
+
+              auto view = make_shared<View>();
+              view->def(view_def);
+
+              auto self = loadable->cast<GameObject>();
+              self->addTrait(view);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'body'
+      short_name: 'bdy'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'PhysicsBodyGroup'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto bdy = ctx->loadSubNodeAs<PhysicsBody>(node, content);
+              unlikely (bdy == null)
+                return Var(false);
+
+              auto self = loadable->cast<GameObject>();
+              self->addTrait(bdy);
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'shapes'
+      short_name: 'shp'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'BulletShapeGroup'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto shp_info = ctx->loadSubNodeAs<BulletShapeInfo>(node, content);
+                      unlikely (shp_info == null)
+                        return Var(false);
+
+                      auto shp = make_shared<BulletShape>();
+                      shp->bt_shape_info(shp_info);
+
+                      unlikely (ctx->hasData("physics_shapes") == false)
+                        ctx->setData("physics_shapes", Var(vector<shared_ptr<PhysicsShape>>{}));
+
+                      ctx->getDataRef("physics_shapes").v<vector<shared_ptr<PhysicsShape>>>().push_back(shp);
+                      return Var(true);
+                    '''
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameObject>();
+              auto shape_list = make_shared<PhysicsShapeList>();
+              for (auto& shp : ctx->getData("physics_shapes").v<vector<shared_ptr<PhysicsShape>>>())
+                shape_list->shapes().push_back(shp);
+
+              self->addTrait(shape_list);
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'traits'
+      short_name: 'trt'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'ObjectTraitGroup'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto trait_loadable = ctx->loadSubNode(node, content);
+                      unlikely (trait_loadable == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<GameObject>();
+
+                      { // case: trait
+                        auto trait = dpc<ObjectTrait>(trait_loadable);
+                        likely (trait != null) {
+                          self->addTrait(trait);
+                          return Var(true);
+                        }
+                      }
+
+                      { // case: trait_adaptable
+                        auto trait_adaptable = dpc<ObjectTraitAdaptable>(trait_loadable);
+                        likely (trait_adaptable != null) {
+                          self->addTrait(trait_adaptable);
+                          return Var(true);
+                        }
+                      }
+
+                      return Var(false);
+                    '''

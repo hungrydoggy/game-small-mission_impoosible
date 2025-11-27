@@ -1,0 +1,41 @@
+ObjectFormat:
+  full_name: 'GpuTaskRunner'
+  groups: ['GpuTaskRunnerGroup']
+  guard_head: '#ifndef SERVER_ONLY'
+  guard_tail: '#endif'
+  include_part:
+    '''{
+      #include <gpu_task/gpu_task_runner.h>
+    '''
+  loadable_class: 'GpuTaskRunner'
+  attributes:
+    - AttributeFormat:
+      full_name: 'tasks'
+      short_name: 'tsk'
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'GpuTaskItem'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+                      auto inf = ctx->loadSubNodeAs<GpuTaskRunner::TaskItem>(node, content);
+                      unlikely (inf == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<GpuTaskRunner>();
+                      self->addTaskDef(inf->name, inf->task_def);
+
+                      return Var(true);
+                    '''

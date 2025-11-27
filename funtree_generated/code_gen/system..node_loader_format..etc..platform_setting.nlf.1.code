@@ -1,0 +1,16 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto bax = ctx->loadSubNodeAs<GameBaseAxis>(node, content);
+unlikely (bax == null)
+  return Var(false);
+
+auto self = loadable->cast<PlatformSetting>();
+self->game_base_axis = *bax;
+return Var(true);
+return null_var;

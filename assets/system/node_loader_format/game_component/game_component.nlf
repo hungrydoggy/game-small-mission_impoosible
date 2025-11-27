@@ -1,0 +1,239 @@
+ObjectFormat:
+  full_name: 'GameComponent'
+  short_name: 'Component'
+  aliases: ['Cmp']
+  groups: ['GameComponentGroup']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_item.h>
+      #include <game_component/game_component.h>
+      #include <physics/bullet/bullet_body.h>
+      #include <physics/bullet/bullet_shape_info.h>
+      #include <physics/bullet/bullet_shape.h>
+      #include <sstream>
+      #include <util/util.h>
+    '''
+  loadable_class: 'GameComponent'
+  attributes:
+    - AttributeFormat:
+      full_name: 'name'
+      short_name: 'nam'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameComponent>();
+              self->name(content->cast<Value>()->var().as<string>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'position'
+      short_name: 'pos'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameComponent>();
+              self->position(ctx->getData("vector3.val").v<Vector3>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'rotation'
+      short_name: 'rot'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/quaternion.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameComponent>();
+              self->rotation(ctx->getData("quaternion.val").v<Quaternion>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'scale'
+      short_name: 'scl'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameComponent>();
+              self->scale(ctx->getData("vector3.val").v<Vector3>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'color'
+      short_name: 'col'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/color.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameComponent>();
+              self->color(ctx->getData("color.val").v<Color>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'is_drawable'
+      short_name: 'dra'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameComponent>();
+              self->is_drawable_self(content->cast<Value>()->var().as<bool>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'is_updatable'
+      short_name: 'upd'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameComponent>();
+              self->is_updatable_self(content->cast<Value>()->var().as<bool>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'need_body_without_draw'
+      short_name: 'bwd'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<GameComponent>();
+              self->need_body_without_draw(content->cast<Value>()->var().as<bool>());
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'state_serializers'
+      short_name: 'sts'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'StateSerializerGroup'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<GameComponent>();
+                      auto ssnl = ctx->loadSubNodeAs<StateSerializerNodeLoadable>(node, content);
+                      unlikely (ssnl == null)
+                        return Var(false);
+
+                      self->addStateSerializer(
+                          make_shared<StateSerializer>(
+                            ssnl->name,
+                            ssnl->on_serialize_func,
+                            ssnl->on_deserialize_func
+                          )
+                      );
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'children'
+      short_name: 'chl'
+      is_essential: false
+      formats:
+        - SequenceFormat:
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'GameComponentGroup'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<GameComponent>();
+                      auto child =
+                          ctx->loadSubNode(
+                            node,
+                            content,
+                            [self](sp<NodeLoadable> const& loadable) {
+                              self->addChild(dpc<GameComponent>(loadable));
+                            }
+                          );
+                      unlikely (child == null)
+                        return Var(false);
+
+                      return Var(true);
+                    '''

@@ -1,0 +1,32 @@
+GlobalObject:
+  ref:
+    'lang':
+      '$lang': 'en'
+
+    'bgm_vol': 0.4
+    'snd_vol': 0.6
+
+    'fnt_col_dark'      : {'!color.code': '302c2c'}
+    'fnt_col_dark_gray' : {'!color.code': '545350'}
+    'fnt_col_gray'      : {'!color.code': '646464'}
+    'fnt_col_light_gray': {'!color.code': '909090'}
+
+    'fnt_col_blue_green': {'!color.code': '008b7c'}
+    'fnt_col_green'     : {'!color.code': '66a119'}
+    'fnt_col_red'       : {'!color.code': 'd24932'}
+    'fnt_col_light_red' : {'!color.code': 'f87a61'}
+    'fnt_col_yellow'    : {'!color.code': 'eab550'}
+
+    'fnt_col_suit_black'   : {'!color.code': '5f5a45'}
+    'fnt_col_suit_red'     : {'!color.code': 'e1522b'}
+
+    'bmf_apple_left': {'!+':['bitmap_fonts/noto_sans.', '$lang', '.bold.25.bmf']}
+    'bmf_game_ui.sm': {'!+':['bitmap_fonts/noto_sans.', '$lang', '.bold.25.bmf']}
+    'bmf_game_ui'   : {'!+':['bitmap_fonts/noto_sans.', '$lang', '.bold.35.bmf']}
+    'bmf_game_ui.bg': {'!+':['bitmap_fonts/noto_sans.', '$lang', '.bold.45.bmf']}
+
+  dat:
+    'settings':
+      'lang'   : '$lang'
+      'bgm_vol': '$bgm_vol'
+      'snd_vol': '$snd_vol'

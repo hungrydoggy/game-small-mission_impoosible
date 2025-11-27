@@ -1,0 +1,21 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto prp_str = content->cast<Value>()->var().as<string>();
+Util::upper(prp_str);
+
+auto prp_p = Util::find(VideoMemoryPack::vmpprop_enm_map(), prp_str);
+unlikely (prp_p == null) {
+  CNT_LOG_ERR(content, "unknown VideoMemoryPack::Property --- %s", prp_str.c_str());
+  return Var(false);
+}
+auto self = loadable->cast<ShaderDataBindDef>();
+self->vmp_property = *prp_p;
+
+return Var(true);
+return null_var;

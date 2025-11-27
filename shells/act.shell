@@ -1,0 +1,23 @@
+Scene:
+  cls: SVS
+  amb: [1, 1, 1, 1]
+  phy:
+    BulletPhysics:
+  chl: 
+    - Camera:
+      nam: 'camera'
+      pos: [0, 0, 1000]
+      prj:
+        Projection:
+          typ: 'orthogonal'
+    - GameObject:
+      nam: 'self'
+      vie:
+        Sprite :
+          img : images/test.png
+          cel :
+            - Cell :
+              dur : 10
+              src : [0, 0, 1, 1]
+              anc : [0.5, 0.5]
+              siz : [302, 335.5]

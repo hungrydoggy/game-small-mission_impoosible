@@ -1,0 +1,77 @@
+ObjectFormat:
+  full_name: 'StencilFunction'
+  include_part:
+    '''{
+      #include <common/draw_option/draw_option.h>
+    '''
+  loadable_class: 'StencilFunction'
+  attributes:
+    - AttributeFormat:
+      full_name: 'function'
+      short_name: 'fun'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              #ifndef SERVER_ONLY
+              auto fun_str = content->cast<Value>()->var().as<string>();
+              Util::upper(fun_str);
+
+              auto fun_p = Util::find(StencilFunction::str_funtyp_map(), fun_str);
+              unlikely (fun_p == null) {
+                LOG_ERR("unknown StencilFunction::FuncType --- %s", fun_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<StencilFunction>();
+              self->func = *fun_p;
+              #endif
+
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'value'
+      short_name: 'val'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<StencilFunction>();
+              self->value = content->cast<Value>()->var().as<uint>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'mask'
+      short_name: 'msk'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<StencilFunction>();
+              self->mask = content->cast<Value>()->var().as<uint>();
+              return Var(true);
+            '''

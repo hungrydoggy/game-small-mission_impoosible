@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+auto sopt = ctx->loadSubNodeAs<StencilOption>(node, content);
+unlikely (sopt == null)
+  return Var(false);
+
+auto self = loadable->cast<DrawOption>();
+self->back_stencil_option = *sopt;
+self->use(DrawOption::EnableType::STENCIL_TEST);
+
+return Var(true);
+return null_var;

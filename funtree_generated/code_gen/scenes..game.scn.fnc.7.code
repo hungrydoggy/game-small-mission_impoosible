@@ -1,0 +1,27 @@
+auto self = params[0].as<Scene*>();  auto msg_params = params[4].as<vector<Var>>();  
+
+auto& world_pos = msg_params[0].v<Vector3>();
+
+auto& gd = self->getDataRef("game_data" ).v<sp<GameData >>();
+
+auto face = gd->snake_face_cmp;
+auto snake_pos = self->inv_base_matrix() * face->base_matrix() * face->model_matrix() * Vector3::kZero;;
+
+auto angle = Vector2::computeAngle(Vector2(-1, 1), Vector2(world_pos) - Vector2(snake_pos));
+auto dir_idx = (int)(angle/(math::kPI * REAL(0.5)) + REAL(2.0));
+
+switch (dir_idx) {
+  case 0: // right
+    Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_RIGHT, KeyEventState::STATE_PRESSED});
+    break;
+  case 1: // up
+    Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_UP, KeyEventState::STATE_PRESSED});
+    break;
+  case 2: // left
+    Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_LEFT, KeyEventState::STATE_PRESSED});
+    break;
+  case 3: // down
+    Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_DOWN, KeyEventState::STATE_PRESSED});
+    break;
+}
+return null_var;

@@ -1,0 +1,215 @@
+ObjectFormat:
+  full_name: 'PlatformSetting'
+  include_part:
+    '''{
+      #include <_platform_setting.h>
+    '''
+  loadable_class: 'PlatformSetting'
+  attributes:
+    - AttributeFormat:
+      full_name: 'game_base_axis'
+      short_name: 'bax'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'GameBaseAxis'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto bax = ctx->loadSubNodeAs<GameBaseAxis>(node, content);
+              unlikely (bax == null)
+                return Var(false);
+
+              auto self = loadable->cast<PlatformSetting>();
+              self->game_base_axis = *bax;
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'resolutions'
+      short_name: 'rsl'
+      is_essential: false
+      dependencies: ['game_base_axis']
+      formats:
+        - SequenceFormat:
+          min_count: 0
+          max_count: 0
+          elements:
+            - ElementFormat:
+              formats:
+                - '@system/node_loader_format/common/resolution.nlf':
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto self = loadable->cast<PlatformSetting>();
+
+                      auto w = ctx->getData("resolution.val.w", (int)0);
+                      auto h = ctx->getData("resolution.val.h", (int)0);
+
+                      auto base_axis = self->game_base_axis.base_axis;
+                      unlikely (self->hasData("resolution.base_axis")) {
+                        auto base_axis_str = ctx->getData("resolution.val.base_axis", "");
+                        Util::upper(base_axis_str);
+                        auto base_axis_p = Util::find(TypesUtil::axis_enm_map, base_axis_str);
+                        likely (base_axis_p != null)
+                          base_axis = *base_axis_p;
+                      }
+
+                      auto axis_size = ctx->getData("resolution.val.axis_size", self->game_base_axis.axis_size);
+
+                      self->resolutions.push_back(Resolution{w, h, base_axis, axis_size});
+
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'width'
+      short_name: 'wid'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PlatformSetting>();
+              self->width = content->cast<Value>()->var().as<int>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'height'
+      short_name: 'hei'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PlatformSetting>();
+              self->height = content->cast<Value>()->var().as<int>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'width_for_font'
+      short_name: 'wff'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PlatformSetting>();
+              self->width_for_font = content->cast<Value>()->var().as<int>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'height_for_font'
+      short_name: 'hff'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PlatformSetting>();
+              self->height_for_font = content->cast<Value>()->var().as<int>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'monitor_index'
+      short_name: 'mid'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PlatformSetting>();
+              self->monitor_index = content->cast<Value>()->var().as<int>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'fullscreen_mode'
+      short_name: 'ful'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PlatformSetting>();
+              self->fullscreen_mode = content->cast<Value>()->var().as<bool>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'need_title_bar'
+      short_name: 'ttl'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<PlatformSetting>();
+              self->need_title_bar = content->cast<Value>()->var().as<bool>();
+              return Var(true);
+            '''
+
+

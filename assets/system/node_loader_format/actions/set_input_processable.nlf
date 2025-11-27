@@ -1,0 +1,41 @@
+ObjectFormat:
+  full_name: 'Action.SetInputProcessable'
+  short_name: 'SetInputProcessable'
+  groups: ['ActionGroup']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_factory.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      al->action = action::SetInputProcessable(al->getData("value").as<bool>());
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'value'
+      short_name: 'val'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("value", content->cast<Value>()->var());
+              return Var(true);
+            '''

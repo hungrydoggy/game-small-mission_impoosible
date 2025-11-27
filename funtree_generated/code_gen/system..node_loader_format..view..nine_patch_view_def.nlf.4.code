@@ -1,0 +1,16 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+
+
+auto self = loadable->cast<NinePatchViewDef>();
+auto& v = ctx->getDataRef("lrtb_uint.val").v<Lrtb<uint>>();
+self->build_conf()->l_width (v.l());
+self->build_conf()->r_width (v.r());
+self->build_conf()->t_height(v.t());
+self->build_conf()->b_height(v.b());
+return Var(true);
+return null_var;

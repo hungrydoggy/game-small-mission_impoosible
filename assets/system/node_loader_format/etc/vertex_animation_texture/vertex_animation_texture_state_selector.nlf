@@ -1,0 +1,61 @@
+ObjectFormat:
+  full_name : 'VertexAnimationTextureStateSelector'
+  short_name: 'VATStateSelector'
+  groups: ['ObjectTraitGroup', 'VertexAnimationTextureStateGroup']
+  include_part:
+    '''{
+      #include <etc/vertex_animation_texture/vertex_animation_texture_state_item.h>
+      #include <etc/vertex_animation_texture/vertex_animation_texture_state_selector.h>
+    '''
+  loadable_class: 'VertexAnimationTextureStateSelector'
+  attributes:
+    - AttributeFormat:
+      full_name: 'vertex_animation_texture_states'
+      short_name: 'stt'
+      aliases: ['vat_states']
+      is_essential: true
+      formats:
+        - SequenceFormat:
+          min_count: 1
+          elements:
+            - ElementFormat:
+              formats:
+                - ValueFormat:
+                  type: 'Object'
+                  sub_type: 'VertexAnimationTextureStateItem'
+                  on_load:
+                    '''{(
+                          FormatContext* ctx,
+                          shared_ptr<NodeLoadable> loadable,
+                          shared_ptr<Node> node,
+                          shared_ptr<Content> content
+                        )
+
+                      auto itm = ctx->loadSubNodeAs<VATStateItem>(node, content);
+                      unlikely (itm == null)
+                        return Var(false);
+
+                      auto self = loadable->cast<VATStateSelector>();
+                      self->addState(itm->name, itm->vat_state);
+                      return Var(true);
+                    '''
+    - AttributeFormat:
+      full_name: 'time_scale'
+      short_name: 'tsc'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<VATStateSelector>();
+              self->time_scale(content->asValue<double>());
+              return Var(true);
+            '''

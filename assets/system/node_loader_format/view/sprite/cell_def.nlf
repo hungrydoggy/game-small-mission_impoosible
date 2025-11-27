@@ -1,0 +1,110 @@
+ObjectFormat:
+  full_name: 'CellDef'
+  short_name: 'Cell'
+  include_part:
+    '''{
+      #include <view/sprite_view/_cell_def.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>
+    '''
+  loadable_class: 'CellDef'
+  attributes:
+    - AttributeFormat:
+      full_name: 'duration_frames'
+      short_name: 'frm'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<CellDef>();
+              self->duration_frames = content->cast<Value>()->var().as<uint>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'position'
+      short_name: 'pos'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<CellDef>();
+              self->position = ctx->getData("vector3.val").v<Vector3>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'rotation'
+      short_name: 'rot'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/quaternion.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<CellDef>();
+              self->rotation = ctx->getData("quaternion.val").v<Quaternion>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'scale'
+      short_name: 'scl'
+      is_essential: false
+      formats:
+        - '@system/node_loader_format/common/vector3.nlf':
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<CellDef>();
+              self->scale = ctx->getData("vector3.val").v<Vector3>();
+              return Var(true);
+            '''
+    - AttributeFormat:
+      full_name: 'image_view_def'
+      short_name: 'img'
+      aliases: ['image_view']
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Object'
+          sub_type: 'ImageViewDef'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto img = ctx->loadSubNodeAs<ImageViewDef>(node, content);
+              unlikely (img == null)
+                return Var(false);
+
+              auto self = loadable->cast<CellDef>();
+              self->image_view_def = img;
+              return Var(true);
+            '''

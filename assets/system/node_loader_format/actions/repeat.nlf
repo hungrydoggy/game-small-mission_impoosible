@@ -1,0 +1,38 @@
+'@system/node_loader_format/actions/sequence.nlf':
+  ref:
+    'action_name': 'Repeat'
+
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      auto  cnt = al->getData("count"   ).as<uint>();
+      auto& chl = al->getData("children").v<vector<shared_ptr<Action>>>();
+      al->action = action::Repeat(cnt, chl);
+      return Var(true);
+    '''
+  attributes+:
+    - AttributeFormat:
+      full_name: 'count'
+      short_name: 'cnt'
+      is_essential: true
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'number'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("count", Var(content->cast<Value>()->var()));
+              return Var(true);
+            '''

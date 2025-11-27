@@ -1,0 +1,21 @@
+Mesh:
+  vpr:
+    - VertexProperty:
+      usg: POSITION
+      typ: FLOAT
+      len: 3
+    - VertexProperty:
+      usg: NORMAL
+      typ: FLOAT
+      len: 3
+    - VertexProperty:
+      usg: ST
+      typ: FLOAT
+      len: 2
+  vdt: [
+      0, 0, 0,   0, 0, 1,   0, 1,
+      1, 0, 0,   0, 0, 1,   1, 1,
+      1, 1, 0,   0, 0, 1,   1, 0,
+      0, 1, 0,   0, 0, 1,   0, 0,
+    ]
+  idx: [0, 1, 2,   2, 3, 0]

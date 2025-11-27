@@ -1,0 +1,25 @@
+MacroFormat:
+  full_name: 'Project.isSystemInputProcessable'
+  short_name: 'prj.isSystemInputProcessable'
+  include_part: '{#include <project.h>'
+  formats:
+    - ValueFormat:
+      type: 'any'
+      on_load:
+        '''{(
+              FormatContext* ctx,
+              shared_ptr<NodeLoadable> loadable,
+              shared_ptr<Node> node,
+              shared_ptr<Content> content
+            )
+          return Var(true);
+        '''
+  on_call:
+    '''{(
+          shared_ptr<Node> node,
+          shared_ptr<Content> content,
+          shared_ptr<Macro> self
+        )
+
+      return Var(Project::active_project()->is_system_input_processable());
+    '''
