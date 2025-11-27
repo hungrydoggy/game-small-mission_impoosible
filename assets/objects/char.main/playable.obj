@@ -2,15 +2,7 @@ Obj:
   nam: 'minjun'
   dat:
     'move_vel': 170
-
-  fnc:
-    '%onPostBuildBody':
-      '''{(GameObject* self, BulletBody* body)
-      
-        auto bt_body = body->bt_body();
-        bt_body->setLinearFactor (btVector3(1, 1, 0));
-        bt_body->setAngularFactor(btVector3(0, 0, 0));
-      '''
+    'is_invincible': false
 
   #scl: [3, 3, 1]
   chl:
@@ -73,7 +65,7 @@ Obj:
           pos: [-0.7, 0, 0]
           vie:
             Sprite:
-              cnt: -1
+              cnt: 1
               cel:
                 '!sprite.cellsBySheet':
                   tex: './sprites/hit.png'
@@ -83,6 +75,15 @@ Obj:
                   frm: 5
                   siz: {'!relh.pair':[0, 161]}
                   mat: 'transparent'
+              acl:
+                - CellActionItem:
+                  idx: 9
+                  act:
+                    SendMessage:
+                      dst: '~'
+                      nam: 'onEndHitSprite'
+          trt:
+            - ActionState:
         - Obj:
           nam: 'ko'
           pos: [-0.7, 0, 0]
@@ -151,6 +152,54 @@ Obj:
     - BulletBox:
       pos: [0, 28, 0]
       hsz: [10, 30, 0.1]
+
+  acl:
+    - ActionItem:
+      nam: 'hit'
+      act:
+        Sequence:
+          chl:
+            - ColorTo:
+              dur: 0
+              val: [10, 10, 10, 1]
+            - Wait:
+              dur: 0.032
+            - ColorTo:
+              dur: 0
+              val: [1, 0, 0, 1]
+            - Wait:
+              dur: 0.032
+            - ColorTo:
+              dur: 0
+              val: [1, 1, 1, 1]
+    - ActionItem:
+      nam: 'invincible'
+      act:
+        Sequence:
+          chl:
+            - Script:
+              scr:
+                '''{(ActionState* state)
+                  state->owner()->setData("is_invincible", true);
+                '''
+            - Repeat:
+              cnt: 8
+              chl:
+                - AlphaTo:
+                  dur: 0
+                  val: 0
+                - Wait:
+                  dur: 0.1
+                - AlphaTo:
+                  dur: 0
+                  val: 1
+                - Wait:
+                  dur: 0.1
+            - Script:
+              scr:
+                '''{(ActionState* state)
+                  state->owner()->setData("is_invincible", false);
+                '''
 
   trt:
     - '@./playable.obj.fsm'

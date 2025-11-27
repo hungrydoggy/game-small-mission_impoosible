@@ -46,5 +46,10 @@ Fsm:
                   default: break;
                 }
                 break;
+
+              case KeyEventType::KEY_SPACE:
+                likely (e->state == KeyEventState::STATE_PRESSED)
+                  fsm->owner()->sendMessage("/player", "onHit");
+                break;
             }
           '''

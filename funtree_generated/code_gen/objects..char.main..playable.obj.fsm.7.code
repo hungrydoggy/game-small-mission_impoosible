@@ -1,4 +1,4 @@
 auto fsm = params[0].as<Fsm*>();  
 
-fsm->setCurState("move.right");
+fsm->setCurState("idle");
 return null_var;

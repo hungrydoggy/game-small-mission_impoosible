@@ -4,3 +4,5 @@ using namespace appetizer;
 
 // returns view component
 static GameComponent* __playSprite (GameObject* self, string const& name);
+
+static void __onHit (Fsm* fsm);

@@ -1,6 +1,4 @@
-auto fsm = params[0].as<Fsm*>();  auto delta_time = params[2].as<double>();  
+auto fsm = params[0].as<Fsm*>();  
 
-auto self = fsm->owner();
-auto move_vel = self->getData("move_vel", 0.0);
-self->x(math::min(self->x() + move_vel * delta_time, self->scene()->getData("bound.right", 0.0)));
+__onHit(fsm);
 return null_var;

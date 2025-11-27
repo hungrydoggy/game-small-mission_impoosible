@@ -124,6 +124,46 @@ static Var __code_11 (
 }
 
 
+static Var __code_12 (
+    vector<Var> const& params
+) {
+
+  #include "objects..char.main..playable.obj.fsm.12.code"
+}
+
+
+static Var __code_13 (
+    vector<Var> const& params
+) {
+
+  #include "objects..char.main..playable.obj.fsm.13.code"
+}
+
+
+static Var __code_14 (
+    vector<Var> const& params
+) {
+
+  #include "objects..char.main..playable.obj.fsm.14.code"
+}
+
+
+static Var __code_15 (
+    vector<Var> const& params
+) {
+
+  #include "objects..char.main..playable.obj.fsm.15.code"
+}
+
+
+static Var __code_16 (
+    vector<Var> const& params
+) {
+
+  #include "objects..char.main..playable.obj.fsm.16.code"
+}
+
+
 Var Code_ObjectsCharMainPlayableObjFsm::execute (
     int code_idx, vector<Var> const& params
 ) {
@@ -139,6 +179,11 @@ Var Code_ObjectsCharMainPlayableObjFsm::execute (
     case 9: return __code_9(params);
     case 10: return __code_10(params);
     case 11: return __code_11(params);
+    case 12: return __code_12(params);
+    case 13: return __code_13(params);
+    case 14: return __code_14(params);
+    case 15: return __code_15(params);
+    case 16: return __code_16(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"objects..char.main..playable.obj.fsm.cpp\"", code_idx);
       return null_var;
@@ -148,7 +193,7 @@ Var Code_ObjectsCharMainPlayableObjFsm::execute (
 
 }
 
-#include "./objects..char.main..playable.obj.fsm.12.code"
+#include "./objects..char.main..playable.obj.fsm.17.code"
 
 
 

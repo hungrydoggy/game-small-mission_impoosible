@@ -1,4 +1,5 @@
 auto fsm = params[0].as<Fsm*>();  
 
+fsm->owner()->setAction("invincible");
 fsm->setCurState("idle");
 return null_var;

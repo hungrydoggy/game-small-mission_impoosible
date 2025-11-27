@@ -5,6 +5,8 @@ Fsm:
 
       // returns view component
       static GameComponent* __playSprite (GameObject* self, string const& name);
+
+      static void __onHit (Fsm* fsm);
     '''
 
   sta: 'moveRight'
@@ -23,6 +25,10 @@ Fsm:
         'moveRight':
           '''{(Fsm* fsm)
             fsm->setCurState("move.right");
+          '''
+        'onHit':
+          '''{(Fsm* fsm)
+            __onHit(fsm);
           '''
 
     - FsmState:
@@ -47,6 +53,10 @@ Fsm:
           '''{(Fsm* fsm)
             fsm->setCurState("move.right");
           '''
+        'onHit':
+          '''{(Fsm* fsm)
+            __onHit(fsm);
+          '''
 
     - FsmState:
       nam: 'move.right'
@@ -70,6 +80,25 @@ Fsm:
           '''{(Fsm* fsm)
             fsm->setCurState("move.left");
           '''
+        'onHit':
+          '''{(Fsm* fsm)
+            __onHit(fsm);
+          '''
+
+    - FsmState:
+      nam: 'hit'
+      on_enter:
+        '''{(Fsm* fsm)
+          auto self = fsm->owner();
+          __playSprite(self, "hit");
+          self->setAction("hit");
+        '''
+      msg:
+        'onEndHitSprite':
+          '''{(Fsm* fsm)
+            fsm->owner()->setAction("invincible");
+            fsm->setCurState("idle");
+          '''
 
   hip_part:
     '''{
@@ -79,5 +108,14 @@ Fsm:
         auto spr = view->findChild<GameObject>(name)->getTrait<View>("view")->state<SpriteViewState>();
         spr->play();
         return view;
+      }
+
+
+      void __onHit (Fsm* fsm) {
+        auto is_invincible = fsm->owner()->getData("is_invincible", false);
+        unlikely (is_invincible == true)
+          return;
+
+        fsm->setCurState("hit");
       }
     '''

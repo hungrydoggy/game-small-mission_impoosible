@@ -1,0 +1,18 @@
+
+
+GameComponent* __playSprite (GameObject* self, string const& name) {
+  auto view = self->findChild("view").get();
+  self->sendMessage(view, "selectChild", {Var(name)});
+  auto spr = view->findChild<GameObject>(name)->getTrait<View>("view")->state<SpriteViewState>();
+  spr->play();
+  return view;
+}
+
+
+void __onHit (Fsm* fsm) {
+  auto is_invincible = fsm->owner()->getData("is_invincible", false);
+  unlikely (is_invincible == true)
+    return;
+
+  fsm->setCurState("hit");
+}
