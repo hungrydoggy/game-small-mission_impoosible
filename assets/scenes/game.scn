@@ -1,7 +1,12 @@
 Scene:
-  #fnc: '@scenes/game.scn.fnc'
-
   nam: 'game scene'
+
+  dat:
+    'bound.left' : -360
+    'bound.right':  360
+
+  fnc: '@scenes/game.scn.fnc'
+
   gtr: '@gpu_tasks/game/runner.gtr'
   phy:
     Bullet:
@@ -9,7 +14,9 @@ Scene:
       gra: [0, -9.8, 0]
   chl:
     - Obj:
-      nam: 'state_obj'
+      nam: 'scene_state'
+      trt:
+        - '@./game.scn.fsm'
     - Camera:
       nam: 'camera'
       pos: [0, 0, 4000]
@@ -124,4 +131,5 @@ Scene:
                           nam: 'randomShow'
 
     - '@objects/char.main/playable.obj':
+      nam: 'player'
       pos: [0, -220, 100]

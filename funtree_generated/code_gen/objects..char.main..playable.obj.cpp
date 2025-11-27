@@ -1,6 +1,6 @@
 
 
-#include "./scenes..game.scn.fnc.h"
+#include "./objects..char.main..playable.obj.h"
 
 #include <common/path_registry/path_registry.h>
 #include <common/loader/fun_tree/_code_set.h>
@@ -8,11 +8,9 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./scenes..game.scn.fnc.0.code"
 
 
 
-#include "./scenes..game.scn.fnc.1.code"
 
 
 
@@ -29,38 +27,29 @@ using std::make_shared;
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
   CodeSetBundle::default_bundle().registerCodeSet(
-      "scenes/game.scn.fnc",
-      make_shared<Code_ScenesGameScnFnc>(),
+      "objects/char.main/playable.obj",
+      make_shared<Code_ObjectsCharMainPlayableObj>(),
       true
   );
 }
 
 
 
-static Var __code_2 (
+static Var __code_0 (
     vector<Var> const& params
 ) {
 
-  #include "scenes..game.scn.fnc.2.code"
+  #include "objects..char.main..playable.obj.0.code"
 }
 
 
-static Var __code_3 (
-    vector<Var> const& params
-) {
-
-  #include "scenes..game.scn.fnc.3.code"
-}
-
-
-Var Code_ScenesGameScnFnc::execute (
+Var Code_ObjectsCharMainPlayableObj::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
-    case 2: return __code_2(params);
-    case 3: return __code_3(params);
+    case 0: return __code_0(params);
     default:
-      LOG_ERR("unknown code_idx %u --- \"scenes..game.scn.fnc.cpp\"", code_idx);
+      LOG_ERR("unknown code_idx %u --- \"objects..char.main..playable.obj.cpp\"", code_idx);
       return null_var;
   }
 }
@@ -68,7 +57,6 @@ Var Code_ScenesGameScnFnc::execute (
 
 }
 
-#include "./scenes..game.scn.fnc.4.code"
 
 
 

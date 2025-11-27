@@ -1,0 +1,6 @@
+auto fsm = params[0].as<Fsm*>();  auto delta_time = params[2].as<double>();  
+
+auto self = fsm->owner();
+auto move_vel = self->getData("move_vel", 0.0);
+self->x(math::max(self->x() - move_vel * delta_time, self->scene()->getData("bound.left", 0.0)));
+return null_var;

@@ -1,0 +1,9 @@
+
+
+GameComponent* __playSprite (GameObject* self, string const& name) {
+  auto view = self->findChild("view").get();
+  self->sendMessage(view, "selectChild", {Var(name)});
+  auto spr = view->findChild<GameObject>(name)->getTrait<View>("view")->state<SpriteViewState>();
+  spr->play();
+  return view;
+}

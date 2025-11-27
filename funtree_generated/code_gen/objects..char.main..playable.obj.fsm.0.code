@@ -1,0 +1,6 @@
+
+
+using namespace appetizer;
+
+// returns view component
+static GameComponent* __playSprite (GameObject* self, string const& name);

@@ -1,0 +1,27 @@
+auto fsm = params[0].as<Fsm*>();  auto msg_params = params[5].as<vector<Var>>();  
+
+unlikely (msg_params.size() < 1) {
+  LOG_ERR("need params --- KeyEvent const* e");
+  return null_var;
+}
+
+auto e = msg_params[0].v<KeyEvent const*>();
+
+switch (e->type) {
+  case KeyEventType::KEY_LEFT:
+    switch (e->state) {
+      case KeyEventState::STATE_PRESSED : g_is_left_key_down = true;  break;
+      case KeyEventState::STATE_RELEASED: g_is_left_key_down = false; break;
+      default: break;
+    }
+    break;
+
+  case KeyEventType::KEY_RIGHT:
+    switch (e->state) {
+      case KeyEventState::STATE_PRESSED : g_is_right_key_down = true;  break;
+      case KeyEventState::STATE_RELEASED: g_is_right_key_down = false; break;
+      default: break;
+    }
+    break;
+}
+return null_var;

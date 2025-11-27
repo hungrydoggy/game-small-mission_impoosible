@@ -1,0 +1,83 @@
+Fsm:
+  neck_part:
+    '''{
+      using namespace appetizer;
+
+      // returns view component
+      static GameComponent* __playSprite (GameObject* self, string const& name);
+    '''
+
+  sta: 'moveRight'
+  stt:
+    - FsmState:
+      nam: 'idle'
+      on_enter:
+        '''{(Fsm* fsm)
+          __playSprite(fsm->owner(), "idle");
+        '''
+      msg:
+        'moveLeft':
+          '''{(Fsm* fsm)
+            fsm->setCurState("move.left");
+          '''
+        'moveRight':
+          '''{(Fsm* fsm)
+            fsm->setCurState("move.right");
+          '''
+
+    - FsmState:
+      nam: 'move.left'
+      on_enter:
+        '''{(Fsm* fsm)
+          auto view = __playSprite(fsm->owner(), "run");
+          view->scale_x(-1);
+        '''
+      on_update:
+        '''{(Fsm* fsm, , double delta_time)
+          auto self = fsm->owner();
+          auto move_vel = self->getData("move_vel", 0.0);
+          self->x(math::max(self->x() - move_vel * delta_time, self->scene()->getData("bound.left", 0.0)));
+        '''
+      msg:
+        'stopMove':
+          '''{(Fsm* fsm)
+            fsm->setCurState("idle");
+          '''
+        'moveRight':
+          '''{(Fsm* fsm)
+            fsm->setCurState("move.right");
+          '''
+
+    - FsmState:
+      nam: 'move.right'
+      on_enter:
+        '''{(Fsm* fsm)
+          auto view = __playSprite(fsm->owner(), "run");
+          view->scale_x(1);
+        '''
+      on_update:
+        '''{(Fsm* fsm, , double delta_time)
+          auto self = fsm->owner();
+          auto move_vel = self->getData("move_vel", 0.0);
+          self->x(math::min(self->x() + move_vel * delta_time, self->scene()->getData("bound.right", 0.0)));
+        '''
+      msg:
+        'stopMove':
+          '''{(Fsm* fsm)
+            fsm->setCurState("idle");
+          '''
+        'moveLeft':
+          '''{(Fsm* fsm)
+            fsm->setCurState("move.left");
+          '''
+
+  hip_part:
+    '''{
+      GameComponent* __playSprite (GameObject* self, string const& name) {
+        auto view = self->findChild("view").get();
+        self->sendMessage(view, "selectChild", {Var(name)});
+        auto spr = view->findChild<GameObject>(name)->getTrait<View>("view")->state<SpriteViewState>();
+        spr->play();
+        return view;
+      }
+    '''

@@ -1,9 +1,4 @@
-auto loadable = params[0].as<NodeLoadable*>();  
+auto self = params[0].as<Scene*>();  auto e = params[1].as<KeyEvent const*>();  
 
-auto self = loadable->cast<Scene>();
-
-auto& gs = self->getDataRef("game_state").v<sp<GameState>>();
-auto content = gs->convertToMap();
-
-return Var(content);
+self->sendMessage("/scene_state", "onKeyInput", {Var(e)});
 return null_var;
