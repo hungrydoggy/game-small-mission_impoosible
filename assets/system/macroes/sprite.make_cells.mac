@@ -12,10 +12,14 @@ MacroFormat:
 
   neck_part:
     '''{
+      using namespace appetizer;
+      using namespace appetizer::fun_tree;
+
+
       class CellIndexIterator_ {
       public: // inner types
         enum class ContentType {
-          NULL,
+          DEFAULT,
           COUNT,
           INDEX_LIST,
         };
@@ -26,25 +30,40 @@ MacroFormat:
 
         int step ();
 
+        size_t size () const;
+
 
       private: // vars
         sp<Content> content_;
 
         ContentType content_type_;
-        int next_idx_;
-        int size_;
+        size_t next_idx_;
+        vector<int> index_list_;
       };
 
 
-      class CellDurFrmIterator_ {
-      public: // methods
-        CellDurFrmIterator_ (sp<Content> const& cont);
 
-        sp<Content> step ();
+      class CellDurFrmIterator_ {
+      public: // inner types
+        enum class ContentType {
+          DEFAULT,
+          FRAME,
+          FRAME_LIST,
+        };
+
+
+      public: // methods
+        CellDurFrmIterator_ (sp<Content> const& cont, size_t cell_cnt);
+
+        uint step ();
 
 
       private: // vars
         sp<Content> content_;
+
+        ContentType content_type_;
+        size_t next_idx_;
+        vector<uint> frame_list_;
       };
     '''
 
@@ -336,13 +355,13 @@ MacroFormat:
       auto result = make_shared<Sequence>(content);
 
       CellIndexIterator_  idx_itr(cell_indices_cont, row_cnt, col_cnt);
-      CellDurFrmIterator_ frm_itr(cell_duration_frames_cont);
+      CellDurFrmIterator_ frm_itr(cell_duration_frames_cont, idx_itr.size());
       for (auto idx=idx_itr.step(); idx>=0; idx=idx_itr.step()) {
         /// make cell
         auto cell = make_shared<Map>(content);
 
         // frm
-        cell->add("frm", frm_itr.step());
+        cell->add("frm", make_shared<Value>(Var(frm_itr.step()), content));
 
 
         // img
@@ -373,11 +392,11 @@ MacroFormat:
         unlikely (mat_cont != null)
           img->add("mat", mat_cont);
 
-        cell->add("img", img);
+        cell->add("img", make_shared<Object>("Image", img, content));
 
 
         /// add cell
-        result->add(cell);
+        result->add(make_shared<Object>("Cell", cell, content));
       }
 
       return Var(dpc<Content>(result));
@@ -386,14 +405,12 @@ MacroFormat:
   hip_part:
     '''{
         CellIndexIterator_::CellIndexIterator_ (sp<Content> const& cont, uint row_cnt, uint col_cnt)
-        :content_(cont),
-         row_cnt_(row_cnt),
-         col_cnt_(col_cnt)
+        :content_(cont)
         {
           next_idx_ = 0;
 
           likely (content_ == null)
-            content_type_ = ContentType::NULL;
+            content_type_ = ContentType::DEFAULT;
           else if (dpc<Value>(content_) != null)
             content_type_ = ContentType::COUNT;
           else if (dpc<Sequence>(content_))
@@ -402,34 +419,92 @@ MacroFormat:
             LOG_ERR("unhandled content type --- %u", content_->type());
 
 
+          index_list_.clear();
           switch (content_type_) {
-            case ContentType::NULL:
-              size_ = row_cnt_ * col_cnt_;
+            case ContentType::DEFAULT:
+              for (int i=0; i<row_cnt*col_cnt; ++i)
+                index_list_.push_back(i);
               break;
 
-            case ContentType::COUNT:
+            case ContentType::COUNT: {
+              auto size = content_->asValue<int>();
+              for (int i=0; i<size; ++i)
+                index_list_.push_back(i);
               break;
+            }
 
-            case ContentType::INDEX_LIST:
+            case ContentType::INDEX_LIST: {
+              auto seq = dpc<Sequence>(content_);
+              for (int si=0; si<seq->size(); ++si)
+                index_list_.push_back(seq->get(si)->asValue<int>());
               break;
+            }
           }
         }
 
 
         int CellIndexIterator_::step () {
-          likely (content_ == null)
-            return 1;
+          unlikely (next_idx_ >= index_list_.size())
+            return -1;
+
+          auto result = index_list_[next_idx_];
+          next_idx_ += 1;
+          return result;
+        }
+
+
+        size_t CellIndexIterator_::size () const {
+          return index_list_.size();
         }
 
 
 
 
-        CellDurFrmIterator_::CellDurFrmIterator_ (sp<Content> const& cont)
+        CellDurFrmIterator_::CellDurFrmIterator_ (sp<Content> const& cont, size_t cell_cnt)
         :content_(cont)
         {
+          next_idx_ = 0;
+
+          likely (content_ == null)
+            content_type_ = ContentType::DEFAULT;
+          else if (dpc<Value>(content_) != null)
+            content_type_ = ContentType::FRAME;
+          else if (dpc<Sequence>(content_))
+            content_type_ = ContentType::FRAME_LIST;
+          else
+            LOG_ERR("unhandled content type --- %u", content_->type());
+
+
+          frame_list_.clear();
+          switch (content_type_) {
+            case ContentType::DEFAULT:
+              for (int i=0; i<cell_cnt; ++i)
+                frame_list_.push_back(1);
+              break;
+
+            case ContentType::FRAME: {
+              auto frame = content_->asValue<uint>();
+              for (int i=0; i<cell_cnt; ++i)
+                frame_list_.push_back(frame);
+              break;
+            }
+
+            case ContentType::FRAME_LIST: {
+              auto seq = dpc<Sequence>(content_);
+              for (int si=0; si<seq->size(); ++si)
+                frame_list_.push_back(seq->get(si)->asValue<uint>());
+              break;
+            }
+          }
         }
 
 
-        sp<Content> CellDurFrmIterator_::step () {
+        uint CellDurFrmIterator_::step () {
+          unlikely (next_idx_ >= frame_list_.size())
+            return 1;
+
+          auto result = frame_list_[next_idx_];
+          next_idx_ += 1;
+          return result;
         }
     '''

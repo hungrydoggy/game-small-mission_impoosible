@@ -6,8 +6,7 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-auto self = loadable->cast<ImageViewDef>();
-self->build_conf()->image_region(ctx->getData("rectangle_real.val").v<Rectangle<real>>());
-self->build_conf()->img_reg_norm_mode(false);
+auto self = dpc<Macro>(loadable);
+self->params.set(9, content);
 return Var(true);
 return null_var;

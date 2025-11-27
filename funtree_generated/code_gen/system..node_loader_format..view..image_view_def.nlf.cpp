@@ -100,6 +100,14 @@ static Var __code_8 (
 }
 
 
+static Var __code_9 (
+    vector<Var> const& params
+) {
+
+  #include "system..node_loader_format..view..image_view_def.nlf.9.code"
+}
+
+
 Var Code_SystemNodeloaderformatViewImageviewdefNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
@@ -112,6 +120,7 @@ Var Code_SystemNodeloaderformatViewImageviewdefNlf::execute (
     case 6: return __code_6(params);
     case 7: return __code_7(params);
     case 8: return __code_8(params);
+    case 9: return __code_9(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"system..node_loader_format..view..image_view_def.nlf.cpp\"", code_idx);
       return null_var;

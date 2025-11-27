@@ -1,8 +1,0 @@
-auto loadable = params[0].as<NodeLoadable*>();  
-
-auto self = loadable->cast<GameObject>();
-auto vss = self->getTrait<VATStateSelector>("vertex_animation_texture_state");
-
-auto b = vss->select("b", 3);
-b->setPos(0.1);
-return null_var;

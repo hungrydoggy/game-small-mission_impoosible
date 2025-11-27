@@ -308,10 +308,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatViewImageviewdefNlf:
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_uint.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_real.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_uint.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_real.nlf");
                       return Var(false);
                     }
                     return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -327,10 +327,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatViewImageviewdefNlf:
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_uint.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_real.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_uint.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_real.nlf");
                       return Var(false);
                     }
                     return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -346,10 +346,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatViewImageviewdefNlf:
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_uint.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_real.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_uint.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_real.nlf");
                       return Var(false);
                     }
                     return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -365,10 +365,113 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatViewImageviewdefNlf:
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_uint.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_real.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_uint.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_real.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+              }
+            )
+          },
+          AttributeLoader{
+            "image_region_norm",
+            "rgn",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<SequenceFormat>(
+              4,
+              4,
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/view/image_view_def.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/view/image_view_def.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(8, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              },
+              vector<shared_ptr<Format>>{
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_real.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_real.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_real.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_real.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_real.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_real.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/rectangle_real.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/rectangle_real.nlf");
                       return Var(false);
                     }
                     return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -399,7 +502,7 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatViewImageviewdefNlf:
                   LOG_ERR("code_set is null --- system/node_loader_format/view/image_view_def.nlf");
                   return Var(false);
                 }
-                return code_set->execute(8, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                return code_set->execute(9, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

@@ -1,22 +1,65 @@
-Obj:
+Cmp:
   nam: 'minjun'
+  scl: [3, 3, 1]
   chl:
-    - Cmp:
+    - Obj:
+      pos: [0, 0, 1000]
+      col: [1, 0, 0, 1]
+      vie:
+        Image:
+          tex: '%white'
+          siz: [1, 0]
+    - Obj:
       nam: 'views'
-      fnc: '@plugins/child_selector/selce_child.fnc'
+      fnc: '@plugins/child_selector/select_child.fnc'
+      pos: [-2.7, 30, 0]
       chl:
         - Obj:
           nam: 'idle'
-          ref:
-            frm: 1
-            tex: '@./sprites/idle.png'
           vie:
             Sprite:
               cnt: -1
               cel:
-                - Cell:
-                  frm: '$frm'
-                  img:
-                    tex: '$tex'
-                    siz: []
-                    mat: ''
+                '!sprite.cellsBySheet':
+                  tex: './sprites/idle.png'
+                  row: 6
+                  col: 6
+                  idx:
+                    '!seq.concat':
+                      - '!seq.intSeq': {'start':3, 'end':15}
+                      - '!seq.intSeq': {'start':14, 'end': 2}
+                  frm: 3
+                  siz: {'!relh.pair':[0, 132]}
+                  mat: 'transparent'
+        - Obj:
+          nam: 'run'
+          pos: [5, 4, 0]
+          vie:
+            Sprite:
+              cnt: -1
+              cel:
+                '!sprite.cellsBySheet':
+                  tex: './sprites/run.png'
+                  row: 6
+                  col: 6
+                  idx: [
+                    29, 30, 31, 32,
+                    25, 26, 27, 28,
+                    29, 30, 31, 32,
+                    25, 26, 27, 28,
+                    29, 30, 31, 32,
+                    25, 26, 27,  2,
+                    3,  4,  5,  6,
+                    24,  8, 10, 11,
+                  ]
+                  frm: 4
+                  siz: {'!relh.pair':[0, 153]}
+                  mat: 'transparent'
+      #acl:
+      #  - ActionItem:
+      #    nam: '%onInit'
+      #    act:
+      #      SendMessage:
+      #        dst: '.'
+      #        nam: 'selectChild'
+      #        par: ['run']

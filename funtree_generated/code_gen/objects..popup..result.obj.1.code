@@ -1,7 +1,0 @@
-auto loadable = params[0].as<NodeLoadable*>();  auto level = params[1].as<int>();  auto score = params[2].as<int>();  
-
-auto self = loadable->cast<GameComponent>();
-
-self->findByNamePath<GameObject>("./content/txt.level.val")->setText(std::to_string(level));
-self->findByNamePath<GameObject>("./content/txt.score.val")->setText(std::to_string(score));
-return null_var;

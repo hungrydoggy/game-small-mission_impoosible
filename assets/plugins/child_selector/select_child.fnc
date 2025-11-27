@@ -9,6 +9,7 @@
           unlikely (chl == null)
             continue;
 
-          chl->is_drawable_self(chl->name() == name);
+          chl->is_drawable_self (chl->name() == name);
+          chl->is_updatable_self(chl->name() == name);
         }
       '''

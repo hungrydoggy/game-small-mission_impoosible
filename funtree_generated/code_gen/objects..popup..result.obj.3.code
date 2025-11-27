@@ -1,6 +1,0 @@
-auto loadable = params[0].as<NodeLoadable*>();  auto idx = params[1].as<int>();  
-
-auto self = loadable->cast<GameComponent>();
-self->y(self->getData("base_y", REAL(0.0)) - 21.25 * idx);
-self->is_drawable_self(true);
-return null_var;
