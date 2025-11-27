@@ -122,3 +122,6 @@ Scene:
                         - SendMessage:
                           dst: '.'
                           nam: 'randomShow'
+
+    - '@objects/char.main/playable.obj':
+      pos: [0, -220, 100]
