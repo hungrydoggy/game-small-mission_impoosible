@@ -25,31 +25,29 @@ Scene:
       nam: 'bg'
       pos: [0, 0, -1]
       vie:
-        ImageView:
+        Image:
           tex: 'textures/main_scene/bg.png'
           siz: [0, '$game_height']
 
     - Object:
       nam: 'title'
-      pos: [0, 120, 1]
+      pos: [45, 110, 1]
       col: [1, 1, 1, 0]
       vie:
-        ImageView:
-          tex: 'textures/main_scene/txt.title.png'
-          hor: center
-          ver: center
-          siz: [350, 0]
+        Image:
+          tex: 'textures/main_scene/title.png'
+          siz: {'!relh.pair':[0, 276]}
+          mat: 'transparent'
 
     - Object:
       nam: 'btn.start'
-      pos: [0, -15, 1]
+      pos: [0, '!-':[50, '$half_game_height'], 1]
       col: [1, 1, 1, 0]
       vie:
-        ImageView:
+        Image:
           tex: 'textures/main_scene/btn.start.png'
-          hor: center
-          ver: center
-          siz: [160, 0]
+          siz: {'!relh.pair':[0, 162]}
+          mat: 'transparent'
       bdy:
         BulletBody:
           mas: 0
@@ -86,24 +84,3 @@ Scene:
                   dur: 0.1
                   val: [1, 1, 1]
                   int: IN_QUAD
-
-    - Object:
-      nam: 'snake'
-      pos: [0, -140, 0.2]
-      col: [1, 1, 1, 0]
-      vie:
-        ImageView:
-          tex: 'textures/main_scene/snake.png'
-          hor: center
-          ver: center
-          siz: [200, 0]
-    - Object:
-      nam: 'snake.shadow'
-      pos: [0, -195, 0.1]
-      col: [1, 1, 1, 0]
-      vie:
-        ImageView:
-          tex: 'textures/main_scene/snake.shadow.png'
-          hor: center
-          ver: center
-          siz: [200, 0]

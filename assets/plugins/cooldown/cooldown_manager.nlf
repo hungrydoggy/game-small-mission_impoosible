@@ -1,0 +1,9 @@
+ObjectFormat:
+  full_name: 'CooldownManager'
+  groups: ['CooldownManagerGroup', 'ObjectTraitGroup']
+  include_part:
+    '''{
+      #include <plugins/cooldown/cooldown_manager.h>
+    '''
+  loadable_class: 'CooldownManager'
+  attributes: []
