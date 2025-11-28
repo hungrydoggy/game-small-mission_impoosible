@@ -1,0 +1,16 @@
+Cmp:
+  nam: 'number'
+
+  fnc: '@plugins/child_selector/select_child.fnc'
+
+  chl:
+    '!seq.map':
+      src: {'!seq.intSeq':{'end':10}}
+      nod:
+        Obj:
+          nam: {'!toStr':'$e'}
+          vie:
+            Image:
+              tex: {'!+':['./', '$e', '.png']}
+              siz: {'!relh.pair':[0, 65]}
+              mat: 'transparent'

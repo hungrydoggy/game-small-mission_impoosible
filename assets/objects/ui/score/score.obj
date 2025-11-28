@@ -1,0 +1,47 @@
+Cmp:
+  nam: 'score'
+
+  fnc:
+    '~setScore':
+      '''{(GameComponent* self, ,,, vector<Var> msg_params)
+        unlikely (msg_params.size() < 1) {
+          LOG_ERR("need params --- int score");
+          return null_var;
+        }
+
+        auto score = math::clamp(msg_params[0].as<int>(), 0, 99999);
+
+
+        auto left_score = score;
+        for (int decimal : {10000, 1000, 100, 10, 1}) {
+          auto obj = self->findByNamePath("./numbers/" + std::to_string(decimal));
+          auto v = left_score / decimal;
+          self->sendMessage(obj, "selectChild", {Var(std::to_string(v))});
+          if (score >= decimal || decimal == 1)
+            obj->activate();
+          else
+            obj->deactivate();
+
+          left_score = left_score % decimal;
+        }
+      '''
+
+  chl:
+    - Obj:
+      nam: 'bg'
+      pos: [0, 0, 0]
+      vie:
+        Image:
+          tex: './bg.png'
+          siz: {'!relh.pair':[0, 101]}
+          mat: 'transparent'
+    - Cmp:
+      nam: 'numbers'
+      pos: [17, 1, 1]
+      chl:
+        '!seq.map':
+          src: [10000, 1000, 100, 10, 1]
+          nod:
+            '@objects/ui/number/number.obj':
+              nam: {'!toStr':'$e'}
+              pos: ['!*':['$i', 22], 0, 0]

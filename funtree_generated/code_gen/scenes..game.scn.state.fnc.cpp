@@ -53,12 +53,21 @@ static Var __code_3 (
 }
 
 
+static Var __code_4 (
+    vector<Var> const& params
+) {
+
+  #include "scenes..game.scn.state.fnc.4.code"
+}
+
+
 Var Code_ScenesGameScnStateFnc::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
     case 2: return __code_2(params);
     case 3: return __code_3(params);
+    case 4: return __code_4(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"scenes..game.scn.state.fnc.cpp\"", code_idx);
       return null_var;
@@ -68,7 +77,7 @@ Var Code_ScenesGameScnStateFnc::execute (
 
 }
 
-#include "./scenes..game.scn.state.fnc.4.code"
+#include "./scenes..game.scn.state.fnc.5.code"
 
 
 

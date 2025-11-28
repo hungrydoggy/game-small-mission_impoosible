@@ -7,7 +7,9 @@ for (int ci=0; ci<self->getChildCount(); ++ci) {
   unlikely (chl == null)
     continue;
 
-  chl->is_drawable_self (chl->name() == name);
-  chl->is_updatable_self(chl->name() == name);
+  likely (chl->name() != name)
+    chl->deactivate();
+  else
+    chl->activate();
 }
 return null_var;

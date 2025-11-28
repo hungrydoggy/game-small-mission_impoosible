@@ -1,4 +1,4 @@
 auto self = params[0].as<Scene*>();  
 
-return null_var;
+self->sendMessage("/camera/score", "setScore", {Var(self->getData("score", 0))});
 return null_var;

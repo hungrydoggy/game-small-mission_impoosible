@@ -19,7 +19,7 @@
   val:
     '%onInit':
       '''{(Scene* self)
-        return null_var;
+        self->sendMessage("/camera/score", "setScore", {Var(self->getData("score", 0))});
       '''
 
     '%onKeyInput':

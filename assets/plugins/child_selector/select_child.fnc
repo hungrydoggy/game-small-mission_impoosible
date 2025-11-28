@@ -9,7 +9,9 @@
           unlikely (chl == null)
             continue;
 
-          chl->is_drawable_self (chl->name() == name);
-          chl->is_updatable_self(chl->name() == name);
+          likely (chl->name() != name)
+            chl->deactivate();
+          else
+            chl->activate();
         }
       '''

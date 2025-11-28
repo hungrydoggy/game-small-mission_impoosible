@@ -5,6 +5,8 @@ Scene:
     'bound.left' : -360
     'bound.right':  360
 
+    'score': 0
+
   fnc: '@scenes/game.scn.fnc'
 
   gtr: '@gpu_tasks/game/runner.gtr'
@@ -27,6 +29,9 @@ Scene:
       chl:
         - '@objects/ui/hp/hp.obj':
           pos: ['!-':[115, '$half_game_width'], '!+':[-35, '$half_game_height'], -1000]
+
+        - '@objects/ui/score/score.obj':
+          pos: ['!+':[-135, '$half_game_width'], '!+':[-35, '$half_game_height'], -1000]
 
     - Obj:
       nam: 'bg'

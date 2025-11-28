@@ -36,6 +36,20 @@
         self->sendMessage("/camera/hp", "setHp", {msg_params[0]});
       '''
 
+    '~incScore':
+      '''{(GameObject* self, ,,, vector<Var> msg_params)
+        unlikely (msg_params.size() < 1) {
+          LOG_ERR("need params --- int score_inc");
+          return null_var;
+        }
+
+        auto score_inc = msg_params[0].as<int>();
+
+        auto score = math::clamp(self->scene()->getData("score", 0) + score_inc, 0, 99999);
+        self->scene()->setData("score", score);
+        self->sendMessage("/camera/score", "setScore", {Var(score)});
+      '''
+
   hip_part:
     '''{
       void __onBeforeInit (GameObject* self) {
