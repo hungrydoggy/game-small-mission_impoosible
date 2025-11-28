@@ -11,6 +11,18 @@ Obj:
       '''{(GameObject* self)
         self->sendMessage("/scene_state", "onHpUpdated", {Var(self->getData("hp", 10))});
       '''
+    '~incHp':
+      '''{(GameObject* self, ,,, vector<Var> msg_params)
+        unlikely (msg_params.size() < 1) {
+          LOG_ERR("need params --- int hp_inc");
+          return null_var;
+        }
+
+        auto hp_inc = msg_params[0].as<int>();
+        auto hp = math::clamp(self->getData("hp", 5) + hp_inc, 0, 10);
+        self->setData("hp", hp);
+        self->sendMessage("/scene_state", "onHpUpdated", {Var(hp)});
+      '''
 
   #scl: [3, 3, 1]
   chl:
@@ -202,7 +214,7 @@ Obj:
                   dur: 0
                   val: 1
                 - Wait:
-                  dur: 0.1
+                  dur: 0.2
             - Script:
               scr:
                 '''{(ActionState* state)

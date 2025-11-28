@@ -12,13 +12,16 @@ Obj:
     '%onBeginContact':
       '''{(GameObject* self, BulletShape* my_shape, BulletShape* other_shape, void* contact_info)
         auto other = dynamic_cast<GameObject*>(other_shape->body_owner());
-        auto is_player = other->getData("type", "") == "player";
-        unlikely (is_player == false)
-          return null_var;
 
-        self->unregisterBody();
-        self->sendMessage(other, "incHp", {Var(1)});
-        self->setAction("disappear");
+        auto type = other->getData("type", "");
+        likely (type == "land") {
+          self->setAction("onLand");
+
+        }else if (type == "player") {
+          self->unregisterBody();
+          self->sendMessage(other, "incHp", {Var(1)});
+          self->setAction("disappear");
+        }
       '''
 
   chl:
@@ -75,6 +78,28 @@ Obj:
     - BulletBox:
       hsz: [25, 25, 100]
   acl:
+    - ActionItem:
+      nam: 'onLand'
+      act:
+        Sequence:
+          chl:
+            - Wait:
+              dur: 2
+            - Repeat:
+              cnt: 3
+              chl:
+                - SetDrawable:
+                  tar: './view'
+                  val: false
+                - Wait:
+                  dur: 0.1
+                - SetDrawable:
+                  tar: './view'
+                  val: true
+                - Wait:
+                  dur: 0.2
+            - SetAction:
+              nam: 'disappear'
     - ActionItem:
       nam: 'disappear'
       act:

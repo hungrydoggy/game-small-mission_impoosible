@@ -164,6 +164,8 @@ Scene:
 
     - Obj:
       nam: 'land'
+      dat:
+        'type': 'land'
       pos: [0, '!-':[29, '$half_game_height'], 0]
       bdy:
         BulletBody:
