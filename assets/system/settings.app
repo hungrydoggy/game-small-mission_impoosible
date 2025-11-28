@@ -94,9 +94,9 @@ App:
           axs: 'x'
           siz: 1000
       wid:
-        '$window_width': 1280
+        '$window_width': 1600
       hei:
-        '$window_height': 720
+        '$window_height': 900
       ful: false
       rsl:
         # 16:10

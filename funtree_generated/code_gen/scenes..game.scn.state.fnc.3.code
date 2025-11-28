@@ -1,0 +1,9 @@
+auto self = params[0].as<GameObject*>();  auto msg_params = params[4].as<vector<Var>>();  
+
+unlikely (msg_params.size() < 1) {
+  LOG_ERR("need params --- int cur_hp");
+  return null_var;
+}
+
+self->sendMessage("/camera/hp", "setHp", {msg_params[0]});
+return null_var;

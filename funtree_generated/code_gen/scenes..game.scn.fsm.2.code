@@ -1,32 +1,26 @@
-auto fsm = params[0].as<Fsm*>();  auto msg_params = params[5].as<vector<Var>>();  
+auto fsm = params[0].as<Fsm*>();  
 
-unlikely (msg_params.size() < 1) {
-  LOG_ERR("need params --- KeyEvent const* e");
-  return null_var;
+auto self = fsm->owner();
+
+
+// process input
+int mov_dir = ((g_is_left_key_down == true)? -1 : 0) + ((g_is_right_key_down == true)? 1 : 0);
+switch (mov_dir) {
+  case -1: self->sendMessage("/player", "moveLeft" ); break;
+  case  0: self->sendMessage("/player", "stopMove" ); break;
+  case  1: self->sendMessage("/player", "moveRight"); break;
 }
 
-auto e = msg_params[0].v<KeyEvent const*>();
 
-switch (e->type) {
-  case KeyEventType::KEY_LEFT:
-    switch (e->state) {
-      case KeyEventState::STATE_PRESSED : g_is_left_key_down = true;  break;
-      case KeyEventState::STATE_RELEASED: g_is_left_key_down = false; break;
-      default: break;
-    }
-    break;
-
-  case KeyEventType::KEY_RIGHT:
-    switch (e->state) {
-      case KeyEventState::STATE_PRESSED : g_is_right_key_down = true;  break;
-      case KeyEventState::STATE_RELEASED: g_is_right_key_down = false; break;
-      default: break;
-    }
-    break;
-
-  case KeyEventType::KEY_SPACE:
-    likely (e->state == KeyEventState::STATE_PRESSED)
-      fsm->owner()->sendMessage("/player", "onHit");
-    break;
+// create poops
+auto cooldown_manager = self->getTrait<CooldownManager>(g_cooldown_manager_gid);
+auto cooldown = cooldown_manager->getCooldown(g_poop_create_interval_reg);
+unlikely (cooldown->is_complete() == true) {
+  auto x = DefaultRandomPocket::draw(
+      self->scene()->getData("bound.left" , REAL(0.0)),
+      self->scene()->getData("bound.right", REAL(0.0))
+  );
+  __makePoop(self, x);
+  cooldown->start();
 }
 return null_var;

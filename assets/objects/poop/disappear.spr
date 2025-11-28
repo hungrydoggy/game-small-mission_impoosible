@@ -1,0 +1,13 @@
+Sprite:
+  cnt: 1
+  cel:
+    '!seq.map':
+      src: {'!seq.intSeq':{'end':3}}
+      nod:
+        Cell:
+          frm: 2
+          img:
+            Image:
+              tex: {'!+':['./normal/disappear/', '$e', '.png']}
+              siz: {'!relh.pair':[0, 66]}
+              mat: 'transparent'

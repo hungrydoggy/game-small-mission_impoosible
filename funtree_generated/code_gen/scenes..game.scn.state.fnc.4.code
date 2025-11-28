@@ -1,0 +1,16 @@
+
+
+void __onBeforeInit (GameObject* self) {
+
+  // cooldown_manager
+  auto cooldown_manager = make_shared<CooldownManager>();
+  self->addTrait(cooldown_manager);
+
+  cooldown_manager->addCooldown(
+      "poop_create_interval",
+      make_shared<Cooldown>(
+        0.5,
+        1
+      )
+  );
+}

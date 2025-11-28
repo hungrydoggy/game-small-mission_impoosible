@@ -15,6 +15,7 @@ Scene:
   chl:
     - Obj:
       nam: 'scene_state'
+      fnc: '@scenes/game.scn.state.fnc'
       trt:
         - '@./game.scn.fsm'
     - Camera:
@@ -60,7 +61,7 @@ Scene:
         'x.max': {'!+':[ -20, '$half_game_width']}
         'y.min': {'!+':[-130, '$half_game_height']}
         'y.max': {'!+':[ -50, '$half_game_height']}
-      pos: [0, 0, 1000]
+      pos: [0, 0, 100]
       chl:
         '!seq.map':
           src: {'!seq.intSeq':{'end':4}}
@@ -132,6 +133,32 @@ Scene:
                         - SendMessage:
                           dst: '.'
                           nam: 'randomShow'
+
+    - Cmp:
+      nam: 'poops.normal'
+      pos: [0, '!+':[100, '$half_game_height'], 200]
+      chl:
+        '!seq.map':
+          src: {'!seq.intSeq':{'end':200}}
+          nod:
+            '!lnk.make':
+              pth: {'!+':['objects/poop/normal.', '!%':['$e', 8], '.obj']}
+              add:
+                dra: false
+                nam: {'!toStr':'$e'}
+                pos: [0, 0, '!*':['$e', 0.1]]
+
+    - Obj:
+      nam: 'land'
+      pos: [0, '!-':[29, '$half_game_height'], 100]
+      bdy:
+        BulletBody:
+          mas: 0
+          grp: ['land']
+          msk: ['projectile.enemy', 'item']
+      shp:
+        - BulletBox:
+          hsz: ['$game_width', 30, 300]
 
     - '@objects/char.main/playable.obj':
       nam: 'player'

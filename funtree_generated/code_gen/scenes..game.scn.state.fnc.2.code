@@ -1,0 +1,4 @@
+auto self = params[0].as<GameObject*>();  
+
+__onBeforeInit(self);
+return null_var;

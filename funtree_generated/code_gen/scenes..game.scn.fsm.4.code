@@ -1,0 +1,24 @@
+
+
+
+static GameComponent* __pickInactivePoop (GameObject* self) {
+  auto poop_parent = self->findByNamePath("/poops.normal");
+
+  for (auto& poop : poop_parent->children()) {
+    unlikely (poop->getData("is_active", false) == false)
+      return poop.get();
+  }
+
+  return null;
+}
+
+
+void __makePoop (GameObject* self, real x) {
+  auto poop = __pickInactivePoop(self);
+  unlikely (poop == null)
+    return;
+
+  poop->x(x);
+  poop->y(0);
+  self->sendMessage(poop, "setActive", {Var(true)});
+}

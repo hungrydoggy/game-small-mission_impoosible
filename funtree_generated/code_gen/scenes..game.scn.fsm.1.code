@@ -1,11 +1,14 @@
-auto fsm = params[0].as<Fsm*>();  
 
-auto self = fsm->owner();
 
-int mov_dir = ((g_is_left_key_down == true)? -1 : 0) + ((g_is_right_key_down == true)? 1 : 0);
-switch (mov_dir) {
-  case -1: self->sendMessage("/player", "moveLeft" ); break;
-  case  0: self->sendMessage("/player", "stopMove" ); break;
-  case  1: self->sendMessage("/player", "moveRight"); break;
-}
-return null_var;
+using namespace appetizer;
+
+
+bool g_is_left_key_down  = false;
+bool g_is_right_key_down = false;
+
+StringRegistryIdType g_cooldown_manager_gid = StringRegistry::default_registry().lookUp("cooldown_manager");
+
+StringRegistryIdType g_poop_create_interval_reg = StringRegistry::default_registry().lookUp("poop_create_interval");
+
+
+static void __makePoop (GameObject* self, real x);
