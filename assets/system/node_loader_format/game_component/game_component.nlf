@@ -149,26 +149,6 @@ ObjectFormat:
               return Var(true);
             '''
     - AttributeFormat:
-      full_name: 'need_body_without_draw'
-      short_name: 'bwd'
-      is_essential: false
-      formats:
-        - ValueFormat:
-          type: 'Value'
-          sub_type: 'bool'
-          on_load:
-            '''{(
-                  FormatContext* ctx,
-                  shared_ptr<NodeLoadable> loadable,
-                  shared_ptr<Node> node,
-                  shared_ptr<Content> content
-                )
-
-              auto self = loadable->cast<GameComponent>();
-              self->need_body_without_draw(content->cast<Value>()->var().as<bool>());
-              return Var(true);
-            '''
-    - AttributeFormat:
       full_name: 'state_serializers'
       short_name: 'sts'
       is_essential: false

@@ -100,6 +100,16 @@ Fsm:
             fsm->setCurState("idle");
           '''
 
+    - FsmState:
+      nam: 'ko'
+      on_enter:
+        '''{(Fsm* fsm)
+          auto self = fsm->owner();
+          __playSprite(self, "ko");
+          self->setAction("hit");
+          self->unregisterBody();
+        '''
+
   hip_part:
     '''{
       GameComponent* __playSprite (GameObject* self, string const& name) {
@@ -112,10 +122,17 @@ Fsm:
 
 
       void __onHit (Fsm* fsm) {
-        auto is_invincible = fsm->owner()->getData("is_invincible", false);
+        auto self = fsm->owner();
+        auto is_invincible = self->getData("is_invincible", false);
         unlikely (is_invincible == true)
           return;
 
-        fsm->setCurState("hit");
+        auto hp = math::max(self->getData("hp", 5) - 1, 0);
+        self->setData("hp", hp);
+
+        unlikely (hp <= 0)
+          fsm->setCurState("ko");
+        else
+          fsm->setCurState("hit");
       }
     '''

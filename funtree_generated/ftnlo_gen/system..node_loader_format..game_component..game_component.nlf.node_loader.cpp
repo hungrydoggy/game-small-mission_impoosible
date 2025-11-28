@@ -532,32 +532,6 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGamecomponentGamecom
             )
           },
           AttributeLoader{
-            "need_body_without_draw",
-            "bwd",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::BOOL,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/game_component.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(8, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
             "state_serializers",
             "sts",
             vector<string>{ },
@@ -583,7 +557,7 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGamecomponentGamecom
                       LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
                       return Var(false);
                     }
-                    return code_set->execute(9, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                    return code_set->execute(8, {Var(&ctx), Var(loadable), Var(node), Var(content)});
                   }
                 ),
               }
@@ -615,7 +589,7 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGamecomponentGamecom
                       LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
                       return Var(false);
                     }
-                    return code_set->execute(10, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                    return code_set->execute(9, {Var(&ctx), Var(loadable), Var(node), Var(content)});
                   }
                 ),
               }

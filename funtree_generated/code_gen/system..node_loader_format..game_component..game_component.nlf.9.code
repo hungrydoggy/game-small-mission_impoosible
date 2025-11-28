@@ -7,17 +7,16 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 auto self = loadable->cast<GameComponent>();
-auto ssnl = ctx->loadSubNodeAs<StateSerializerNodeLoadable>(node, content);
-unlikely (ssnl == null)
+auto child =
+    ctx->loadSubNode(
+      node,
+      content,
+      [self](sp<NodeLoadable> const& loadable) {
+        self->addChild(dpc<GameComponent>(loadable));
+      }
+    );
+unlikely (child == null)
   return Var(false);
-
-self->addStateSerializer(
-    make_shared<StateSerializer>(
-      ssnl->name,
-      ssnl->on_serialize_func,
-      ssnl->on_deserialize_func
-    )
-);
 
 return Var(true);
 return null_var;

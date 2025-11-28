@@ -2,6 +2,7 @@ Obj:
   nam: 'minjun'
   dat:
     'move_vel': 170
+    'hp': 1 # 5
     'is_invincible': false
 
   #scl: [3, 3, 1]

@@ -108,14 +108,6 @@ static Var __code_9 (
 }
 
 
-static Var __code_10 (
-    vector<Var> const& params
-) {
-
-  #include "system..node_loader_format..game_component..game_component.nlf.10.code"
-}
-
-
 Var Code_SystemNodeloaderformatGamecomponentGamecomponentNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
@@ -129,7 +121,6 @@ Var Code_SystemNodeloaderformatGamecomponentGamecomponentNlf::execute (
     case 7: return __code_7(params);
     case 8: return __code_8(params);
     case 9: return __code_9(params);
-    case 10: return __code_10(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"system..node_loader_format..game_component..game_component.nlf.cpp\"", code_idx);
       return null_var;
