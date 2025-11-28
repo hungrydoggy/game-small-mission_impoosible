@@ -1,4 +1,4 @@
-auto state = params[0].as<ActionState*>();  
+auto self = params[0].as<GameObject*>();  
 
-state->owner()->setData("is_invincible", true);
+self->sendMessage("/", "onHpUpdated", {Var(self->getData("hp", 10))});
 return null_var;

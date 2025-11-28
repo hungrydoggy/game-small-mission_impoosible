@@ -1,0 +1,67 @@
+Cmp:
+  nam: 'hp'
+
+  fnc:
+    '~setHp':
+      '''{(GameComponent* self, ,,, vector<Var> msg_params)
+        unlikely (msg_params.size() < 1) {
+          LOG_ERR("need params --- int hp");
+          return null_var;
+        }
+
+        auto hp = math::min(msg_params[0].as<int>(), 10);
+
+        // set heart.ones
+        auto one_cnt = (int)(hp / 2);
+        auto heart_ones = self->findChild("heart.ones");
+        for (int oi=0; oi<5; ++oi) {
+          auto h = heart_ones->findChild(std::to_string(oi));
+          h->is_drawable_self(oi < one_cnt);
+        }
+
+        // set heart.half
+        auto heart_half = self->findChild("heart.half");
+        heart_half->is_drawable_self(hp > (one_cnt * 2 + 0.1));
+        unlikely (heart_half->is_drawable_self() == true)
+          heart_half->x(heart_ones->findChild(std::to_string(one_cnt))->x());
+      '''
+
+  #scl: [4, 4, 1]
+  chl:
+    - Obj:
+      nam: 'bg'
+      pos: [0, 0, 0]
+      vie:
+        Image:
+          tex: './bg.png'
+          siz: {'!relh.pair':[0, 109]}
+          mat: 'transparent'
+
+    - Cmp:
+      nam: 'heart.ones'
+      ref:
+        'x_poses': [-80, -40, -0.5, 39, 78.5]
+      pos: [0, 0, 1]
+      chl:
+        '!seq.map':
+          src: '$x_poses'
+          nod:
+            Obj:
+              dra: false
+              nam: {'!toStr':'$i'}
+              pos: ['$e', 0, 0]
+              vie:
+                Image:
+                  tex: './one.png'
+                  siz: {'!relh.pair':[0, 65]}
+                  mat: 'transparent'
+
+    - Obj:
+      dra: false
+      nam: 'heart.half'
+      pos: [0, 0, 2]
+      vie:
+        Image:
+          tex: './half.png'
+          siz: {'!relh.pair':[0, 65]}
+          mat: 'transparent'

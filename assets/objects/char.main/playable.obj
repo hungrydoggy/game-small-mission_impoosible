@@ -2,8 +2,14 @@ Obj:
   nam: 'minjun'
   dat:
     'move_vel': 170
-    'hp': 1 # 5
+    'hp': 5
     'is_invincible': false
+
+  fnc:
+    '%onInit':
+      '''{(GameObject* self)
+        self->sendMessage("/", "onHpUpdated", {Var(self->getData("hp", 10))});
+      '''
 
   #scl: [3, 3, 1]
   chl:

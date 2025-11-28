@@ -1,0 +1,23 @@
+auto self = params[0].as<GameComponent*>();  auto msg_params = params[4].as<vector<Var>>();  
+
+unlikely (msg_params.size() < 1) {
+  LOG_ERR("need params --- int hp");
+  return null_var;
+}
+
+auto hp = math::min(msg_params[0].as<int>(), 10);
+
+// set heart.ones
+auto one_cnt = (int)(hp / 2);
+auto heart_ones = self->findChild("heart.ones");
+for (int oi=0; oi<5; ++oi) {
+  auto h = heart_ones->findChild(std::to_string(oi));
+  h->is_drawable_self(oi < one_cnt);
+}
+
+// set heart.half
+auto heart_half = self->findChild("heart.half");
+heart_half->is_drawable_self(hp > (one_cnt * 2 + 0.1));
+unlikely (heart_half->is_drawable_self() == true)
+  heart_half->x(heart_ones->findChild(std::to_string(one_cnt))->x());
+return null_var;

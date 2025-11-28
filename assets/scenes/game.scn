@@ -23,6 +23,9 @@ Scene:
       prj:
         Projection:
           typ: 'orthogonal'
+      chl:
+        - '@objects/ui/hp/hp.obj':
+          pos: ['!-':[115, '$half_game_width'], '!+':[-35, '$half_game_height'], -1000]
 
     - Obj:
       nam: 'bg'

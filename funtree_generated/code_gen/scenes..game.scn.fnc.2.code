@@ -1,4 +1,4 @@
-auto scene = params[0].as<Scene*>();  
+auto self = params[0].as<Scene*>();  
 
 return null_var;
 return null_var;

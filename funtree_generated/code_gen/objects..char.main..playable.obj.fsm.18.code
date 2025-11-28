@@ -17,6 +17,7 @@ void __onHit (Fsm* fsm) {
 
   auto hp = math::max(self->getData("hp", 5) - 1, 0);
   self->setData("hp", hp);
+  self->sendMessage("/", "onHpUpdated", {Var(hp)});
 
   unlikely (hp <= 0)
     fsm->setCurState("ko");
