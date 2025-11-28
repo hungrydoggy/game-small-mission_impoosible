@@ -1,6 +1,7 @@
 Obj:
   nam: 'minjun'
   dat:
+    'type': 'player'
     'move_vel': 170
     'hp': 5
     'is_invincible': false

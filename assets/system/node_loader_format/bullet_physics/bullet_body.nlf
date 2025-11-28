@@ -12,6 +12,26 @@ ObjectFormat:
   loadable_class: 'BulletBody'
   attributes:
     - AttributeFormat:
+      full_name: 'need_auto_register'
+      short_name: 'reg'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'bool'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+
+              auto self = loadable->cast<BulletBody>();
+              self->need_auto_register(content->asValue<bool>());
+              return Var(true);
+            '''
+    - AttributeFormat:
       full_name: 'mass'
       short_name: 'mas'
       is_essential: false

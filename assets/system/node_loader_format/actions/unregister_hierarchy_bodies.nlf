@@ -1,0 +1,41 @@
+ObjectFormat:
+  full_name: 'Action.UnregisterHierarchyBodies'
+  short_name: 'UnregisterHierarchyBodies'
+  groups: ['ActionGroup']
+  include_part:
+    '''{
+      #include <action/_action_loadable.h>
+      #include <action/action_factory.h>
+    '''
+  loadable_class: 'ActionLoadable'
+  post_load:
+    '''{(
+          LoaderContext* ctx,
+          shared_ptr<Node> node,
+          shared_ptr<NodeLoadable> loadable,
+        )
+
+      auto al = loadable->cast<ActionLoadable>();
+      al->action = action::UnregisterHierarchyBodies(al->getData("target_path", "."));
+      return Var(true);
+    '''
+  attributes:
+    - AttributeFormat:
+      full_name: 'target_path'
+      short_name: 'tar'
+      is_essential: false
+      formats:
+        - ValueFormat:
+          type: 'Value'
+          sub_type: 'string'
+          on_load:
+            '''{(
+                  FormatContext* ctx,
+                  shared_ptr<NodeLoadable> loadable,
+                  shared_ptr<Node> node,
+                  shared_ptr<Content> content
+                )
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("target_path", content->cast<Value>()->var());
+              return Var(true);
+            '''

@@ -180,6 +180,14 @@ static Var __code_18 (
 }
 
 
+static Var __code_19 (
+    vector<Var> const& params
+) {
+
+  #include "system..node_loader_format..bullet_physics..bullet_body.nlf.19.code"
+}
+
+
 Var Code_SystemNodeloaderformatBulletphysicsBulletbodyNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
@@ -202,6 +210,7 @@ Var Code_SystemNodeloaderformatBulletphysicsBulletbodyNlf::execute (
     case 16: return __code_16(params);
     case 17: return __code_17(params);
     case 18: return __code_18(params);
+    case 19: return __code_19(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"system..node_loader_format..bullet_physics..bullet_body.nlf.cpp\"", code_idx);
       return null_var;

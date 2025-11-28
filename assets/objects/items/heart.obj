@@ -1,0 +1,93 @@
+Obj:
+  nam: 'heart'
+
+  fnc:
+    '%onPostBuildBody':
+      '''{(GameObject* self, BulletBody* body)
+      
+        auto bt_body = body->bt_body();
+        bt_body->setLinearFactor (btVector3(1, 1, 0));
+        bt_body->setAngularFactor(btVector3(0, 0, 0));
+      '''
+    '%onBeginContact':
+      '''{(GameObject* self, BulletShape* my_shape, BulletShape* other_shape, void* contact_info)
+        auto other = dynamic_cast<GameObject*>(other_shape->body_owner());
+        auto is_player = other->getData("type", "") == "player";
+        unlikely (is_player == false)
+          return null_var;
+
+        self->unregisterBody();
+        self->sendMessage(other, "incHp", {Var(1)});
+        self->setAction("disappear");
+      '''
+
+  chl:
+    - Obj:
+      nam: 'view'
+      vie:
+        Image:
+          tex: 'textures/items/heart.png'
+          siz: {'!relh.pair':[0, 118]}
+          mat: 'transparent'
+      acl:
+        - ActionItem:
+          nam: '%onInit'
+          act:
+            Repeat:
+              cnt: -1
+              chl:
+                - Parallel:
+                  chl:
+                    - Sequence:
+                      chl:
+                        - ScaleYTo:
+                          dur: 0.2
+                          val: 1.1
+                          int: out_quad
+                        - ScaleYTo:
+                          dur: 0.2
+                          val: 0.9
+                          int: out_quad
+                        - ScaleYTo:
+                          dur: 0.8
+                          val: 1
+                          int: out_elastic
+                    - Sequence:
+                      chl:
+                        - ScaleXTo:
+                          dur: 0.2
+                          val: 1.1
+                          int: in_quad
+                        - ScaleXTo:
+                          dur: 0.2
+                          val: 0.9
+                          int: in_quad
+                        - ScaleXTo:
+                          dur: 0.8
+                          val: 1
+                          int: out_elastic
+  bdy:
+    BulletBody:
+      mas: 1
+      grp: ['item']
+      msk: ['land', 'player']
+  shp:
+    - BulletBox:
+      hsz: [25, 25, 100]
+  acl:
+    - ActionItem:
+      nam: 'disappear'
+      act:
+        Sequence:
+          chl:
+            - Parallel:
+              chl:
+                - AlphaTo:
+                  dur: 0.2
+                  val: 0
+                  int: out_quad
+                - ScaleTo:
+                  dur: 0.2
+                  val: [1.5, 1.5, 1]
+                  int: out_quad
+            - Deactivate:

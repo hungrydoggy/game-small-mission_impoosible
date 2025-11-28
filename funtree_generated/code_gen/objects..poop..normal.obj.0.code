@@ -11,5 +11,9 @@ likely (is_active == true) {
   self->sendMessage("./view", "selectChild", {Var("idle")});
   self->alpha(1);
 }
-self->is_drawable_self(is_active);
+
+likely (is_active == true)
+  self->activate();
+else
+  self->deactivate();
 return null_var;
