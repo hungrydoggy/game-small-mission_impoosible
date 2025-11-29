@@ -64,7 +64,7 @@
               0.5,
               1
             )
-        );
+        )->start();
 
         cooldown_manager->addCooldown(
             "coin_create_interval",
@@ -72,6 +72,14 @@
               3,
               1
             )
-        );
+        )->start();
+
+        cooldown_manager->addCooldown(
+            "item_create_interval",
+            make_shared<Cooldown>(
+              10,
+              1
+            )
+        )->start();
       }
     '''

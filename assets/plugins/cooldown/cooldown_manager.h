@@ -16,7 +16,7 @@ class GAMECONTENT_API CooldownManager :
 public: // getter/setter
   ObjectTraitGroupIdType trait_group_id () const override;
 
-  void addCooldown (string const& name, shared_ptr<Cooldown> const& cooldown);
+  shared_ptr<Cooldown> const&  addCooldown (string const& name, shared_ptr<Cooldown> const& cooldown);
   void removeCooldown (string const& name);
 
   inline shared_ptr<Cooldown> getCooldown (string const& name) const {

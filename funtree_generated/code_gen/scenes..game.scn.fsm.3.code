@@ -26,11 +26,6 @@ switch (e->type) {
 
   case KeyEventType::KEY_SPACE:
     likely (e->state == KeyEventState::STATE_PRESSED) {
-      auto heart = fsm->owner()->findByNamePath<GameObject>("/hearts/0");
-      heart->y(200);
-      heart->alpha(1);
-      heart->scale({1, 1, 1});
-      heart->activate();
     }
     break;
 }

@@ -196,7 +196,7 @@ Scene:
 
     - '@objects/npc.rollroll/rollroll.obj':
       nam: 'rollroll'
-      pos: [0, 120, 70]
+      pos: [0, 200, 70]
 
     - '@objects/char.main/playable.obj':
       nam: 'player'

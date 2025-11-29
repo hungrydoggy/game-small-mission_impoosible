@@ -6,8 +6,13 @@ unlikely (msg_params.size() < 3) {
 }
 
 auto item  = msg_params[0].v<GameComponent*>();
-auto dst_x = msg_params[1].v<real>();
-auto dst_y = msg_params[2].v<real>();
+auto dst_x = msg_params[1].as<real>();
+auto dst_y = msg_params[2].as<real>();
 
-auto item_holder = item->findByNamePath(item->getData("holder.path", ""));
+auto action_state = self->getTrait<ActionState>("action_state");
+action_state->setData("drop_dst.x", dst_x);
+action_state->setData("drop_dst.y", dst_y);
+
+self->setData("holding", item);
+self->sendMessage(".", "toAppearFsmState");
 return null_var;

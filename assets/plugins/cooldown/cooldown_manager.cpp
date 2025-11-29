@@ -10,8 +10,9 @@ ObjectTraitGroupIdType CooldownManager::trait_group_id () const {
 }
 
 
-void CooldownManager::addCooldown (string const& name, shared_ptr<Cooldown> const& cooldown) {
+shared_ptr<Cooldown> const&  CooldownManager::addCooldown (string const& name, shared_ptr<Cooldown> const& cooldown) {
   cooldown_map_[StringRegistry::default_registry().lookUp(name)] = cooldown;
+  return cooldown;
 }
 
 

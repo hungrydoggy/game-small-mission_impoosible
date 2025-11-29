@@ -2,15 +2,41 @@ Obj:
   nam: 'heart'
 
   dat:
+    'is_active': false
     'holder.path': './holder'
 
   fnc:
+    '~setActive':
+      '''{(GameObject* self, ,,, vector<Var> msg_params)
+        unlikely (msg_params.size() < 1) {
+          LOG_ERR("need params --- bool is_active");
+          return null_var;
+        }
+
+        auto is_active = msg_params[0].as<bool>();
+        self->setData("is_active", is_active);
+        likely (is_active == true) {
+          self->alpha(1);
+          self->scale({1, 1, 1});
+        }
+
+        self->is_drawable_self (is_active);
+        self->is_updatable_self(is_active);
+
+        likely (is_active == false)
+          self->unregisterBody();
+      '''
     '%onPostBuildBody':
       '''{(GameObject* self, BulletBody* body)
       
         auto bt_body = body->bt_body();
         bt_body->setLinearFactor (btVector3(1, 1, 0));
         bt_body->setAngularFactor(btVector3(0, 0, 0));
+      '''
+    '%onPostRegisterBody':
+      '''{(GameObject* self, BulletBody* body)
+          auto bt_body = body->bt_body();
+          bt_body->setLinearVelocity({0, 0, 0});
       '''
     '%onBeginContact':
       '''{(GameObject* self, BulletShape* my_shape, BulletShape* other_shape, void* contact_info)
@@ -127,4 +153,7 @@ Obj:
                   dur: 0.2
                   val: [1.5, 1.5, 1]
                   int: out_quad
-            - Deactivate:
+            - SendMessage:
+              dst: '.'
+              nam: 'setActive'
+              par: [false]

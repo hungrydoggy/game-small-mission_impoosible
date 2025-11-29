@@ -1,0 +1,4 @@
+auto fsm = params[0].as<Fsm*>();  
+
+fsm->owner()->setAction("disappear");
+return null_var;

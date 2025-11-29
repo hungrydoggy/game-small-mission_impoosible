@@ -1,0 +1,8 @@
+auto fsm = params[0].as<Fsm*>();  
+
+auto self = fsm->owner();
+auto holding = self->getData("holding", (GameComponent*)null);
+((GameObject*)holding)->registerBody();
+
+fsm->setCurState("disappear");
+return null_var;

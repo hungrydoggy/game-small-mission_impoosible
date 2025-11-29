@@ -1,0 +1,4 @@
+auto fsm = params[0].as<Fsm*>();  
+
+fsm->setCurState("appear");
+return null_var;

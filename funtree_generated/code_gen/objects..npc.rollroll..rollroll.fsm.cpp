@@ -1,6 +1,6 @@
 
 
-#include "./objects..items..heart.obj.h"
+#include "./objects..npc.rollroll..rollroll.fsm.h"
 
 #include <common/path_registry/path_registry.h>
 #include <common/loader/fun_tree/_code_set.h>
@@ -27,8 +27,8 @@ using std::make_shared;
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
   CodeSetBundle::default_bundle().registerCodeSet(
-      "objects/items/heart.obj",
-      make_shared<Code_ObjectsItemsHeartObj>(),
+      "objects/npc.rollroll/rollroll.fsm",
+      make_shared<Code_ObjectsNpcRollrollRollrollFsm>(),
       true
   );
 }
@@ -39,7 +39,7 @@ static Var __code_0 (
     vector<Var> const& params
 ) {
 
-  #include "objects..items..heart.obj.0.code"
+  #include "objects..npc.rollroll..rollroll.fsm.0.code"
 }
 
 
@@ -47,7 +47,7 @@ static Var __code_1 (
     vector<Var> const& params
 ) {
 
-  #include "objects..items..heart.obj.1.code"
+  #include "objects..npc.rollroll..rollroll.fsm.1.code"
 }
 
 
@@ -55,7 +55,7 @@ static Var __code_2 (
     vector<Var> const& params
 ) {
 
-  #include "objects..items..heart.obj.2.code"
+  #include "objects..npc.rollroll..rollroll.fsm.2.code"
 }
 
 
@@ -63,11 +63,27 @@ static Var __code_3 (
     vector<Var> const& params
 ) {
 
-  #include "objects..items..heart.obj.3.code"
+  #include "objects..npc.rollroll..rollroll.fsm.3.code"
 }
 
 
-Var Code_ObjectsItemsHeartObj::execute (
+static Var __code_4 (
+    vector<Var> const& params
+) {
+
+  #include "objects..npc.rollroll..rollroll.fsm.4.code"
+}
+
+
+static Var __code_5 (
+    vector<Var> const& params
+) {
+
+  #include "objects..npc.rollroll..rollroll.fsm.5.code"
+}
+
+
+Var Code_ObjectsNpcRollrollRollrollFsm::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
@@ -75,8 +91,10 @@ Var Code_ObjectsItemsHeartObj::execute (
     case 1: return __code_1(params);
     case 2: return __code_2(params);
     case 3: return __code_3(params);
+    case 4: return __code_4(params);
+    case 5: return __code_5(params);
     default:
-      LOG_ERR("unknown code_idx %u --- \"objects..items..heart.obj.cpp\"", code_idx);
+      LOG_ERR("unknown code_idx %u --- \"objects..npc.rollroll..rollroll.fsm.cpp\"", code_idx);
       return null_var;
   }
 }

@@ -10,8 +10,11 @@ StringRegistryIdType g_cooldown_manager_gid = StringRegistry::default_registry()
 
 StringRegistryIdType g_poop_create_interval_reg = StringRegistry::default_registry().lookUp("poop_create_interval");
 StringRegistryIdType g_coin_create_interval_reg = StringRegistry::default_registry().lookUp("coin_create_interval");
+StringRegistryIdType g_item_create_interval_reg = StringRegistry::default_registry().lookUp("item_create_interval");
 
 
 static void __makePoop (GameObject* self, real x);
 
 static void __makeCoin (GameObject* self, real x);
+
+static void __makeItem (GameObject* self, real x);

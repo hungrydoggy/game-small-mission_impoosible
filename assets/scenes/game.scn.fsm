@@ -18,11 +18,14 @@ Fsm:
 
       StringRegistryIdType g_poop_create_interval_reg = StringRegistry::default_registry().lookUp("poop_create_interval");
       StringRegistryIdType g_coin_create_interval_reg = StringRegistry::default_registry().lookUp("coin_create_interval");
+      StringRegistryIdType g_item_create_interval_reg = StringRegistry::default_registry().lookUp("item_create_interval");
 
 
       static void __makePoop (GameObject* self, real x);
 
       static void __makeCoin (GameObject* self, real x);
+
+      static void __makeItem (GameObject* self, real x);
     '''
 
   stt:
@@ -71,6 +74,20 @@ Fsm:
               cooldown->start();
             }
           }
+
+
+          // create item
+          {
+            auto cooldown = cooldown_manager->getCooldown(g_item_create_interval_reg);
+            unlikely (cooldown->is_complete() == true) {
+              auto x = DefaultRandomPocket::draw(
+                  self->scene()->getData("bound.left" , REAL(0.0)) + REAL(100.0),
+                  self->scene()->getData("bound.right", REAL(0.0)) - REAL(100.0)
+              );
+              __makeItem(self, x);
+              cooldown->start();
+            }
+          }
         '''
       msg:
         'onKeyInput':
@@ -101,11 +118,6 @@ Fsm:
 
               case KeyEventType::KEY_SPACE:
                 likely (e->state == KeyEventState::STATE_PRESSED) {
-                  auto heart = fsm->owner()->findByNamePath<GameObject>("/hearts/0");
-                  heart->y(200);
-                  heart->alpha(1);
-                  heart->scale({1, 1, 1});
-                  heart->activate();
                 }
                 break;
             }
@@ -145,5 +157,22 @@ Fsm:
         coin->x(x);
         coin->y(0);
         self->sendMessage(coin, "setActive", {Var(true)});
+      }
+
+
+      void __makeItem (GameObject* self, real x) {
+
+        auto rollroll = self->findByNamePath<GameObject>("/rollroll");
+        unlikely (rollroll->getTrait<Fsm>("finite_state_machine")->cur_state()->name() != "inactive")
+          return;
+
+
+        auto item = __pickInactiveStuff(self, "/hearts");
+        unlikely (item == null)
+          return;
+
+
+        self->sendMessage(item, "setActive", {Var(true)});
+        self->sendMessage("/rollroll", "dropItem", {Var(item), Var(x), Var(REAL(120.0))});
       }
     '''

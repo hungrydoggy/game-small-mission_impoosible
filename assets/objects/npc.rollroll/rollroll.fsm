@@ -1,0 +1,70 @@
+Fsm:
+  stt:
+    - FsmState:
+      nam: 'inactive'
+      msg:
+        'toAppearFsmState':
+          '''{(Fsm* fsm)
+            fsm->setCurState("appear");
+          '''
+
+    - FsmState:
+      nam: 'appear'
+      on_enter:
+        '''{(Fsm* fsm)
+          auto self = fsm->owner();
+          auto action_state = self->getTrait<ActionState>("action_state");
+
+          auto dst_x = action_state->getData("drop_dst.x", REAL(0.0));
+          if (dst_x <= REAL(0.0)) {
+            action_state->setData("start.x", (real)(App::project().game_width() /  2 + 100));
+            action_state->setData("end.x"  , (real)(App::project().game_width() / -2 - 100));
+            self->scale_x(1);
+          }else {
+            action_state->setData("start.x", (real)(App::project().game_width() / -2 - 100));
+            action_state->setData("end.x"  , (real)(App::project().game_width() /  2 + 100));
+            self->scale_x(-1);
+          }
+
+          self->setAction("appear");
+          self->activate();
+        '''
+      on_update:
+        '''{(Fsm* fsm)
+          auto self = fsm->owner();
+
+          auto action_state = self->getTrait<ActionState>("action_state");
+          auto dst_x = action_state->getData("drop_dst.x", REAL(0.0));
+
+          auto holding = self->getData("holding", (GameComponent*)null);
+          auto holder_point = holding->findByNamePath(holding->getData("holder.path", ""));
+
+          auto pos =
+              Matrix::makeTranslate({((dst_x <= REAL(0.0))? -holder_point->x() : holder_point->x()), -holder_point->y(), 0})
+              * holding->parent()->inv_model_matrix()
+              * self->model_matrix()
+              * Vector3::kZero;
+          holding->x(pos.x());
+          holding->y(pos.y());
+        '''
+      msg:
+        'drop':
+          '''{(Fsm* fsm)
+            auto self = fsm->owner();
+            auto holding = self->getData("holding", (GameComponent*)null);
+            ((GameObject*)holding)->registerBody();
+
+            fsm->setCurState("disappear");
+          '''
+
+    - FsmState:
+      nam: 'disappear'
+      on_enter:
+        '''{(Fsm* fsm)
+          fsm->owner()->setAction("disappear");
+        '''
+      msg:
+        'toInactiveFsmState':
+          '''{(Fsm* fsm)
+            fsm->setCurState("inactive");
+          '''

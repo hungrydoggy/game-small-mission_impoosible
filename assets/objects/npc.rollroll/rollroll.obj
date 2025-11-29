@@ -1,10 +1,6 @@
 Obj:
   nam: 'rollroll'
 
-  dat:
-    'drop_dst.x': 0
-    'drop_dst.y': 0
-
   fnc:
     '~dropItem':
       '''{(GameObject* self, ,,, vector<Var> msg_params)
@@ -14,10 +10,15 @@ Obj:
         }
 
         auto item  = msg_params[0].v<GameComponent*>();
-        auto dst_x = msg_params[1].v<real>();
-        auto dst_y = msg_params[2].v<real>();
+        auto dst_x = msg_params[1].as<real>();
+        auto dst_y = msg_params[2].as<real>();
 
-        auto item_holder = item->findByNamePath(item->getData("holder.path", ""));
+        auto action_state = self->getTrait<ActionState>("action_state");
+        action_state->setData("drop_dst.x", dst_x);
+        action_state->setData("drop_dst.y", dst_y);
+
+        self->setData("holding", item);
+        self->sendMessage(".", "toAppearFsmState");
       '''
 
   #scl: [4, 4, 4]
@@ -69,3 +70,53 @@ Obj:
                   dur: 0.5
                   val: -5
                   int: out_quad
+  acl:
+    - ActionItem:
+      nam: 'appear'
+      act:
+        Sequence:
+          chl:
+            - MoveXTo:
+              dur: 0
+              val: {ActionDataRef:{key:'start.x'}}
+            - MoveYTo:
+              dur: 0
+              val: 200
+
+            - Parallel:
+              chl:
+                - MoveXTo:
+                  dur: 2
+                  val: {ActionDataRef:{key:'drop_dst.x'}}
+                  int: in_out_quad
+                - MoveYTo:
+                  dur: 2
+                  val: {ActionDataRef:{key:'drop_dst.y'}}
+                  int: out_quad
+            - Wait:
+              dur: 0.2
+            - SendMessage:
+              dst: '.'
+              nam: 'drop'
+    - ActionItem:
+      nam: 'disappear'
+      act:
+        Sequence:
+          chl:
+            - Parallel:
+              chl:
+                - MoveXTo:
+                  dur: 1.7
+                  val: {ActionDataRef:{key:'end.x'}}
+                  int: out_quad
+                - MoveYTo:
+                  dur: 1.7
+                  val: 200
+                  int: in_quad
+            - Deactivate:
+            - SendMessage:
+              dst: '.'
+              nam: 'toInactiveFsmState'
+
+  trt:
+    - '@./rollroll.fsm'

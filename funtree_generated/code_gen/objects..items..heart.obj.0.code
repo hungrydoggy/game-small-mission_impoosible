@@ -1,7 +1,20 @@
-auto self = params[0].as<GameObject*>();  auto body = params[1].as<BulletBody*>();  
+auto self = params[0].as<GameObject*>();  auto msg_params = params[4].as<vector<Var>>();  
 
+unlikely (msg_params.size() < 1) {
+  LOG_ERR("need params --- bool is_active");
+  return null_var;
+}
 
-auto bt_body = body->bt_body();
-bt_body->setLinearFactor (btVector3(1, 1, 0));
-bt_body->setAngularFactor(btVector3(0, 0, 0));
+auto is_active = msg_params[0].as<bool>();
+self->setData("is_active", is_active);
+likely (is_active == true) {
+  self->alpha(1);
+  self->scale({1, 1, 1});
+}
+
+self->is_drawable_self (is_active);
+self->is_updatable_self(is_active);
+
+likely (is_active == false)
+  self->unregisterBody();
 return null_var;

@@ -41,4 +41,18 @@ auto cooldown_manager = self->getTrait<CooldownManager>(g_cooldown_manager_gid);
     cooldown->start();
   }
 }
+
+
+// create item
+{
+  auto cooldown = cooldown_manager->getCooldown(g_item_create_interval_reg);
+  unlikely (cooldown->is_complete() == true) {
+    auto x = DefaultRandomPocket::draw(
+        self->scene()->getData("bound.left" , REAL(0.0)) + REAL(100.0),
+        self->scene()->getData("bound.right", REAL(0.0)) - REAL(100.0)
+    );
+    __makeItem(self, x);
+    cooldown->start();
+  }
+}
 return null_var;
