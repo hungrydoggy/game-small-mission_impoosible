@@ -1,0 +1,13 @@
+auto self = params[0].as<GameObject*>();  auto msg_params = params[4].as<vector<Var>>();  
+
+unlikely (msg_params.size() < 3) {
+  LOG_ERR("need params --- GameComponent* item, real x, real y");
+  return null_var;
+}
+
+auto item  = msg_params[0].v<GameComponent*>();
+auto dst_x = msg_params[1].v<real>();
+auto dst_y = msg_params[2].v<real>();
+
+auto item_holder = item->findByNamePath(item->getData("holder.path", ""));
+return null_var;

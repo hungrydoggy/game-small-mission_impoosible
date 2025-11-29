@@ -1,6 +1,9 @@
 Obj:
   nam: 'heart'
 
+  dat:
+    'holder.path': './holder'
+
   fnc:
     '%onPostBuildBody':
       '''{(GameObject* self, BulletBody* body)
@@ -25,7 +28,15 @@ Obj:
         }
       '''
 
+  #scl: [4, 4, 4]
   chl:
+    - Obj:
+      nam: 'holder'
+      dra: false
+      upd: false
+      pos: [17, 14, 0]
+      col: [1, 0, 1, 1]
+      vie: { Image: { tex: '%white', siz: [2, 0] } }
     - Obj:
       nam: 'view'
       vie:
@@ -72,7 +83,7 @@ Obj:
                           int: out_elastic
   bdy:
     BulletBody:
-      mas: 1
+      mas: 0#1
       grp: ['item']
       msk: ['land', 'player']
   shp:

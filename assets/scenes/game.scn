@@ -194,6 +194,10 @@ Scene:
         - BulletBox:
           hsz: ['$game_width', 30, 1000]
 
+    - '@objects/npc.rollroll/rollroll.obj':
+      nam: 'rollroll'
+      pos: [0, 120, 70]
+
     - '@objects/char.main/playable.obj':
       nam: 'player'
       pos: [0, -220, 50]

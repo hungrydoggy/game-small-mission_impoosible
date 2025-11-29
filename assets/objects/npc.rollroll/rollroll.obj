@@ -1,0 +1,78 @@
+Obj:
+  nam: 'rollroll'
+
+  dat:
+    'drop_dst.x': 0
+    'drop_dst.y': 0
+
+  fnc:
+    '~dropItem':
+      '''{(GameObject* self, ,,, vector<Var> msg_params)
+        unlikely (msg_params.size() < 3) {
+          LOG_ERR("need params --- GameComponent* item, real x, real y");
+          return null_var;
+        }
+
+        auto item  = msg_params[0].v<GameComponent*>();
+        auto dst_x = msg_params[1].v<real>();
+        auto dst_y = msg_params[2].v<real>();
+
+        auto item_holder = item->findByNamePath(item->getData("holder.path", ""));
+      '''
+
+  #scl: [4, 4, 4]
+  chl:
+    #- Obj:
+    #  pos: [0, 0, 1000]
+    #  col: [1, 0, 0, 1]
+    #  vie: { Image: { tex: '%white', siz: [2, 0] } }
+    - Obj:
+      nam: 'view'
+      pos: [40, 25, 0]
+      vie:
+        Sprite:
+          cnt: -1
+          cel:
+            '!seq.map':
+              src: {'!seq.intSeq':{'end':8}}
+              nod:
+                Cell:
+                  frm: 6
+                  img:
+                    Image:
+                      tex: {'!+':['./', '$e', '.png']}
+                      siz: {'!relh.pair':[0, 136]}
+                      mat: 'transparent'
+      chl:
+        - Obj:
+          dra: false
+          upd: false
+          nam: 'pivot.item'
+          pos: [-40, -25, 1]
+          col: [0, 1, 0, 1]
+          vie:
+            Image:
+              tex: '%white'
+              siz: [2, 0]
+      acl:
+        - ActionItem:
+          nam: '%onInit'
+          act:
+            Repeat:
+              cnt: -1
+              chl:
+                - MoveYBy:
+                  dur: 0.5
+                  val: 5
+                  int: out_quad
+                - MoveYBy:
+                  dur: 0.5
+                  val: -5
+                  int: out_quad
+  acl:
+    - ActionItem:
+      nam: 'drop'
+      act:
+        Sequence:
+          chl:
+            - Emptry:
