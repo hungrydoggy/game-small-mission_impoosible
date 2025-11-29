@@ -12,15 +12,33 @@ switch (mov_dir) {
 }
 
 
-// create poops
 auto cooldown_manager = self->getTrait<CooldownManager>(g_cooldown_manager_gid);
-auto cooldown = cooldown_manager->getCooldown(g_poop_create_interval_reg);
-unlikely (cooldown->is_complete() == true) {
-  auto x = DefaultRandomPocket::draw(
-      self->scene()->getData("bound.left" , REAL(0.0)),
-      self->scene()->getData("bound.right", REAL(0.0))
-  );
-  __makePoop(self, x);
-  cooldown->start();
+
+
+// create poops
+{
+  auto cooldown = cooldown_manager->getCooldown(g_poop_create_interval_reg);
+  unlikely (cooldown->is_complete() == true) {
+    auto x = DefaultRandomPocket::draw(
+        self->scene()->getData("bound.left" , REAL(0.0)),
+        self->scene()->getData("bound.right", REAL(0.0))
+    );
+    __makePoop(self, x);
+    cooldown->start();
+  }
+}
+
+
+// create coins
+{
+  auto cooldown = cooldown_manager->getCooldown(g_coin_create_interval_reg);
+  unlikely (cooldown->is_complete() == true) {
+    auto x = DefaultRandomPocket::draw(
+        self->scene()->getData("bound.left" , REAL(0.0)),
+        self->scene()->getData("bound.right", REAL(0.0))
+    );
+    __makeCoin(self, x);
+    cooldown->start();
+  }
 }
 return null_var;

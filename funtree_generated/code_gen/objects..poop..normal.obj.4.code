@@ -1,0 +1,4 @@
+auto self = params[0].as<GameComponent*>();  
+
+self->sendMessage(".", "selectChild", {Var("idle")});
+return null_var;

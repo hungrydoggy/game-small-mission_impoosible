@@ -155,8 +155,21 @@ Scene:
                 pos: [0, 0, '!*':['$e', 0.1]]
 
     - Cmp:
+      nam: 'coins'
+      pos: [0, '!+':[100, '$half_game_height'], 200]
+      chl:
+        '!seq.map':
+          src: {'!seq.intSeq':{'end':50}}
+          nod:
+            '@objects/items/coin.obj':
+              dra: false
+              upd: false
+              nam: {'!toStr':'$e'}
+              pos: [0, 0, '!*':['$e', 0.1]]
+
+    - Cmp:
       nam: 'hearts'
-      pos: [0, 0, 100]
+      pos: [0, 0, 110]
       chl:
         '!seq.map':
           src: {'!seq.intSeq':{'end':4}}

@@ -1,12 +1,12 @@
 
 
 
-static GameComponent* __pickInactivePoop (GameObject* self) {
-  auto poop_parent = self->findByNamePath("/poops.normal");
+static GameComponent* __pickInactiveStuff (GameObject* self, string const& parent_path) {
+  auto stuff_parent = self->findByNamePath(parent_path);
 
-  for (auto& poop : poop_parent->children()) {
-    unlikely (poop->getData("is_active", false) == false)
-      return poop.get();
+  for (auto& stuff : stuff_parent->children()) {
+    unlikely (stuff->getData("is_active", false) == false)
+      return stuff.get();
   }
 
   return null;
@@ -14,11 +14,22 @@ static GameComponent* __pickInactivePoop (GameObject* self) {
 
 
 void __makePoop (GameObject* self, real x) {
-  auto poop = __pickInactivePoop(self);
+  auto poop = __pickInactiveStuff(self, "/poops.normal");
   unlikely (poop == null)
     return;
 
   poop->x(x);
   poop->y(0);
   self->sendMessage(poop, "setActive", {Var(true)});
+}
+
+
+void __makeCoin (GameObject* self, real x) {
+  auto coin = __pickInactiveStuff(self, "/coins");
+  unlikely (coin == null)
+    return;
+
+  coin->x(x);
+  coin->y(0);
+  self->sendMessage(coin, "setActive", {Var(true)});
 }

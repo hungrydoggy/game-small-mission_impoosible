@@ -34,6 +34,13 @@ Obj:
         bt_body->setLinearFactor (btVector3(1, 1, 0));
         bt_body->setAngularFactor(btVector3(0, 0, 0));
       '''
+    '%onPostRegisterBody':
+      '''{(GameObject* self, BulletBody* body)
+          auto gravity = dynamic_cast<BulletWrapper*>(self->scene()->getPhysics())->world()->getGravity();
+          auto bt_body = body->bt_body();
+          bt_body->setGravity(gravity * DefaultRandomPocket::draw(REAL(1.0), REAL(1.5)));
+          bt_body->setLinearVelocity({0, 0, 0});
+      '''
     '%onBeginContact':
       '''{(GameObject* self, BulletShape* my_shape, BulletShape* other_shape, void* contact_info)
         self->sendMessage("./view", "selectChild", {Var("disappear")});

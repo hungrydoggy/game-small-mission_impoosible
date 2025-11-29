@@ -17,9 +17,12 @@ Fsm:
       StringRegistryIdType g_cooldown_manager_gid = StringRegistry::default_registry().lookUp("cooldown_manager");
 
       StringRegistryIdType g_poop_create_interval_reg = StringRegistry::default_registry().lookUp("poop_create_interval");
+      StringRegistryIdType g_coin_create_interval_reg = StringRegistry::default_registry().lookUp("coin_create_interval");
 
 
       static void __makePoop (GameObject* self, real x);
+
+      static void __makeCoin (GameObject* self, real x);
     '''
 
   stt:
@@ -39,16 +42,34 @@ Fsm:
           }
 
 
-          // create poops
           auto cooldown_manager = self->getTrait<CooldownManager>(g_cooldown_manager_gid);
-          auto cooldown = cooldown_manager->getCooldown(g_poop_create_interval_reg);
-          unlikely (cooldown->is_complete() == true) {
-            auto x = DefaultRandomPocket::draw(
-                self->scene()->getData("bound.left" , REAL(0.0)),
-                self->scene()->getData("bound.right", REAL(0.0))
-            );
-            __makePoop(self, x);
-            cooldown->start();
+
+
+          // create poops
+          {
+            auto cooldown = cooldown_manager->getCooldown(g_poop_create_interval_reg);
+            unlikely (cooldown->is_complete() == true) {
+              auto x = DefaultRandomPocket::draw(
+                  self->scene()->getData("bound.left" , REAL(0.0)),
+                  self->scene()->getData("bound.right", REAL(0.0))
+              );
+              __makePoop(self, x);
+              cooldown->start();
+            }
+          }
+
+
+          // create coins
+          {
+            auto cooldown = cooldown_manager->getCooldown(g_coin_create_interval_reg);
+            unlikely (cooldown->is_complete() == true) {
+              auto x = DefaultRandomPocket::draw(
+                  self->scene()->getData("bound.left" , REAL(0.0)),
+                  self->scene()->getData("bound.right", REAL(0.0))
+              );
+              __makeCoin(self, x);
+              cooldown->start();
+            }
           }
         '''
       msg:
@@ -93,12 +114,12 @@ Fsm:
   hip_part:
     '''{
 
-      static GameComponent* __pickInactivePoop (GameObject* self) {
-        auto poop_parent = self->findByNamePath("/poops.normal");
+      static GameComponent* __pickInactiveStuff (GameObject* self, string const& parent_path) {
+        auto stuff_parent = self->findByNamePath(parent_path);
 
-        for (auto& poop : poop_parent->children()) {
-          unlikely (poop->getData("is_active", false) == false)
-            return poop.get();
+        for (auto& stuff : stuff_parent->children()) {
+          unlikely (stuff->getData("is_active", false) == false)
+            return stuff.get();
         }
 
         return null;
@@ -106,12 +127,23 @@ Fsm:
 
 
       void __makePoop (GameObject* self, real x) {
-        auto poop = __pickInactivePoop(self);
+        auto poop = __pickInactiveStuff(self, "/poops.normal");
         unlikely (poop == null)
           return;
 
         poop->x(x);
         poop->y(0);
         self->sendMessage(poop, "setActive", {Var(true)});
+      }
+
+
+      void __makeCoin (GameObject* self, real x) {
+        auto coin = __pickInactiveStuff(self, "/coins");
+        unlikely (coin == null)
+          return;
+
+        coin->x(x);
+        coin->y(0);
+        self->sendMessage(coin, "setActive", {Var(true)});
       }
     '''

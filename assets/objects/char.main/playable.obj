@@ -130,6 +130,7 @@ Obj:
                           tex: './sprites/ko.png'
                           siz: {'!relh.pair':[0, 158]}
                           rgn: [0.25, 0.5, 0.25, 0.25]
+                          mat: 'transparent'
                     - Cell:
                       frm: 5
                       pos: [22, -8, 0]
@@ -139,6 +140,7 @@ Obj:
                           tex: './sprites/ko.png'
                           siz: {'!relh.pair':[0, 74]}
                           reg: [268, 317, 123, 74]
+                          mat: 'transparent'
                     - Cell:
                       frm: 5
                       pos: [30, -17, 0]
@@ -147,6 +149,7 @@ Obj:
                           tex: './sprites/ko.png'
                           siz: {'!relh.pair':[0, 76]}
                           reg: [19, 554, 150, 76]
+                          mat: 'transparent'
                     - Cell:
                       frm: 5
                       pos: [32, -15, 0]
@@ -155,6 +158,7 @@ Obj:
                           tex: './sprites/ko.png'
                           siz: {'!relh.pair':[0, 75]}
                           reg: [20, 476, 148, 75]
+                          mat: 'transparent'
                     - Cell:
                       frm: 5
                       pos: [34, -17, 0]
@@ -163,6 +167,7 @@ Obj:
                           tex: './sprites/ko.png'
                           siz: {'!relh.pair':[0, 76]}
                           reg: [19, 554, 150, 76]
+                          mat: 'transparent'
   bdy:
     BulletBody:
       mas: 0

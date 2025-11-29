@@ -20,7 +20,7 @@ Obj:
         }else if (type == "player") {
           self->unregisterBody();
           self->sendMessage(other, "incHp", {Var(1)});
-          self->sendMessage("/scene_state", "incScore", {Var(100)});
+          self->sendMessage("/scene_state", "incScore", {Var(20)});
           self->setAction("disappear");
         }
       '''

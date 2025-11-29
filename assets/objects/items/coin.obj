@@ -1,0 +1,118 @@
+Obj:
+  nam: 'coin'
+
+  dat:
+    'is_active': false
+
+  fnc:
+    '~setActive':
+      '''{(GameObject* self, ,,, vector<Var> msg_params)
+        unlikely (msg_params.size() < 1) {
+          LOG_ERR("need params --- bool is_active");
+          return null_var;
+        }
+
+        auto is_active = msg_params[0].as<bool>();
+        self->setData("is_active", is_active);
+        likely (is_active == true) {
+          self->alpha(1);
+          self->scale({1, 1, 1});
+        }
+
+        likely (is_active == true)
+          self->activate();
+        else
+          self->deactivate();
+      '''
+    '%onPostBuildBody':
+      '''{(GameObject* self, BulletBody* body)
+        auto bt_body = body->bt_body();
+        bt_body->setLinearFactor (btVector3(1, 1, 0));
+        bt_body->setAngularFactor(btVector3(0, 0, 0));
+      '''
+    '%onPostRegisterBody':
+      '''{(GameObject* self, BulletBody* body)
+          auto gravity = dynamic_cast<BulletWrapper*>(self->scene()->getPhysics())->world()->getGravity();
+          auto bt_body = body->bt_body();
+          bt_body->setGravity(gravity * REAL(0.3));
+          bt_body->setLinearVelocity({0, 0, 0});
+      '''
+    '%onBeginContact':
+      '''{(GameObject* self, BulletShape* my_shape, BulletShape* other_shape, void* contact_info)
+        auto other = dynamic_cast<GameObject*>(other_shape->body_owner());
+
+        auto type = other->getData("type", "");
+        likely (type == "land") {
+          self->setAction("disappear");
+
+        }else if (type == "player") {
+          self->setAction("gain");
+          self->sendMessage("/scene_state", "incScore", {Var(3)});
+        }
+      '''
+
+  chl:
+    - Obj:
+      nam: 'view'
+      vie:
+        Sprite:
+          cnt: -1
+          cel:
+            '!seq.map':
+              src: {'!seq.intSeq':{'end':8}}
+              nod:
+                Cell:
+                  frm: 6
+                  img:
+                    Image:
+                      tex: {'!+':['./coin/', '$e', '.png']}
+                      siz: {'!relh.pair':[0, 84]}
+                      mat: 'transparent'
+  bdy:
+    BulletBody:
+      mas: 1
+      grp: ['item']
+      msk: ['land', 'player']
+  shp:
+    - BulletBox:
+      hsz: [18, 18, 100]
+
+  acl:
+    - ActionItem:
+      nam: 'disappear'
+      act:
+        Sequence:
+          chl:
+            - UnregisterBody:
+            - AlphaTo:
+              dur: 0.2
+              val: 0
+              int: out_quad
+            - SendMessage:
+              dst: '.'
+              nam: 'setActive'
+              par: [false]
+    - ActionItem:
+      nam: 'gain'
+      act:
+        Sequence:
+          chl:
+            - UnregisterBody:
+            - MoveYBy:
+              dur: 0.5
+              val: 80
+              int: out_quad
+            - Parallel:
+              chl:
+                - MoveYBy:
+                  dur: 0.5
+                  val: -80
+                  int: in_quad
+                - AlphaTo:
+                  dur: 0.2
+                  val: 0
+                  int: in_quad
+            - SendMessage:
+              dst: '.'
+              nam: 'setActive'
+              par: [false]

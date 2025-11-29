@@ -1,4 +1,6 @@
-auto self = params[0].as<GameComponent*>();  
+auto self = params[0].as<GameObject*>();  auto my_shape = params[1].as<BulletShape*>();  auto other_shape = params[2].as<BulletShape*>();  auto contact_info = params[3].as<void*>();  
 
-self->sendMessage(".", "selectChild", {Var("idle")});
+self->sendMessage("./view", "selectChild", {Var("disappear")});
+self->setAction("disappear");
+self->sendMessage(dynamic_cast<GameComponent*>(other_shape->body_owner()), "onHit");
 return null_var;

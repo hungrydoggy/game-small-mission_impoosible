@@ -67,6 +67,14 @@ static Var __code_3 (
 }
 
 
+static Var __code_4 (
+    vector<Var> const& params
+) {
+
+  #include "objects..poop..normal.obj.4.code"
+}
+
+
 Var Code_ObjectsPoopNormalObj::execute (
     int code_idx, vector<Var> const& params
 ) {
@@ -75,6 +83,7 @@ Var Code_ObjectsPoopNormalObj::execute (
     case 1: return __code_1(params);
     case 2: return __code_2(params);
     case 3: return __code_3(params);
+    case 4: return __code_4(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"objects..poop..normal.obj.cpp\"", code_idx);
       return null_var;

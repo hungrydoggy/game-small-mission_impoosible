@@ -65,5 +65,13 @@
               1
             )
         );
+
+        cooldown_manager->addCooldown(
+            "coin_create_interval",
+            make_shared<Cooldown>(
+              3,
+              1
+            )
+        );
       }
     '''
