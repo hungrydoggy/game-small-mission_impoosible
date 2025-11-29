@@ -4,52 +4,54 @@ using namespace appetizer;
 using namespace appetizer::fun_tree;
 
 
-class CellIndexIterator_ {
-public: // inner types
-  enum class ContentType {
-    DEFAULT,
-    COUNT,
-    INDEX_LIST,
+namespace {
+  class CellIndexIterator_ {
+  public: // inner types
+    enum class ContentType {
+      DEFAULT,
+      COUNT,
+      INDEX_LIST,
+    };
+
+
+  public: // methods
+    CellIndexIterator_ (sp<Content> const& cont, uint row_cnt, uint col_cnt);
+
+    int step ();
+
+    size_t size () const;
+
+
+  private: // vars
+    sp<Content> content_;
+
+    ContentType content_type_;
+    size_t next_idx_;
+    vector<int> index_list_;
   };
 
 
-public: // methods
-  CellIndexIterator_ (sp<Content> const& cont, uint row_cnt, uint col_cnt);
 
-  int step ();
-
-  size_t size () const;
-
-
-private: // vars
-  sp<Content> content_;
-
-  ContentType content_type_;
-  size_t next_idx_;
-  vector<int> index_list_;
-};
+  class CellDurFrmIterator_ {
+  public: // inner types
+    enum class ContentType {
+      DEFAULT,
+      FRAME,
+      FRAME_LIST,
+    };
 
 
+  public: // methods
+    CellDurFrmIterator_ (sp<Content> const& cont, size_t cell_cnt);
 
-class CellDurFrmIterator_ {
-public: // inner types
-  enum class ContentType {
-    DEFAULT,
-    FRAME,
-    FRAME_LIST,
+    uint step ();
+
+
+  private: // vars
+    sp<Content> content_;
+
+    ContentType content_type_;
+    size_t next_idx_;
+    vector<uint> frame_list_;
   };
-
-
-public: // methods
-  CellDurFrmIterator_ (sp<Content> const& cont, size_t cell_cnt);
-
-  uint step ();
-
-
-private: // vars
-  sp<Content> content_;
-
-  ContentType content_type_;
-  size_t next_idx_;
-  vector<uint> frame_list_;
-};
+}

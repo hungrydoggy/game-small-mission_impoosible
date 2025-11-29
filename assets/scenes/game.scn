@@ -195,6 +195,8 @@ Scene:
           hsz: ['$game_width', 30, 1000]
 
     - '@objects/npc.rollroll/rollroll.obj':
+      dra: false
+      upd: false
       nam: 'rollroll'
       pos: [0, 200, 70]
 
