@@ -69,10 +69,3 @@ Obj:
                   dur: 0.5
                   val: -5
                   int: out_quad
-  acl:
-    - ActionItem:
-      nam: 'drop'
-      act:
-        Sequence:
-          chl:
-            - Emptry:

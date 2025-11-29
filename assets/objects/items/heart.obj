@@ -83,7 +83,7 @@ Obj:
                           int: out_elastic
   bdy:
     BulletBody:
-      mas: 0#1
+      mas: 1
       grp: ['item']
       msk: ['land', 'player']
   shp:
