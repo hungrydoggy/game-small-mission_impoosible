@@ -79,18 +79,21 @@ editor_cpp_args = ['-D_EDITOR', '-DDEBUG', '-DUSE_OBJID_SURF']
 server_cpp_args = ['-DSERVER_ONLY']
 steam_cpp_args = ['-DUSE_STEAM_API']
 
+prj_path_cmd = 'import os; print(os.path.abspath(r"@0@"), end="")'.format(join_paths(meson.current_source_dir(), '../../'))
+prj_path = run_command('python3', '-c', prj_path_cmd, check: true).stdout()
+
 link_args = [
   '-lpthread',
   '-ldl',
-  '-L../../appetizer/external_libs/lib',
-  '-L../../appetizer/out/debug',
+  '-L' + join_paths(prj_path, 'appetizer/external_libs/lib'),
+  '-L' + join_paths(prj_path, 'appetizer/out/debug'),
 ]
 
 editor_link_args = [
   '-lpthread',
   '-ldl',
-  '-L../../appetizer/external_libs/lib',
-  '-L../../appetizer/out/debug',
+  '-L' + join_paths(prj_path, 'appetizer/external_libs/lib'),
+  '-L' + join_paths(prj_path, 'appetizer/out/debug'),
 ]
 
 steam_link_args = []
@@ -98,8 +101,18 @@ steam_link_args = []
 
 # case of build_sys
 if build_sys == 'windows'
+  cpp_args += [
+    '/Z7',
+  ]
   editor_cpp_args += [
+    '/Z7',
     '/EHa'
+  ]
+  server_cpp_args += [
+    '/Z7',
+  ]
+  steam_cpp_args += [
+    '/Z7',
   ]
   link_args += [
     '-LC:/vcpkg/installed/x64-windows/debug/lib',
