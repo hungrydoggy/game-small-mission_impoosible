@@ -1,0 +1,6 @@
+
+#line 5 "assets/system/node_loader_format/view/sprite/cell_def.nlf"
+      
+      #include <view/sprite_view/_cell_def.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>

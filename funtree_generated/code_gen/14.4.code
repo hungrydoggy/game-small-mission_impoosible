@@ -1,0 +1,5 @@
+auto self = params[0].as<GameComponent*>();  
+#line 58 "assets/objects/poop/normal.obj"
+              
+              self->sendMessage(".", "selectChild", {Var("idle")});
+              return null_var;

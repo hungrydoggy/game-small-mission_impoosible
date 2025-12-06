@@ -1,0 +1,4 @@
+
+#line 4 "assets/system/node_loader_format/etc/game_base_axis.nlf"
+      
+      #include <_game_base_axis.h>

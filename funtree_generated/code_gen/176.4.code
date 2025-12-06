@@ -1,0 +1,29 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 80 "assets/system/node_loader_format/actions/temporal_script.nlf"
+              
+              auto self = loadable->cast<ActionLoadable>();
+              auto code = content->cast<Code>();
+              TemporalScriptFunc scr =
+                  [path=code->file_path(), index=code->index()](
+                      GameComponent* target,
+                      double duration,
+                      double local_pos,
+                      double delta_time
+                  ) {
+                    static uint path_id = PathRegistry::lookUp(path);
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- %s", path.c_str());
+                      return;
+                    }
+              
+                    code_set->execute(index, {Var(target), Var(duration), Var(local_pos), Var(delta_time)});
+                  };
+              self->setData("apply", Var(scr));
+              return Var(true);
+              return null_var;

@@ -1,0 +1,16 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 524 "assets/system/node_loader_format/graphics/gpu_task/color_attachment.nlf"
+              
+              
+              auto self = loadable->cast<AttachmentInfo>();
+              
+              auto value = content->cast<Value>()->var().as<uint>();
+              self->setData("stencil_clear_value", value);
+              
+              return Var(true);
+              return null_var;

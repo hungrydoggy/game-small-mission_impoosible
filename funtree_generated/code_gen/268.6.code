@@ -1,0 +1,13 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 119 "assets/system/node_loader_format/app_info.nlf"
+              
+              
+              auto self = loadable->cast<AppInfo>();
+              self->setData("steamdeck", Var(content));
+              return Var(true);
+              return null_var;

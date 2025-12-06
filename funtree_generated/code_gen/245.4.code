@@ -1,0 +1,25 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 104 "assets/system/node_loader_format/game_component/game_object.nlf"
+              
+              
+              auto self = loadable->cast<GameObject>();
+              
+              // add ActionState trait if not added already
+              likely (self->hasTrait("action_state") == false) {
+                auto action_state = make_shared<ActionState>();
+                self->addTrait(action_state);
+              }
+              
+              // add ActionList trait
+              auto action_list = make_shared<ActionList>();
+              for (auto& itm : ctx->getData("action_items").v<vector<shared_ptr<ActionItem>>>())
+                action_list->add(itm->name, itm->action);
+              
+              self->addTrait(action_list);
+              return Var(true);
+              return null_var;

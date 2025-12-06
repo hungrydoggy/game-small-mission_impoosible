@@ -1,0 +1,47 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+#line 29 "assets/system/macroes/color.from_code.mac"
+      
+      
+      auto& mac_params = self->params;
+      
+      
+      // get color_code_str
+      auto color_code_str = mac_params.get(0)->cast<Value>()->var().as<string>();
+      {
+        unlikely (color_code_str.size() != 6 && color_code_str.size() != 8) {
+          CNT_LOG_ERR(content, "value of !Color.fromCode must be a string sized 6 or 8");
+          return Var(false);
+        }
+      
+        unlikely (color_code_str.size() == 6)
+          color_code_str += "FF";
+      }
+      
+      
+      // make color_code
+      uint color_code;
+      {
+        std::stringstream ss;
+        ss << std::hex << color_code_str;
+        ss >> color_code;
+      }
+      
+      
+      // make result
+      auto r = ((color_code >> 24) & 0xff) / REAL(255.0);
+      auto g = ((color_code >> 16) & 0xff) / REAL(255.0);
+      auto b = ((color_code >>  8) & 0xff) / REAL(255.0);
+      auto a = ((color_code >>  0) & 0xff) / REAL(255.0);
+      
+      auto seq = make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
+      seq->add(make_shared<Value>(Var(r), content));
+      seq->add(make_shared<Value>(Var(g), content));
+      seq->add(make_shared<Value>(Var(b), content));
+      seq->add(make_shared<Value>(Var(a), content));
+      
+      return Var(seq);
+      return null_var;

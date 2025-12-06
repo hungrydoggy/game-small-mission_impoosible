@@ -1,0 +1,4 @@
+
+#line 7 "assets/system/node_loader_format/view/sprite_view_def.nlf"
+      
+      #include <view/sprite_view/sprite_view_def.h>

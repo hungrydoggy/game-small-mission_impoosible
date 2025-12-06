@@ -1,4 +1,0 @@
-auto self = params[0].as<GameObject*>();  
-
-self->sendMessage(".", "randomShow");
-return null_var;

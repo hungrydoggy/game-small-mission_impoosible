@@ -1,0 +1,8 @@
+auto self = params[0].as<GameObject*>();  auto body = params[1].as<BulletBody*>();  
+#line 38 "assets/objects/poop/normal.obj"
+        
+        auto gravity = dynamic_cast<BulletWrapper*>(self->scene()->getPhysics())->world()->getGravity();
+        auto bt_body = body->bt_body();
+        bt_body->setGravity(gravity * DefaultRandomPocket::draw(REAL(1.0), REAL(1.5)));
+        bt_body->setLinearVelocity({0, 0, 0});
+        return null_var;

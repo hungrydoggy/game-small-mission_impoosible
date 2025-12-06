@@ -1,0 +1,22 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 194 "assets/system/node_loader_format/game_component/game_object.nlf"
+                      
+                      
+                      auto shp_info = ctx->loadSubNodeAs<BulletShapeInfo>(node, content);
+                      unlikely (shp_info == null)
+                        return Var(false);
+                      
+                      auto shp = make_shared<BulletShape>();
+                      shp->bt_shape_info(shp_info);
+                      
+                      unlikely (ctx->hasData("physics_shapes") == false)
+                        ctx->setData("physics_shapes", Var(vector<shared_ptr<PhysicsShape>>{}));
+                      
+                      ctx->getDataRef("physics_shapes").v<vector<shared_ptr<PhysicsShape>>>().push_back(shp);
+                      return Var(true);
+                      return null_var;

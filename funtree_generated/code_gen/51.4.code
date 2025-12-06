@@ -1,0 +1,23 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+#line 75 "assets/system/macroes/string.replace.mac"
+      
+      
+      auto& mac_params = self->params;
+      
+      // get params
+      auto str = mac_params.get(0)->asValue<string>();
+      auto frm = mac_params.get(1)->asValue<string>();
+      auto to  = mac_params.get(2)->asValue<string>();
+      
+      
+      // make result
+      auto replaced = Util::replace(str, frm, to);
+      
+      auto result = make_shared<Value>(Var(replaced), content);
+      
+      return Var(result);
+      return null_var;

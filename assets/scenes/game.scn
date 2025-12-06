@@ -35,11 +35,31 @@ Scene:
 
     - Obj:
       nam: 'bg'
-      pos: [0, 0, -1]
+      fnc:
+        '%onPointDown.1':
+          '''{(GameObject* self, Vector3 world_pos)
+            if (world_pos.x() >= REAL(0.0))
+              Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_RIGHT, KeyEventState::STATE_PRESSED});
+            else
+              Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_LEFT , KeyEventState::STATE_PRESSED});
+          '''
+        '%onPointUp.1':
+          '''{(GameObject* self, Vector3 world_pos)
+            Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_RIGHT, KeyEventState::STATE_RELEASED});
+            Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_LEFT , KeyEventState::STATE_RELEASED});
+          '''
+      pos: [0, 0, '=Var(-1)']
       vie:
         Image:
           tex: 'textures/game_scene/bg.png'
           siz: [0, '$game_height']
+      bdy:
+        BulletBody:
+          mas: 0
+          msk: ['%pick']
+      shp:
+        - BulletBox:
+          hsz: ['$half_game_width', '$half_game_height', 0.1]
 
     - Obj:
       nam: 'bush.left'

@@ -1,0 +1,53 @@
+
+#line 127 "assets/scenes/game.scn.fsm"
+      
+      
+      static GameComponent* __pickInactiveStuff (GameObject* self, string const& parent_path) {
+        auto stuff_parent = self->findByNamePath(parent_path);
+      
+        for (auto& stuff : stuff_parent->children()) {
+          unlikely (stuff->getData("is_active", false) == false)
+            return stuff.get();
+        }
+      
+        return null;
+      }
+      
+      
+      void __makePoop (GameObject* self, real x) {
+        auto poop = __pickInactiveStuff(self, "/poops.normal");
+        unlikely (poop == null)
+          return;
+      
+        poop->x(x);
+        poop->y(0);
+        self->sendMessage(poop, "setActive", {Var(true)});
+      }
+      
+      
+      void __makeCoin (GameObject* self, real x) {
+        auto coin = __pickInactiveStuff(self, "/coins");
+        unlikely (coin == null)
+          return;
+      
+        coin->x(x);
+        coin->y(0);
+        self->sendMessage(coin, "setActive", {Var(true)});
+      }
+      
+      
+      void __makeItem (GameObject* self, real x) {
+      
+        auto rollroll = self->findByNamePath<GameObject>("/rollroll");
+        unlikely (rollroll->getTrait<Fsm>("finite_state_machine")->cur_state()->name() != "inactive")
+          return;
+      
+      
+        auto item = __pickInactiveStuff(self, "/hearts");
+        unlikely (item == null)
+          return;
+      
+      
+        self->sendMessage(item, "setActive", {Var(true)});
+        self->sendMessage("/rollroll", "dropItem", {Var(item), Var(x), Var(REAL(120.0))});
+      }

@@ -1,0 +1,5 @@
+auto self = params[0].as<GameObject*>();  
+#line 25 "assets/scenes/game.scn.state.fnc"
+        
+        __onBeforeInit(self);
+        return null_var;

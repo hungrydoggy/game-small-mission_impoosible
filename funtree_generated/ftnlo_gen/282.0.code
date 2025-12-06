@@ -1,0 +1,5 @@
+
+#line 5 "assets/system/node_loader_format/etc/resource_holder.nlf"
+      
+      #include <resource/audio_clip/audio_clip.h>
+      #include <resource/resource_holder.h>

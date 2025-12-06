@@ -1,0 +1,4 @@
+
+#line 5 "assets/system/node_loader_format/physics/physics_joint_item.nlf"
+      
+      #include <physics/_physics_joint_item.h>

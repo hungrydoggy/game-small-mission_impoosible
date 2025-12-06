@@ -1,0 +1,3 @@
+
+#line 5 "assets/system/macroes/math.log10.mac"
+                 #include <util/math.h>

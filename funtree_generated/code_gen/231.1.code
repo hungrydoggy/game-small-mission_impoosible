@@ -1,0 +1,16 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 25 "assets/system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf"
+              
+              
+              auto self = loadable->cast<GpuTaskDef>();
+              
+              auto name = content->cast<Value>()->var().as<string>();
+              self->name(name);
+              
+              return Var(true);
+              return null_var;

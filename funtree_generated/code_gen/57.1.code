@@ -1,0 +1,20 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+#line 31 "assets/system/macroes/operator.and.mac"
+      
+      
+      auto& mac_params = self->params;
+      Var result = mac_params.get(0)->cast<Value>()->var();
+      for (size_t pi=1; pi<mac_params.size(); ++pi) {
+        auto& p = mac_params.get(pi);
+        unlikely (p == null)
+          continue;
+      
+        result = result && p->cast<Value>()->var();
+      }
+      
+      return Var(dpc<Content>(make_shared<Value>(result, content)));
+      return null_var;

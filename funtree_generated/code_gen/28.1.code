@@ -1,0 +1,5 @@
+auto fsm = params[0].as<Fsm*>();  
+#line 17 "assets/objects/char.main/playable.obj.fsm"
+          
+          __playSprite(fsm->owner(), "idle");
+          return null_var;

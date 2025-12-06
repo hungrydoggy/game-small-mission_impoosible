@@ -1,0 +1,4 @@
+
+#line 4 "assets/system/node_loader_format/bone_animation/bone_animation.nlf"
+      
+      #include <resource/bone_animation/bone_animation.h>

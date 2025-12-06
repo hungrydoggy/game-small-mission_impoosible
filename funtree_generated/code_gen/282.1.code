@@ -1,0 +1,23 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 29 "assets/system/node_loader_format/etc/resource_holder.nlf"
+                      
+                      
+                      auto self = loadable->cast<ResourceHolder>();
+                      
+                      auto path = content->resolveFilePath(content->asValue<string>());
+                      auto ext = Util::getExtFromPath(path, false);
+                      if (ext == "wav" || ext == "mp3") {
+                        auto clip = ResourceManager<AudioClip>::load(path);
+                        self->add(clip);
+                      }else {
+                        CNT_LOG_ERR(content, "unhandled resource ext --- %s", ext.c_str());
+                        return Var(false);
+                      }
+                      
+                      return Var(true);
+                      return null_var;

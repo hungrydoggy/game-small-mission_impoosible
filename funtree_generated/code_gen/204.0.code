@@ -1,0 +1,4 @@
+
+#line 6 "assets/system/node_loader_format/physics/physics_shape_list.nlf"
+      
+      #include <physics/physics_shape.h>

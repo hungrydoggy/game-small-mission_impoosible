@@ -1,0 +1,4 @@
+
+#line 4 "assets/system/node_loader_format/etc/platform_setting.nlf"
+      
+      #include <_platform_setting.h>

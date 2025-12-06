@@ -1,4 +1,0 @@
-auto fsm = params[0].as<Fsm*>();  
-
-__playSprite(fsm->owner(), "idle");
-return null_var;

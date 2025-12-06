@@ -1,0 +1,7 @@
+auto ctx = params[0].as<FormatContext*>();  auto content = params[3].as<shared_ptr<Content>>();  
+#line 273 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf"
+                              
+                              
+                              ctx->setData("rot.z", content->asValue<real>());
+                              return Var(true);
+                              return null_var;

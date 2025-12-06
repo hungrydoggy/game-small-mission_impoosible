@@ -1,0 +1,5 @@
+auto self = params[0].as<Scene*>();  auto e = params[1].as<KeyEvent const*>();  
+#line 26 "assets/scenes/game.scn.fnc"
+        
+        self->sendMessage("/scene_state", "onKeyInput", {Var(e)});
+        return null_var;

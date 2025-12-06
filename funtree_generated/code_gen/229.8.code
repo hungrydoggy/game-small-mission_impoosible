@@ -1,0 +1,24 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 294 "assets/system/node_loader_format/graphics/gpu_task/swapchain_attachment.nlf"
+                      
+                      #if defined(USE_VULKAN)
+                      auto asp_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(asp_str);
+                      
+                      auto asp_p = Util::find(VulkanHelper::imageaspectflags_enm_map(), asp_str);
+                      unlikely (asp_p == null) {
+                        LOG_ERR("unknown VulkanHelper::ImageAspectFlags --- %s", asp_str.c_str());
+                        return Var(false);
+                      }
+                      
+                      auto self = loadable->cast<AttachmentInfo>();
+                      self->additional_aspect_flags = self->additional_aspect_flags | *asp_p;
+                      #endif  // if defined(USE_VULKAN)
+                      
+                      return Var(true);
+                      return null_var;

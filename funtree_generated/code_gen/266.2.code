@@ -1,0 +1,14 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 45 "assets/system/node_loader_format/bullet_physics/joint_attachment_point/relative.nlf"
+              
+              
+              auto& pnt = ctx->getData("vector3.val").v<Vector3>();
+              auto self = loadable->cast<BulletRelativeJointAttachmentPoint>();
+              self->point_from_anchor(pnt);
+              return Var(true);
+              return null_var;

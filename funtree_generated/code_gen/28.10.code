@@ -1,0 +1,6 @@
+auto fsm = params[0].as<Fsm*>();  
+#line 64 "assets/objects/char.main/playable.obj.fsm"
+          
+          auto view = __playSprite(fsm->owner(), "run");
+          view->scale_x(1);
+          return null_var;

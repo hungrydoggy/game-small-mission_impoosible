@@ -1,0 +1,6 @@
+
+#line 7 "assets/system/node_loader_format/bullet_physics/joints/generic_6dof.nlf"
+      
+      #include <physics/bullet/joint/_generic_6dof.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>

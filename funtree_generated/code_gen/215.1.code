@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 29 "assets/system/node_loader_format/mesh/mesh.nlf"
+                      
+                      
+                      auto vp = ctx->loadSubNodeAs<VertexProperty>(node, content);
+                      unlikely (vp == null)
+                        return Var(false);
+                      
+                      auto self = loadable->cast<Mesh>();
+                      self->vertex_properties().push_back(*vp);
+                      return Var(true);
+                      return null_var;

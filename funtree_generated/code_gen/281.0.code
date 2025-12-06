@@ -1,0 +1,4 @@
+
+#line 4 "assets/system/node_loader_format/etc/global_object.nlf"
+      
+      #include <etc/global_object.h>

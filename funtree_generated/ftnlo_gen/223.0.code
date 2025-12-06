@@ -1,0 +1,4 @@
+
+#line 4 "assets/system/node_loader_format/graphics/draw_option/stencil_function.nlf"
+      
+      #include <common/draw_option/draw_option.h>

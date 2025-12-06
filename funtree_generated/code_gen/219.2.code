@@ -1,0 +1,24 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 54 "assets/system/node_loader_format/graphics/draw_option/stencil_operator.nlf"
+              
+              
+              #ifndef SERVER_ONLY
+              auto op_str = content->cast<Value>()->var().as<string>();
+              Util::upper(op_str);
+              
+              auto op_p = Util::find(StencilOperator::str_optyp_map(), op_str);
+              unlikely (op_p == null) {
+                LOG_ERR("unknown StencilOperator::opcType --- %s", op_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<StencilOperator>();
+              self->when_depth_fails = *op_p;
+              #endif
+              
+              return Var(true);
+              return null_var;

@@ -1,0 +1,5 @@
+
+#line 4 "assets/system/node_loader_format/bone_animation/scl_key_frame.nlf"
+      
+      #include <resource/bone_animation/bone_animation.h>
+      #include <util/vector3.h>

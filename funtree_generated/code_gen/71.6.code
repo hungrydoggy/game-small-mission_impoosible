@@ -1,0 +1,57 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+#line 104 "assets/system/macroes/condition.switch.mac"
+      
+      
+      auto& mac_params = self->params;
+      
+      // swt
+      auto& swt = mac_params.get(0)->cast<Value>()->var();
+      uint swt_type = 0;
+      likely (swt.isBool() == true)
+        swt_type = VarContentTypes::BOOL;
+      else if (swt.isNumber() == true)
+        swt_type = VarContentTypes::NUMBER;
+      else if (swt.isString() == true)
+        swt_type = VarContentTypes::STRING;
+      else {
+        CNT_LOG_ERR(content, "unhandled swt type --- %u", swt.type());
+        return Var(Null<Content>::sp());
+      }
+      
+      // case map
+      auto case_map = mac_params.get(1)->cast<Map>();
+      for (auto& case_key : case_map->keys()) {
+      
+        switch (swt_type) {
+          case VarContentTypes::BOOL:
+            unlikely (Util::isBoolString(case_key) == false)
+              continue;
+            unlikely (Util::stringToBool(case_key) == swt.as<bool>())
+              return Var(case_map->get(case_key));
+            break;
+      
+          case VarContentTypes::NUMBER:
+            unlikely (Util::isDoubleString(case_key) == false)
+              continue;
+            unlikely (Util::stringToDouble(case_key) == swt.as<double>())
+              return Var(case_map->get(case_key));
+            break;
+      
+          case VarContentTypes::STRING:
+            unlikely (case_key == swt.as<string>())
+              return Var(case_map->get(case_key));
+            break;
+      
+          default:
+            CNT_LOG_ERR(content, "unhandled swt type --- %u", swt_type);
+            return Var(Null<Content>::sp());
+        }
+      }
+      
+      // default
+      return Var(mac_params.get(2));
+      return null_var;

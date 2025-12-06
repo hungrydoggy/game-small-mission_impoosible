@@ -1,0 +1,4 @@
+
+#line 7 "assets/system/node_loader_format/fsm/finite_state_machine.nlf"
+      
+      #include <fsm/finite_state_machine.h>

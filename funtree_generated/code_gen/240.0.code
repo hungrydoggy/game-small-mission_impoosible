@@ -1,0 +1,5 @@
+
+#line 4 "assets/system/node_loader_format/game_component/projection_info.nlf"
+      
+      #include <util/lrtb.h>
+      #include <game_component/camera/camera.h>

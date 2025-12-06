@@ -1,0 +1,4 @@
+
+#line 5 "assets/system/node_loader_format/view/sprite/cell_action_call_info.nlf"
+      
+      #include <view/sprite_view/_cell_action_call_info.h>

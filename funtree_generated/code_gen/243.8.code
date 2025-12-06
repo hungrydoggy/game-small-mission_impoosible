@@ -1,0 +1,24 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 169 "assets/system/node_loader_format/game_component/game_component.nlf"
+                      
+                      
+                      auto self = loadable->cast<GameComponent>();
+                      auto ssnl = ctx->loadSubNodeAs<StateSerializerNodeLoadable>(node, content);
+                      unlikely (ssnl == null)
+                        return Var(false);
+                      
+                      self->addStateSerializer(
+                          make_shared<StateSerializer>(
+                            ssnl->name,
+                            ssnl->on_serialize_func,
+                            ssnl->on_deserialize_func
+                          )
+                      );
+                      
+                      return Var(true);
+                      return null_var;

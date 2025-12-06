@@ -1,0 +1,5 @@
+
+#line 5 "assets/system/node_loader_format/common/quaternion.nlf"
+      
+      #include <util/quaternion.h>
+      #include <util/vector3.h>

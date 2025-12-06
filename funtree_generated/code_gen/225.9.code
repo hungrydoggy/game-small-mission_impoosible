@@ -1,0 +1,24 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 268 "assets/system/node_loader_format/graphics/gpu_task/graphics_config.nlf"
+                      
+                      auto usg_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(usg_str);
+                      
+                      auto usg_p = Util::find(GpuHelper::bufferusageflag_enm_map(), usg_str);
+                      unlikely (usg_p == null) {
+                        LOG_ERR("unknown GpuHelper::BufferUsageFlags --- %s", usg_str.c_str());
+                        return Var(false);
+                      }
+                      
+                      auto self = loadable->cast<GraphicsConfig>();
+                      self->vert_vmp_add_usage_flags(
+                          self->vert_vmp_add_usage_flags() | *usg_p
+                      );
+                      
+                      return Var(true);
+                      return null_var;

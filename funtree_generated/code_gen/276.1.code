@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 23 "assets/system/node_loader_format/etc/game_base_axis.nlf"
+              
+              
+              string axs_str = content->cast<Value>()->var().as<string>();
+              Util::upper(axs_str);
+              
+              auto axis_p = Util::find(TypesUtil::axis_enm_map, axs_str);
+              auto self = loadable->cast<GameBaseAxis>();
+              self->base_axis = (axis_p != null)? *axis_p : Axis::NONE;
+              return Var(true);
+              return null_var;

@@ -1,0 +1,13 @@
+auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<Node>>();  auto loadable = params[2].as<shared_ptr<NodeLoadable>>();  
+
+
+
+
+#line 10 "assets/system/node_loader_format/actions/parallel.nlf"
+      
+      
+      auto al = loadable->cast<ActionLoadable>();
+      auto& chl = al->getData("children").v<vector<shared_ptr<Action>>>();
+      al->action = action::Parallel(chl);
+      return Var(true);
+      return null_var;

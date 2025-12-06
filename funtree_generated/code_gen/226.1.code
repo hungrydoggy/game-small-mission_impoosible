@@ -1,0 +1,25 @@
+auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<Node>>();  auto loadable = params[2].as<shared_ptr<NodeLoadable>>();  
+
+
+
+
+#line 16 "assets/system/node_loader_format/graphics/gpu_task/attachment_ref.nlf"
+      
+      
+      auto self = loadable->cast<AttachmentInfo>();
+      self->type = AttachmentInfo::Type::REFERENCE;
+      
+      #if defined(USE_VULKAN)
+        self->desc.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        self->desc.storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        self->desc.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        self->desc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+      #elif defined(USE_WEB_GPU)
+        self->load_op                = WGPULoadOp_Clear;
+        self->store_op               = WGPUStoreOp_Store;
+        self->stencil_load_op        = WGPULoadOp_Load;
+        self->stencil_store_op       = WGPUStoreOp_Discard;
+      #endif
+      
+      return Var(true);
+      return null_var;

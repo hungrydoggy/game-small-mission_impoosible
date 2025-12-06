@@ -1,0 +1,5 @@
+auto fsm = params[0].as<Fsm*>();  
+#line 57 "assets/objects/char.main/playable.obj.fsm"
+            
+            __onHit(fsm);
+            return null_var;

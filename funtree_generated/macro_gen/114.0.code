@@ -1,0 +1,3 @@
+
+#line 4 "assets/system/macroes/sequence.pick.mac"
+                 #include <util/random.h>

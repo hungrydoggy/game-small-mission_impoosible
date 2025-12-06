@@ -1,0 +1,7 @@
+
+#line 6 "assets/system/macroes/view.get_image_size.mac"
+      
+      #include <game_component/object/game_object.h>
+      #include <view/image_view/image_view_def.h>
+      #include <view/nine_patch_view/nine_patch_view_def.h>
+      #include <view/view.h>

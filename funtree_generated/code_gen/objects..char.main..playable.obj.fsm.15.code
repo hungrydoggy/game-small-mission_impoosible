@@ -1,6 +1,0 @@
-auto fsm = params[0].as<Fsm*>();  
-
-auto self = fsm->owner();
-__playSprite(self, "hit");
-self->setAction("hit");
-return null_var;

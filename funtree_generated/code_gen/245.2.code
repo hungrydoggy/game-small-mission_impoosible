@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 58 "assets/system/node_loader_format/game_component/game_object.nlf"
+              
+              
+              auto acs = ctx->loadSubNodeAs<ActionState>(node, content);
+              unlikely (acs == null)
+                return Var(false);
+              
+              auto self = loadable->cast<GameObject>();
+              self->addTrait(acs);
+              return Var(true);
+              return null_var;

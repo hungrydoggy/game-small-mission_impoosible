@@ -1,0 +1,26 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+#line 40 "assets/system/macroes/convert.to_real.mac"
+      
+      
+      auto& mac_params = self->params;
+      
+      auto& v = mac_params.get(0)->cast<Value>()->var();
+      
+      likely (v.isNumber() == true)
+        return Var(make_shared<Value>(Var(v.as<real>()), content));
+      
+      likely (v.isString() == true) {
+        auto str = v.as<string>();
+        unlikely (Util::isDoubleString(str) == false)
+          return null_var;
+      
+        return Var(make_shared<Value>(Var((real)Util::stringToDouble(str, 0.0)), content));
+      }
+      
+      CNT_LOG_ERR(content, "you cannot be here");
+      return null_var;
+      return null_var;

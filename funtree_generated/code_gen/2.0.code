@@ -1,0 +1,6 @@
+
+#line 51 "assets/actions/test.act"
+          
+          LOG("end");
+          return null_var;
+          return null_var;

@@ -1,0 +1,18 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 77 "assets/system/node_loader_format/bone_animation/bone_animation.nlf"
+                      
+                      
+                      auto bkfi = ctx->loadSubNodeAs<BoneKeyFrameInfo>(node, content);
+                      unlikely (bkfi == null)
+                        return Var(false);
+                      
+                      auto self = loadable->cast<BoneAnimation>();
+                      self->bone_key_frame_infos().push_back(*bkfi);
+                      
+                      return Var(true);
+                      return null_var;

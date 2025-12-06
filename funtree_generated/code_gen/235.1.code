@@ -1,0 +1,15 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 26 "assets/system/node_loader_format/graphics/gpu_task/compute_config.nlf"
+              
+              
+              auto value = content->resolveFilePath(content->asValue<string>());
+              
+              auto self = loadable->cast<ComputeConfig>();
+              self->comp_shader(Shader::RM::load(value));
+              return Var(self->comp_shader() != null);
+              return null_var;

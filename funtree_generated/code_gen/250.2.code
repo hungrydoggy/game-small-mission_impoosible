@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 50 "assets/system/node_loader_format/fsm/finite_state_machine.nlf"
+                      
+                      
+                      auto stt = ctx->loadSubNodeAs<FSMState>(node, content);
+                      unlikely (stt == null)
+                        return Var(false);
+                      
+                      auto self = loadable->cast<FiniteStateMachine>();
+                      self->addState(stt);
+                      return Var(true);
+                      return null_var;

@@ -1,0 +1,31 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 86 "assets/system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf"
+              
+              
+              auto fmt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(fmt_str);
+              
+              #if defined(USE_VULKAN)
+              auto fmt_p = Util::find(VulkanHelper::format_enm_map(), fmt_str);
+              unlikely (fmt_p == null) {
+                CNT_LOG_ERR(content, "unknown VulkanHelper::Format --- %s", fmt_str.c_str());
+                return Var(false);
+              }
+              #elif defined(USE_WEB_GPU)
+              auto fmt_p = Util::find(WebGpuHelper::vertexformat_enm_map(), fmt_str);
+              unlikely (fmt_p == null) {
+                CNT_LOG_ERR(content, "unknown WebGpuHelper::VertexFormat --- %s", fmt_str.c_str());
+                return Var(false);
+              }
+              #endif
+              
+              auto self = loadable->cast<VertexDef::AttributeDef>();
+              self->format = *fmt_p;
+              
+              return Var(true);
+              return null_var;

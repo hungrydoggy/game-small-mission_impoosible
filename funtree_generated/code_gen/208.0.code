@@ -1,0 +1,4 @@
+
+#line 5 "assets/system/node_loader_format/common/color.nlf"
+      
+      #include <common/color/color.h>

@@ -1,0 +1,4 @@
+
+#line 5 "assets/system/node_loader_format/common/vector3.nlf"
+      
+      #include <util/vector3.h>

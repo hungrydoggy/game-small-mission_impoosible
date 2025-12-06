@@ -1,0 +1,3 @@
+
+#line 5 "assets/system/macroes/math.sin.mac"
+                 #include <util/math.h>

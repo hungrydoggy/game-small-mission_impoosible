@@ -1,0 +1,15 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 22 "assets/system/node_loader_format/actions/templates/value_vector3.nlf"
+              
+              
+              auto self = loadable->cast<ActionLoadable>();
+              auto value = Var(Vector3());
+              self->setData("value", value);
+              value.v<Vector3>().x(content->cast<Value>()->var().as<real>());
+              return Var(true);
+              return null_var;

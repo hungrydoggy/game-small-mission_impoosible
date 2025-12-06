@@ -1,0 +1,10 @@
+
+#line 13 "assets/scenes/game.scn.state.fnc"
+      
+      using namespace appetizer;
+      
+      using std::to_string;
+      namespace fs = std::filesystem;
+      
+      
+      static void __onBeforeInit (GameObject* self);

@@ -1,0 +1,21 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 36 "assets/system/node_loader_format/game_component/scene.nlf"
+              
+              
+              auto phy = ctx->loadSubNodeAs<Physics>(node, content);
+              unlikely (phy == null)
+                return Var(false);
+              
+              phy->need_debug_draw(Project::active_project()->need_physics_debug_draw());
+              phy->init();
+              
+              auto self = loadable->cast<Scene>();
+              self->physics(phy);
+              
+              return Var(true);
+              return null_var;

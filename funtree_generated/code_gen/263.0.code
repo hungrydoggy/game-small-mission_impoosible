@@ -1,0 +1,6 @@
+
+#line 7 "assets/system/node_loader_format/bullet_physics/shape_infos/cylinder.nlf"
+      
+      #include <physics/bullet/shape_info/_cylinder.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>

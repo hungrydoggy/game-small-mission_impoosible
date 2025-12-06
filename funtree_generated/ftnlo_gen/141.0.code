@@ -1,0 +1,4 @@
+
+#line 7 "assets/system/node_loader_format/view/image_view_def.nlf"
+      
+      #include <view/image_view/image_view_def.h>

@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 25 "assets/system/node_loader_format/bullet_physics/joint_attachment_point/absolute.nlf"
+              
+              
+              auto& pow = ctx->getData("vector3.val").v<Vector3>();
+              btVector3 result;
+              BulletWrapper::vector3ToBtVector3(pow, result);
+              
+              auto self = loadable->cast<BulletAbsoluteJointAttachmentPoint>();
+              self->attachment_point_in_owner(result);
+              return Var(true);
+              return null_var;

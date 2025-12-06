@@ -1,0 +1,20 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 375 "assets/system/node_loader_format/graphics/gpu_task/graphics_config.nlf"
+                      
+                      
+                      auto self = loadable->cast<GraphicsConfig>();
+                      unlikely (self->hasData("scissor_vec") == false)
+                        self->setData("scissor_vec", vector<int>{});
+                      
+                      auto& scissor_vec = self->getDataRef("scissor_vec").v<vector<int>>();
+                      
+                      auto value = content->cast<Value>()->var().as<int>();
+                      scissor_vec.push_back(value);
+                      
+                      return Var(true);
+                      return null_var;

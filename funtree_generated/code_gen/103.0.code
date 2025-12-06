@@ -1,0 +1,4 @@
+
+#line 5 "assets/system/macroes/string.format.mac"
+      
+      #include <util/util.h>

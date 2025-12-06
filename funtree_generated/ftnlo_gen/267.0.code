@@ -1,0 +1,6 @@
+
+#line 6 "assets/system/node_loader_format/bullet_physics/joint_attachment_point/absolute.nlf"
+      
+      #include <physics/bullet/joint_attachment_point/absolute.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>

@@ -1,0 +1,14 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 66 "assets/system/node_loader_format/bullet_physics/bullet_body.nlf"
+              
+              
+              auto self = loadable->cast<BulletBody>();
+              auto& ine = ctx->getData("vector3.val").v<Vector3>();
+              BulletWrapper::vector3ToBtVector3(ine, self->bt_body_info().m_localInertia);
+              return Var(true);
+              return null_var;

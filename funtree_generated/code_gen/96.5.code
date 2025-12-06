@@ -1,0 +1,25 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+#line 102 "assets/system/macroes/string.join.mac"
+      
+      
+      auto& mac_params = self->params;
+      
+      // get params
+      auto sep = mac_params.get(0)->asValue<string>();
+      auto beg = KV( 0U, mac_params.get(1), template asValue<uint>());
+      auto siz = KV(~0U, mac_params.get(2), template asValue<uint>());
+      
+      vector<string> string_list;
+      for (size_t mi=3; mac_params.size(); ++mi)
+        string_list.push_back(mac_params.get(mi)->asValue<string>());
+      
+      
+      // make result
+      string result;
+      Util::join(string_list, sep[0], result, beg, siz);
+      return Var(make_shared<Value>(Var(result), content));
+      return null_var;

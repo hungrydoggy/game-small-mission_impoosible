@@ -1,0 +1,5 @@
+auto fsm = params[0].as<Fsm*>();  
+#line 76 "assets/objects/char.main/playable.obj.fsm"
+            
+            fsm->setCurState("idle");
+            return null_var;

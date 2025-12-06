@@ -1,0 +1,3 @@
+
+#line 5 "assets/system/macroes/math.exp.mac"
+                 #include <util/math.h>

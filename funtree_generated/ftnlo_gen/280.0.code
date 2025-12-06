@@ -1,0 +1,6 @@
+
+#line 4 "assets/system/node_loader_format/etc/action/action_item.nlf"
+      
+      #include <action/_action_loadable.h>
+      #include <action/action_item.h>
+      #include <game_component/game_component.h>

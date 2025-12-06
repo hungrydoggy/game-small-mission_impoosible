@@ -1,0 +1,108 @@
+
+#line 408 "assets/system/macroes/sprite.make_cells.mac"
+      
+      namespace {
+        CellIndexIterator_::CellIndexIterator_ (sp<Content> const& cont, uint row_cnt, uint col_cnt)
+        :content_(cont)
+        {
+          next_idx_ = 0;
+      
+          likely (content_ == null)
+            content_type_ = ContentType::DEFAULT;
+          else if (dpc<Value>(content_) != null)
+            content_type_ = ContentType::COUNT;
+          else if (dpc<Sequence>(content_))
+            content_type_ = ContentType::INDEX_LIST;
+          else
+            LOG_ERR("unhandled content type --- %u", content_->type());
+      
+      
+          index_list_.clear();
+          switch (content_type_) {
+            case ContentType::DEFAULT:
+              for (int i=0; i<row_cnt*col_cnt; ++i)
+                index_list_.push_back(i);
+              break;
+      
+            case ContentType::COUNT: {
+              auto size = content_->asValue<int>();
+              for (int i=0; i<size; ++i)
+                index_list_.push_back(i);
+              break;
+            }
+      
+            case ContentType::INDEX_LIST: {
+              auto seq = dpc<Sequence>(content_);
+              for (int si=0; si<seq->size(); ++si)
+                index_list_.push_back(seq->get(si)->asValue<int>());
+              break;
+            }
+          }
+        }
+      
+      
+        int CellIndexIterator_::step () {
+          unlikely (next_idx_ >= index_list_.size())
+            return -1;
+      
+          auto result = index_list_[next_idx_];
+          next_idx_ += 1;
+          return result;
+        }
+      
+      
+        size_t CellIndexIterator_::size () const {
+          return index_list_.size();
+        }
+      
+      
+      
+      
+        CellDurFrmIterator_::CellDurFrmIterator_ (sp<Content> const& cont, size_t cell_cnt)
+        :content_(cont)
+        {
+          next_idx_ = 0;
+      
+          likely (content_ == null)
+            content_type_ = ContentType::DEFAULT;
+          else if (dpc<Value>(content_) != null)
+            content_type_ = ContentType::FRAME;
+          else if (dpc<Sequence>(content_))
+            content_type_ = ContentType::FRAME_LIST;
+          else
+            LOG_ERR("unhandled content type --- %u", content_->type());
+      
+      
+          frame_list_.clear();
+          switch (content_type_) {
+            case ContentType::DEFAULT:
+              for (int i=0; i<cell_cnt; ++i)
+                frame_list_.push_back(1);
+              break;
+      
+            case ContentType::FRAME: {
+              auto frame = content_->asValue<uint>();
+              for (int i=0; i<cell_cnt; ++i)
+                frame_list_.push_back(frame);
+              break;
+            }
+      
+            case ContentType::FRAME_LIST: {
+              auto seq = dpc<Sequence>(content_);
+              for (int si=0; si<seq->size(); ++si)
+                frame_list_.push_back(seq->get(si)->asValue<uint>());
+              break;
+            }
+          }
+        }
+      
+      
+        uint CellDurFrmIterator_::step () {
+          unlikely (next_idx_ >= frame_list_.size())
+            return 1;
+      
+          auto result = frame_list_[next_idx_];
+          next_idx_ += 1;
+          return result;
+        }
+      }

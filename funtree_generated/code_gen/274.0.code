@@ -1,0 +1,4 @@
+
+#line 4 "assets/system/node_loader_format/etc/bitmap_font_info.nlf"
+      
+      #include <resource/bitmap_font/bitmap_font.h>

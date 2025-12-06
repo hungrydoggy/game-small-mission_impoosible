@@ -1,0 +1,10 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+#line 22 "assets/system/macroes/project.is_system_input_processable.mac"
+      
+      
+      return Var(Project::active_project()->is_system_input_processable());
+      return null_var;

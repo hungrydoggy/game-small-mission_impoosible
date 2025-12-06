@@ -1,0 +1,98 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto call_params = params[1].as<shared_ptr<Content>>();  auto embody_func = params[2].as<EmbodyFunc>();  
+
+
+
+
+#line 137 "assets/system/macroes/sequence.filter.mac"
+      
+      
+      auto par_map = call_params->cast<Map>();
+      
+      auto res = KOR(par_map->get("result"), par_map->get("res"));
+      unlikely (res != null)
+        return Var(true);
+      
+      
+      // embody ref_name params
+      auto enm_cnt = embody_func(node, KOR(par_map->get("element_ref_name"), par_map->get("enm")));
+      auto idx_cnt = embody_func(node, KOR(par_map->get("index_ref_name"  ), par_map->get("idx")));
+      auto cnt_cnt = embody_func(node, KOR(par_map->get("count_ref_name"  ), par_map->get("cnt")));
+      
+      enm_cnt = KOR(enm_cnt, make_shared<Value>(Var("e"  ), call_params));
+      idx_cnt = KOR(idx_cnt, make_shared<Value>(Var("i"  ), call_params));
+      cnt_cnt = KOR(cnt_cnt, make_shared<Value>(Var("cnt"), call_params));
+      
+      unlikely (
+          enm_cnt->type() != Content::Type::VALUE ||
+          idx_cnt->type() != Content::Type::VALUE ||
+          cnt_cnt->type() != Content::Type::VALUE
+      ) {
+        return Var(true);
+      }
+      
+      
+      // get source sequence
+      auto src_seq = dpc<Sequence>(embody_func(node, KOR(par_map->get("source"), par_map->get("src"))));
+      unlikely (src_seq == null)
+        return Var(true);
+      
+      
+      // get filter content
+      auto flt_cnt = KOR(par_map->get("filter"), par_map->get("flt"));
+      unlikely (flt_cnt == null)
+        return Var(true);
+      
+      
+      // make result sequence
+      auto result_seq =
+          make_shared<Sequence>(call_params->file_path(), call_params->line_in_file(), call_params->column_in_file());
+      {
+        auto elm_ref_name = enm_cnt->cast<Value>()->var().as<string>();
+        auto idx_ref_name = idx_cnt->cast<Value>()->var().as<string>();
+        auto cnt_ref_name = cnt_cnt->cast<Value>()->var().as<string>();
+        for (size_t si=0; si<src_seq->size(); ++si) {
+      
+          auto src = src_seq->get(si);
+      
+          // make ref_map of Envelope
+          auto ref_map =
+              make_shared<Map>(call_params->file_path(), call_params->line_in_file(), call_params->column_in_file());
+          ref_map->add(elm_ref_name, src);
+          ref_map->add(idx_ref_name, make_shared<Value>(Var(si             ), call_params));
+          ref_map->add(cnt_ref_name, make_shared<Value>(Var(src_seq->size()), call_params));
+      
+          // make att_map of Envelope
+          auto att_map =
+              make_shared<Map>(call_params->file_path(), call_params->line_in_file(), call_params->column_in_file());
+          att_map->add("ref", ref_map);
+          att_map->add("val", flt_cnt);
+      
+          // make Envelope
+          auto envelope =
+              make_shared<Object>(
+                "%Envelope%",
+                att_map,
+                call_params->file_path(),
+                call_params->line_in_file(),
+                call_params->column_in_file()
+              );
+          envelope->need_embody(true);
+      
+          // embody to get filter-result
+          auto flt_res = dpc<Value>(embody_func(node, envelope));
+          unlikely (flt_res == null)
+            continue;
+      
+          likely (flt_res->var().as<bool>() == true)
+            result_seq->add(embody_func(node, src));
+        }
+      }
+      
+      
+      // update params
+      par_map->clear();
+      par_map->setOrAdd("res", result_seq);
+      
+      
+      return Var(true);
+      return null_var;

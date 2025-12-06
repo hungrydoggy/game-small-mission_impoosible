@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 215 "assets/system/node_loader_format/game_component/game_object.nlf"
+              
+              
+              auto self = loadable->cast<GameObject>();
+              auto shape_list = make_shared<PhysicsShapeList>();
+              for (auto& shp : ctx->getData("physics_shapes").v<vector<shared_ptr<PhysicsShape>>>())
+                shape_list->shapes().push_back(shp);
+              
+              self->addTrait(shape_list);
+              return Var(true);
+              return null_var;

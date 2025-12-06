@@ -1,0 +1,5 @@
+auto fsm = params[0].as<Fsm*>();  
+#line 63 "assets/objects/npc.rollroll/rollroll.fsm"
+          
+          fsm->owner()->setAction("disappear");
+          return null_var;

@@ -1,0 +1,7 @@
+
+#line 6 "assets/system/macroes/sprite.make_cells.mac"
+      
+      #include <game_component/object/game_object.h>
+      #include <view/image_view/image_view_def.h>
+      #include <view/sprite_view/sprite_view_def.h>
+      #include <view/view.h>

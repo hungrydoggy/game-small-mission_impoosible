@@ -1,0 +1,4 @@
+
+#line 7 "assets/system/node_loader_format/graphics/gpu_task/vertex_def.nlf"
+      
+      #include <gpu_task/_vertex_def.h>

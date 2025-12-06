@@ -1,0 +1,3 @@
+
+#line 5 "assets/system/macroes/convert.to_string.mac"
+                 #include <util/util.h>

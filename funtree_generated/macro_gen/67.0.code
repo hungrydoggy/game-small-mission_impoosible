@@ -1,0 +1,4 @@
+
+#line 6 "assets/system/macroes/color.from_code.mac"
+      
+      #include <sstream>

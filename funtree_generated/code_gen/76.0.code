@@ -1,0 +1,6 @@
+
+#line 6 "assets/system/macroes/view.get_bitmap_font_size.mac"
+      
+      #include <game_component/object/game_object.h>
+      #include <view/bitmap_font_view/bitmap_font_view_def.h>
+      #include <view/view.h>

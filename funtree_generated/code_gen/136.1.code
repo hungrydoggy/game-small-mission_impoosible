@@ -1,0 +1,20 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 25 "assets/system/node_loader_format/view/bitmap_font_view_def.nlf"
+              
+              
+              auto bmf_path = content->resolveFilePath(content->asValue<string>());
+              auto bmf = BitmapFont::RM::get(bmf_path);
+              unlikely (bmf == null) {
+                LOG_ERR("bitmap_font is null ---- %s", bmf_path.c_str());
+                return Var(false);
+              }
+              
+              auto self = loadable->cast<BitmapFontViewDef>();
+              self->bitmap_font(bmf);
+              return Var(true);
+              return null_var;

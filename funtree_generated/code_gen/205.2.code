@@ -1,0 +1,13 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 41 "assets/system/node_loader_format/common/quaternion.nlf"
+              
+              
+              auto& value = ctx->getDataRef("quaternion.vec3");
+              value.v<Vector3>().y(content->cast<Value>()->var().as<real>());
+              return Var(true);
+              return null_var;

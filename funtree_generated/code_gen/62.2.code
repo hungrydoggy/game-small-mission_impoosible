@@ -1,0 +1,13 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 43 "assets/system/macroes/game_component.get_data.mac"
+                  
+                  
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(1, content);
+                  return Var(true);
+                  return null_var;

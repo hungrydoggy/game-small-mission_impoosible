@@ -1,0 +1,3 @@
+
+#line 5 "assets/system/macroes/random.draw_real.mac"
+                 #include <util/random.h>

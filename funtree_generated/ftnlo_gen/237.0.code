@@ -1,0 +1,4 @@
+
+#line 6 "assets/system/node_loader_format/graphics/gpu_task/extra_vmp_alloc_item.nlf"
+      
+      #include <gpu_task/_gpu_task_def_config.h>

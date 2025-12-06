@@ -1,0 +1,21 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 235 "assets/system/node_loader_format/view/nine_patch_view_def.nlf"
+              
+              
+              auto opt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(opt_str);
+              auto opt_p = Util::find(NinePatchViewDef::stretch_enm_map(), opt_str);
+              unlikely (opt_p == null) {
+                LOG_ERR("unknown NinePatchViewDef::StretchOption --- %s", opt_str.c_str());
+                return Var(false);
+              }
+              
+              auto self = loadable->cast<NinePatchViewDef>();
+              self->build_conf()->c_hor_stretch_option(*opt_p);
+              return Var(true);
+              return null_var;

@@ -1,0 +1,3 @@
+
+#line 4 "assets/system/macroes/project.is_input_processable.mac"
+                 #include <project.h>

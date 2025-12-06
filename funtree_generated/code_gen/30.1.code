@@ -1,0 +1,20 @@
+auto fsm = params[0].as<Fsm*>();  
+#line 14 "assets/objects/npc.rollroll/rollroll.fsm"
+          
+          auto self = fsm->owner();
+          auto action_state = self->getTrait<ActionState>("action_state");
+          
+          auto dst_x = action_state->getData("drop_dst.x", REAL(0.0));
+          if (dst_x <= REAL(0.0)) {
+            action_state->setData("start.x", (real)(App::project().game_width() /  2 + 100));
+            action_state->setData("end.x"  , (real)(App::project().game_width() / -2 - 100));
+            self->scale_x(1);
+          }else {
+            action_state->setData("start.x", (real)(App::project().game_width() / -2 - 100));
+            action_state->setData("end.x"  , (real)(App::project().game_width() /  2 + 100));
+            self->scale_x(-1);
+          }
+          
+          self->setAction("appear");
+          self->activate();
+          return null_var;

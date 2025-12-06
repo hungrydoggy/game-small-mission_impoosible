@@ -1,0 +1,4 @@
+
+#line 6 "assets/system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf"
+      
+      #include <gpu_task/gpu_task_def.h>

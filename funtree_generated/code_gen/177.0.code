@@ -1,0 +1,5 @@
+
+#line 6 "assets/system/node_loader_format/actions/script.nlf"
+      
+      #include <action/_action_loadable.h>
+      #include <action/action_factory.h>

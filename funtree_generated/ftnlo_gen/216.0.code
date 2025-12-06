@@ -1,0 +1,4 @@
+
+#line 4 "assets/system/node_loader_format/mesh/bone.nlf"
+      
+      #include <resource/mesh/_bone.h>

@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 29 "assets/system/node_loader_format/etc/action/action_list.nlf"
+                      
+                      
+                      auto itm = ctx->loadSubNodeAs<ActionItem>(node, content);
+                      unlikely (itm == null)
+                        return Var(false);
+                      
+                      auto self = loadable->cast<ActionList>();
+                      self->add(itm->name, itm->action);
+                      return Var(true);
+                      return null_var;

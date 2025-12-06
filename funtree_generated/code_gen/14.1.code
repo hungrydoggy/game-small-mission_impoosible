@@ -1,0 +1,8 @@
+auto self = params[0].as<GameObject*>();  auto body = params[1].as<BulletBody*>();  
+#line 31 "assets/objects/poop/normal.obj"
+        
+        
+        auto bt_body = body->bt_body();
+        bt_body->setLinearFactor (btVector3(1, 1, 0));
+        bt_body->setAngularFactor(btVector3(0, 0, 0));
+        return null_var;

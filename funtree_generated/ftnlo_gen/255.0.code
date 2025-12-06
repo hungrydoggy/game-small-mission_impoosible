@@ -1,0 +1,4 @@
+
+#line 6 "assets/system/node_loader_format/state_serializer/color.nlf"
+      
+      #include <common/state_serializer/state_serializer.h>

@@ -1,4 +1,0 @@
-auto state = params[0].as<ActionState*>();  
-
-state->owner()->setData("is_invincible", true);
-return null_var;

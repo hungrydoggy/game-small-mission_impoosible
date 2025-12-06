@@ -1,0 +1,22 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 86 "assets/system/node_loader_format/graphics/gpu_task/shader_data_bind_def.nlf"
+              
+              
+              auto dtp_str = content->cast<Value>()->var().as<string>();
+              Util::upper(dtp_str);
+              
+              auto dtp_p = Util::find(GpuHelper::desctype_enm_map(), dtp_str);
+              unlikely (dtp_p == null) {
+                CNT_LOG_ERR(content, "unknown GpuHelper::DescriptorType --- %s", dtp_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->desc_type = *dtp_p;
+              
+              return Var(true);
+              return null_var;

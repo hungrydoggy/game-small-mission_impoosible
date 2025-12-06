@@ -1,0 +1,5 @@
+
+#line 4 "assets/scenes/game.scn.fnc"
+      
+      #include <algorithm>
+      #include <filesystem>

@@ -1,0 +1,27 @@
+
+#line 114 "assets/objects/char.main/playable.obj.fsm"
+      
+      GameComponent* __playSprite (GameObject* self, string const& name) {
+        auto view = self->findChild("view").get();
+        self->sendMessage(view, "selectChild", {Var(name)});
+        auto spr = view->findChild<GameObject>(name)->getTrait<View>("view")->state<SpriteViewState>();
+        spr->play();
+        return view;
+      }
+      
+      
+      void __onHit (Fsm* fsm) {
+        auto self = fsm->owner();
+        auto is_invincible = self->getData("is_invincible", false);
+        unlikely (is_invincible == true)
+          return;
+      
+        auto hp = math::max(self->getData("hp", 5) - 1, 0);
+        self->setData("hp", hp);
+        self->sendMessage("/scene_state", "onHpUpdated", {Var(hp)});
+      
+        unlikely (hp <= 0)
+          fsm->setCurState("ko");
+        else
+          fsm->setCurState("hit");
+      }

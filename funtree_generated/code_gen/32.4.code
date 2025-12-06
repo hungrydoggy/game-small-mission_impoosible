@@ -1,0 +1,73 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+#line 72 "assets/plugins/relh/relh.pair.mac"
+      
+      
+      const double kBaseWidth  = 1920.0;
+      const double kBaseHeight = 1080.0;
+      
+      auto& mac_params = self->params;
+      
+      auto x = mac_params.get(0)->asValue<double>();
+      auto y = mac_params.get(1)->asValue<double>();
+      
+      string align_str = "CC";
+      unlikely (mac_params.size() >= 3) {
+        align_str = mac_params.get(2)->asValue<string>();
+        switch (align_str.size()) {
+          case 0:  align_str =  "CC";  break;
+          case 1:  align_str +=  "C";  break;
+          default: break;
+        }
+      }
+      
+      
+      // compute normalized x
+      double norm_x;
+      switch (align_str[0]) {
+        case 'l':
+        case 'L':
+          norm_x = (x / kBaseWidth) - 0.5;
+          break;
+        case 'r':
+        case 'R':
+          norm_x = (x / kBaseWidth) * -1.0 + 0.5;
+          break;
+        default:
+          norm_x = (x / kBaseWidth);
+          break;
+      }
+      
+      
+      // compute normalized y
+      double norm_y;
+      switch (align_str[1]) {
+        case 'b':
+        case 'B':
+          norm_y = (y / kBaseHeight) - 0.5;
+          break;
+        case 't':
+        case 'T':
+          norm_y = (y / kBaseHeight) * -1.0 + 0.5;
+          break;
+        default:
+          norm_y = (y / kBaseHeight);
+          break;
+      }
+      
+      
+      // make result
+      auto& prj = App::project();
+      auto seq = make_shared<Sequence>(content);
+      seq->add(make_shared<Value>(Var(norm_x * kBaseWidth / kBaseHeight * prj.game_height()), content));
+      seq->add(make_shared<Value>(Var(norm_y * prj.game_height()), content));
+      
+      unlikely (mac_params.size() >= 4)
+        seq->add(mac_params.get(3));
+      
+      
+      return Var(seq);
+      return null_var;

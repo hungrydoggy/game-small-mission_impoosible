@@ -1,0 +1,12 @@
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+
+
+
+
+#line 31 "assets/system/macroes/sequence.pick.mac"
+      
+      
+      auto& mac_params = self->params;
+      
+      return Var(mac_params.get(DefaultRandomPocket::draw(0, mac_params.size()-1)));
+      return null_var;

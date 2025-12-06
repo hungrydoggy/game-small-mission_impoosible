@@ -1,0 +1,29 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 52 "assets/system/node_loader_format/etc/platform_setting.nlf"
+                      
+                      
+                      auto self = loadable->cast<PlatformSetting>();
+                      
+                      auto w = ctx->getData("resolution.val.w", (int)0);
+                      auto h = ctx->getData("resolution.val.h", (int)0);
+                      
+                      auto base_axis = self->game_base_axis.base_axis;
+                      unlikely (self->hasData("resolution.base_axis")) {
+                        auto base_axis_str = ctx->getData("resolution.val.base_axis", "");
+                        Util::upper(base_axis_str);
+                        auto base_axis_p = Util::find(TypesUtil::axis_enm_map, base_axis_str);
+                        likely (base_axis_p != null)
+                          base_axis = *base_axis_p;
+                      }
+                      
+                      auto axis_size = ctx->getData("resolution.val.axis_size", self->game_base_axis.axis_size);
+                      
+                      self->resolutions.push_back(Resolution{w, h, base_axis, axis_size});
+                      
+                      return Var(true);
+                      return null_var;

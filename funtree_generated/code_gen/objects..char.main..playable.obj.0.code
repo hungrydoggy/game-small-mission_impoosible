@@ -1,4 +1,0 @@
-auto self = params[0].as<GameObject*>();  
-
-self->sendMessage("/scene_state", "onHpUpdated", {Var(self->getData("hp", 10))});
-return null_var;

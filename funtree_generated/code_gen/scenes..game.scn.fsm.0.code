@@ -1,4 +1,0 @@
-
-
-#include <plugins/cooldown/cooldown.h>
-#include <plugins/cooldown/cooldown_manager.h>

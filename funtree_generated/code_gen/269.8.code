@@ -1,0 +1,13 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 179 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf"
+                              
+                              
+                              auto self = loadable->cast<VAT>();
+                              ctx->setData("name", content->asValue<string>());
+                              return Var(true);
+                              return null_var;

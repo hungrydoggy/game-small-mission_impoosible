@@ -1,0 +1,5 @@
+auto fsm = params[0].as<Fsm*>();  
+#line 7 "assets/objects/npc.rollroll/rollroll.fsm"
+            
+            fsm->setCurState("appear");
+            return null_var;

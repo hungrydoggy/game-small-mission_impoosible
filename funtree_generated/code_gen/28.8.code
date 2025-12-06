@@ -1,0 +1,5 @@
+auto fsm = params[0].as<Fsm*>();  
+#line 53 "assets/objects/char.main/playable.obj.fsm"
+            
+            fsm->setCurState("move.right");
+            return null_var;

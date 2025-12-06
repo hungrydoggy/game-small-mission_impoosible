@@ -1,0 +1,13 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 87 "assets/system/node_loader_format/game_component/game_component.nlf"
+              
+              
+              auto self = loadable->cast<GameComponent>();
+              self->scale(ctx->getData("vector3.val").v<Vector3>());
+              return Var(true);
+              return null_var;

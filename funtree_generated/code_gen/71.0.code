@@ -1,0 +1,4 @@
+
+#line 5 "assets/system/macroes/condition.switch.mac"
+      
+      #include <util/util.h>

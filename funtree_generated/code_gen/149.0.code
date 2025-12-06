@@ -1,0 +1,5 @@
+
+#line 5 "assets/system/node_loader_format/actions/templates/value_color.nlf"
+      
+      #include <action/_action_loadable.h>
+      #include <common/color/color.h>

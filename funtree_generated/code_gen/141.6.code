@@ -1,0 +1,13 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 153 "assets/system/node_loader_format/view/image_view_def.nlf"
+              
+              
+              auto self = loadable->cast<ImageViewDef>();
+              self->build_conf()->image_size(ctx->getData("vector2.val").v<Vector2>());
+              return Var(true);
+              return null_var;

@@ -1,0 +1,6 @@
+
+#line 6 "assets/system/node_loader_format/actions/play_sound.nlf"
+      
+      #include <action/_action_loadable.h>
+      #include <action/action_factory.h>
+      #include <audio/audio_source.h>

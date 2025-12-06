@@ -1,0 +1,3 @@
+
+#line 5 "assets/system/macroes/math.degree_to_radian.mac"
+                 #include <util/math.h>

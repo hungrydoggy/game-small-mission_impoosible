@@ -1,0 +1,5 @@
+auto self = params[0].as<GameObject*>();  
+#line 99 "assets/scenes/game.scn"
+                    
+                    self->sendMessage(".", "randomShow");
+                    return null_var;

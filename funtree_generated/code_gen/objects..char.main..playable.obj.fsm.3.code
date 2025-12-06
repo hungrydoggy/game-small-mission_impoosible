@@ -1,4 +1,0 @@
-auto fsm = params[0].as<Fsm*>();  
-
-fsm->setCurState("move.right");
-return null_var;

@@ -1,0 +1,4 @@
+
+#line 4 "assets/system/node_loader_format/etc/sampler.nlf"
+      
+      #include <resource/sampler/sampler.h>

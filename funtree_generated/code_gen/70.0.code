@@ -1,0 +1,17 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 19 "assets/system/macroes/sequence.size.mac"
+                  
+                  
+                  auto self = dpc<Macro>(loadable);
+                  
+                  unlikely (self->params.size() <= 0)
+                    self->params.set(0, make_shared<Value>(Var((size_t)0), content));
+                  
+                  self->params.get(0)->getValueRef<size_t>() += 1;
+                  return Var(true);
+                  return null_var;

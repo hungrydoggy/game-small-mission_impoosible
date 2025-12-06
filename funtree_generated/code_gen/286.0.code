@@ -1,0 +1,5 @@
+
+#line 4 "assets/scenes/game.scn.fsm"
+      
+      #include <plugins/cooldown/cooldown.h>
+      #include <plugins/cooldown/cooldown_manager.h>

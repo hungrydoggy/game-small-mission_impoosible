@@ -1,0 +1,18 @@
+auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<Node>>();  auto loadable = params[2].as<shared_ptr<NodeLoadable>>();  
+
+
+
+
+#line 16 "assets/system/node_loader_format/actions/temporal_script.nlf"
+      
+      
+      auto al = loadable->cast<ActionLoadable>();
+      
+      auto target_path   = al->getData("target_path"  , ".");
+      auto duration      = al->getData("duration"     , (double)0.0);
+      auto apply         = al->getData("apply"        , (TemporalScriptFunc)null);
+      auto reverse_apply = al->getData("reverse_apply", (TemporalScriptFunc)null);
+      
+      al->action = action::TemporalScript(target_path, duration, apply, reverse_apply);
+      return Var(true);
+      return null_var;

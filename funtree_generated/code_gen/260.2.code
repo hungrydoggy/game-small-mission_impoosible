@@ -1,0 +1,26 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 43 "assets/system/node_loader_format/state_serializer/state_serializer.nlf"
+              
+              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              auto code = content->cast<Code>();
+              self->on_serialize_func =
+                  [path=code->file_path(), index=code->index()](
+                      GameComponent* cmp, string const& name, vector<byte>& buffer
+                  ) {
+                    static auto path_id = PathRegistry::lookUp(path);
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- %s", path.c_str());
+                      return false;
+                    }
+              
+                    auto res = code_set->execute(index, {Var(cmp), Var(name), Var(&buffer)});
+                    return res.as<bool>();
+                  };
+              return Var(true);
+              return null_var;

@@ -1,0 +1,14 @@
+auto self = params[0].as<GameObject*>();  auto my_shape = params[1].as<BulletShape*>();  auto other_shape = params[2].as<BulletShape*>();  auto contact_info = params[3].as<void*>();  
+#line 41 "assets/objects/items/coin.obj"
+        
+        auto other = dynamic_cast<GameObject*>(other_shape->body_owner());
+        
+        auto type = other->getData("type", "");
+        likely (type == "land") {
+          self->setAction("disappear");
+        
+        }else if (type == "player") {
+          self->setAction("gain");
+          self->sendMessage("/scene_state", "incScore", {Var(3)});
+        }
+        return null_var;

@@ -1,0 +1,6 @@
+auto fsm = params[0].as<Fsm*>();  
+#line 98 "assets/objects/char.main/playable.obj.fsm"
+            
+            fsm->owner()->setAction("invincible");
+            fsm->setCurState("idle");
+            return null_var;

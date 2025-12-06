@@ -1,0 +1,4 @@
+
+#line 7 "assets/system/node_loader_format/state_serializer/drawable.nlf"
+      
+      #include <common/state_serializer/state_serializer.h>

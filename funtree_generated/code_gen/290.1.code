@@ -1,0 +1,6 @@
+auto self = params[0].as<GameObject*>();  auto world_pos = params[1].as<Vector3>();  
+#line 47 "assets/scenes/game.scn"
+            
+            Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_RIGHT, KeyEventState::STATE_RELEASED});
+            Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_LEFT , KeyEventState::STATE_RELEASED});
+            return null_var;

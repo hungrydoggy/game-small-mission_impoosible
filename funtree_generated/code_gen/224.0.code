@@ -1,0 +1,4 @@
+
+#line 4 "assets/system/node_loader_format/graphics/video_memory_pack.nlf"
+      
+      #include <common/video_memory_pack/video_memory_pack.h>

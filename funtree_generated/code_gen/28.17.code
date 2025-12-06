@@ -1,0 +1,8 @@
+auto fsm = params[0].as<Fsm*>();  
+#line 106 "assets/objects/char.main/playable.obj.fsm"
+          
+          auto self = fsm->owner();
+          __playSprite(self, "ko");
+          self->setAction("hit");
+          self->unregisterBody();
+          return null_var;

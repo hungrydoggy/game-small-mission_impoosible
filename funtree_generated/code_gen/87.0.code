@@ -1,0 +1,3 @@
+
+#line 5 "assets/system/macroes/global.get_data.mac"
+                 #include <etc/global_object.h>
