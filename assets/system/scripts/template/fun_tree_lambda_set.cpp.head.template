@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___LambdaSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___LambdaSetBundleRegisterer___ () {
+#endif
+
   LambdaSetBundle::default_bundle().registerLambdaSet(
       %$file_path$%,
       make_shared<%$class_name$%>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
