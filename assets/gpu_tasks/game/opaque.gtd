@@ -27,6 +27,7 @@ GpuTaskDef:
         - DepthAttachment:
           nam: 'opaque_depth'
           dcv: 1
+          sop: STORE
       bind_vert_buff_func:
         '''{(GpuTask* task, GpuTaskMemory* memory, GpuHelper::Binder* binder)
           auto& vmp = memory->getVideoMemoryPack(GpuHelper::current_frame(), {"dynamic_vertex_buff"});

@@ -16,6 +16,7 @@
 .DS_Store
 .cache/
 .vscode/
+.vs/
 build/
 runner/
 runner_debug/
