@@ -13,7 +13,7 @@
 namespace appetizer {
 
 
-class GAMECONTENT_API %$class_name$% : public fun_tree::LambdaSet {
+class FUNTREEGENERATED_API %$class_name$% : public fun_tree::LambdaSet {
 public:  // methods
   Var execute (
       shared_ptr<fun_tree::Node> const& node,
