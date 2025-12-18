@@ -56,9 +56,9 @@ server_deps = [
 
 
 ## cpp_args
-cpp_args = ['-D_THREAD_SAFE']
-editor_cpp_args = ['-D_THREAD_SAFE', '-D_EDITOR', '-DDEBUG', '-DUSE_OBJID_SURF', '-D_FUNTREE_GENERATED']
-server_cpp_args = ['-D_THREAD_SAFE', '-DSERVER_ONLY']
+cpp_args = ['-D_THREAD_SAFE', '-DFUNTREEGENERATED_EXPORTS']
+editor_cpp_args = ['-D_THREAD_SAFE', '-D_EDITOR', '-DDEBUG', '-DUSE_OBJID_SURF', '-D_FUNTREE_GENERATED', '-DFUNTREEGENERATED_EXPORTS']
+server_cpp_args = ['-D_THREAD_SAFE', '-DSERVER_ONLY', '-DFUNTREEGENERATED_EXPORTS']
 
 if build_sys == 'linux'
   cpp_args        += ['-D_LINUX']

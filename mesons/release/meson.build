@@ -135,9 +135,9 @@ if src_out != ''
 endif
 
 
-funtree_generated_lib = shared_library('funtree_generated', srcs, dependencies : deps, include_directories : inc_dirs, link_args : link_args + ['-lappetizer'], cpp_args: cpp_args + ['-DGAMECONTENT_EXPORTS'])
+funtree_generated_lib = shared_library('funtree_generated', srcs, dependencies : deps, include_directories : inc_dirs, link_args : link_args + ['-lappetizer'], cpp_args: cpp_args + ['-DGAMECONTENT_EXPORTS', '-DFUNTREEGENERATED_EXPORTS'])
 
-funtree_generated_lib_server = shared_library('funtree_generated_server', srcs, dependencies : server_deps, include_directories : inc_dirs, link_args : link_args + ['-lappetizer_server'], cpp_args: server_cpp_args + ['-DGAMECONTENT_EXPORTS'])
+funtree_generated_lib_server = shared_library('funtree_generated_server', srcs, dependencies : server_deps, include_directories : inc_dirs, link_args : link_args + ['-lappetizer_server'], cpp_args: server_cpp_args + ['-DGAMECONTENT_EXPORTS', '-DFUNTREEGENERATED_EXPORTS'])
 
 
 src_out = run_command('python3', '../../find_src.py', '../../optional/funtree_generated_plugin').stdout().strip()
@@ -145,7 +145,7 @@ if src_out != ''
   srcs += src_out.split('\n')
 endif
 
-funtree_generated_lib_editor = shared_library('funtree_generated_editor', srcs, dependencies : editor_deps, include_directories : inc_dirs, link_args : editor_link_args + ['-lappetizer_editor'], cpp_args: editor_cpp_args + ['-DGAMECONTENT_EXPORTS'])
+funtree_generated_lib_editor = shared_library('funtree_generated_editor', srcs, dependencies : editor_deps, include_directories : inc_dirs, link_args : editor_link_args + ['-lappetizer_editor'], cpp_args: editor_cpp_args + ['-DGAMECONTENT_EXPORTS', '-DFUNTREEGENERATED_EXPORTS'])
 
 
 
