@@ -1,4 +1,4 @@
 
-#line 5 "assets/system/node_loader_format/etc/action/action_state_data_ref.nlf"
+#line 7 "assets/system/node_loader_format/state_serializer/text_view.nlf"
       
-      #include <action/_action_state_data_ref.h>
+      #include <common/state_serializer/state_serializer.h>

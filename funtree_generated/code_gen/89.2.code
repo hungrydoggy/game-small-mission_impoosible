@@ -3,15 +3,12 @@ auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<share
 
 
 
-#line 57 "assets/system/macroes/sequence.get.mac"
+#line 26 "assets/system/macroes/math.exp.mac"
       
       
       auto& mac_params = self->params;
       
-      auto idx = mac_params.get(0)->asValue<size_t>() + 1;
+      auto v = mac_params.get(0)->asValue<double>();
       
-      unlikely (idx >= mac_params.size())
-        return null_var;
-      
-      return Var(mac_params.get(idx));
+      return Var(make_shared<Value>(Var(math::exp(v)), content));
       return null_var;

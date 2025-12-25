@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"SclKeyFrame", },
+      vector<string>{"BoneAnimation", },
       vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatBoneanimationBoneanimationNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::loadable_class () const {
-  static string cls = "SclKeyFrame";
+string const& NodeLoader_SystemNodeloaderformatBoneanimationBoneanimationNlf::loadable_class () const {
+  static string cls = "BoneAnimation";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<SclKeyFrame>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatBoneanimationBoneanimationNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<BoneAnimation>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatBoneanimationBoneanimationNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatBoneanimationBoneanimationNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -70,128 +80,27 @@ bool NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::_postLoad (
   if (super_ok == false)
     return false;
 
-  return true;
+  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bone_animation/bone_animation.nlf");
+  auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+  unlikely (code_set == null) {
+    LOG_ERR("code_set is null --- system/node_loader_format/bone_animation/bone_animation.nlf");
+    return null;
+  }
+
+  auto result = code_set->execute(1, {Var(&ctx), Var(node), Var(loadable)});
+  return result.as<bool>();
+
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatBoneanimationBoneanimationNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "time",
-            "tim",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bone_animation/scl_key_frame.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/bone_animation/scl_key_frame.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "value",
-            "val",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<SequenceFormat>(
-              3,
-              3,
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bone_animation/scl_key_frame.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/bone_animation/scl_key_frame.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              },
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-              }
-            )
-          },
-          AttributeLoader{
-            "interpolation",
-            "int",
+            "name",
+            "nam",
             vector<string>{ },
             false,
             vector<string>{ },
@@ -205,13 +114,77 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatBoneanimationSclkeyf
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bone_animation/scl_key_frame.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bone_animation/bone_animation.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/bone_animation/scl_key_frame.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/bone_animation/bone_animation.nlf");
                   return Var(false);
                 }
-                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "bone_key_frame_infos",
+            "bkf",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<SequenceFormat>(
+              0,
+              0,
+              vector<shared_ptr<Format>>{
+                make_shared<ValueFormat>(
+                  Content::Type::OBJECT,
+                  0,
+                  "BoneKeyFrameInfo",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bone_animation/bone_animation.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/bone_animation/bone_animation.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+              }
+            )
+          },
+          AttributeLoader{
+            "events",
+            "evn",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<SequenceFormat>(
+              0,
+              0,
+              vector<shared_ptr<Format>>{
+                make_shared<ValueFormat>(
+                  Content::Type::OBJECT,
+                  0,
+                  "FrameEvent",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bone_animation/bone_animation.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/bone_animation/bone_animation.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
               }
             )
           },

@@ -1,21 +1,14 @@
-auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
 
 
 
 
-
-#line 65 "assets/system/macroes/sequence.plus.mac"
-                          
-                          auto self = dpc<Macro>(loadable);
-                          
-                          // data part
-                          unlikely (self->hasData("seq") == false)
-                            self->setData("seq", vector<Var>{});
-                          
-                          auto& seq = self->getDataRef("seq").v<vector<Var>>();
-                          
-                          
-                          // add part
-                          seq.push_back(content->cast<Value>()->var());
-                          return Var(true);
-                          return null_var;
+#line 26 "assets/system/macroes/math.sin.mac"
+      
+      
+      auto& mac_params = self->params;
+      
+      auto v = mac_params.get(0)->asValue<double>();
+      
+      return Var(make_shared<Value>(Var(math::sin(v)), content));
+      return null_var;

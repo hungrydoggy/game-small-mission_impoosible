@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/macroes/game_component.is_drawable.mac",
-      make_shared<Code_SystemMacroesGamecomponentIsdrawableMac>(),
+      "system/macroes/math.tan.mac",
+      make_shared<Code_SystemMacroesMathTanMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -52,7 +63,7 @@ static Var __code_2 (
 }
 
 
-Var Code_SystemMacroesGamecomponentIsdrawableMac::execute (
+Var Code_SystemMacroesMathTanMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

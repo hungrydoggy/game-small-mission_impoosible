@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"Action.Empty", "Empty", },
+      vector<string>{"Action.SetInputProcessable", "SetInputProcessable", },
       vector<string>{"ActionGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatActionsEmptyNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatActionsSetinputprocessableNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatActionsEmptyNlf::loadable_class () const {
+string const& NodeLoader_SystemNodeloaderformatActionsSetinputprocessableNlf::loadable_class () const {
   static string cls = "ActionLoadable";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsEmptyNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool NodeLoader_SystemNodeloaderformatActionsSetinputprocessableNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<ActionLoadable>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsEmptyNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatActionsSetinputprocessableNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatActionsEmptyNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsEmptyNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatActionsSetinputprocessableNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -70,10 +80,10 @@ bool NodeLoader_SystemNodeloaderformatActionsEmptyNlf::_postLoad (
   if (super_ok == false)
     return false;
 
-  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/empty.nlf");
+  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/set_input_processable.nlf");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/node_loader_format/actions/empty.nlf");
+    LOG_ERR("code_set is null --- system/node_loader_format/actions/set_input_processable.nlf");
     return null;
   }
 
@@ -83,10 +93,38 @@ bool NodeLoader_SystemNodeloaderformatActionsEmptyNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsEmptyNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsSetinputprocessableNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
+        vector<AttributeLoader>{
+          AttributeLoader{
+            "value",
+            "val",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::BOOL,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/set_input_processable.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/actions/set_input_processable.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+        },
       }
     );
   return format;

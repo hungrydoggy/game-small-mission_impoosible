@@ -23,31 +23,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Operator.or", "or", "||", },
-      make_shared<Macro_SystemMacroesOperatorOrMac>(),
+      vector<string>{"Math.abs", "math.abs", "abs", },
+      make_shared<Macro_SystemMacroesMathAbsMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesOperatorOrMac::loadable_class () const {
+string const& Macro_SystemMacroesMathAbsMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesOperatorOrMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesMathAbsMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesOperatorOrMac::preEmbody (
+bool Macro_SystemMacroesMathAbsMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -56,7 +65,7 @@ bool Macro_SystemMacroesOperatorOrMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesOperatorOrMac::_preLoad (
+bool Macro_SystemMacroesMathAbsMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -65,7 +74,7 @@ bool Macro_SystemMacroesOperatorOrMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesOperatorOrMac::_postLoad (
+bool Macro_SystemMacroesMathAbsMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -79,10 +88,10 @@ static shared_ptr<Content> __on_call_code_1 (
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.or.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/math.abs.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/operator.or.mac");
+    LOG_ERR("code_set is null --- system/macroes/math.abs.mac");
     return null;
   }
 
@@ -91,7 +100,7 @@ static shared_ptr<Content> __on_call_code_1 (
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesOperatorOrMac::execute (
+shared_ptr<Content> Macro_SystemMacroesMathAbsMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
@@ -105,7 +114,7 @@ shared_ptr<Content> Macro_SystemMacroesOperatorOrMac::execute (
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesOperatorOrMac::execute (
+shared_ptr<Content> Macro_SystemMacroesMathAbsMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
@@ -113,31 +122,25 @@ shared_ptr<Content> Macro_SystemMacroesOperatorOrMac::execute (
   return execute(node, content, 1, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesOperatorOrMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesMathAbsMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<SequenceFormat>(
-      1,
-      -1,
-      vector<shared_ptr<Format>>{
-        make_shared<ValueFormat>(
-          Content::Type::VALUE,
-          VarContentTypes::ANY,
-          "",
-          [](
-              FormatContext& ctx,
-              shared_ptr<NodeLoadable> const& loadable,
-              shared_ptr<Node> const& node,
-              shared_ptr<Content> const& content
-          ) {
-            static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.or.mac");
-            auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-            unlikely (code_set == null) {
-              LOG_ERR("code_set is null --- system/macroes/operator.or.mac");
-              return Var(false);
-            }
-            return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-          }
-        ),
+    make_shared<ValueFormat>(
+      Content::Type::VALUE,
+      VarContentTypes::NUMBER,
+      "",
+      [](
+          FormatContext& ctx,
+          shared_ptr<NodeLoadable> const& loadable,
+          shared_ptr<Node> const& node,
+          shared_ptr<Content> const& content
+      ) {
+        static uint code_path_id = PathRegistry::lookUp("system/macroes/math.abs.mac");
+        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+        unlikely (code_set == null) {
+          LOG_ERR("code_set is null --- system/macroes/math.abs.mac");
+          return Var(false);
+        }
+        return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
       }
     )
 ;

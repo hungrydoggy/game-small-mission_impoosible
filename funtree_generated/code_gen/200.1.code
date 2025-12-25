@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 24 "assets/system/node_loader_format/bone_animation/rot_key_frame.nlf"
+#line 24 "assets/system/node_loader_format/bone_animation/frame_event.nlf"
               
               
-              auto self = loadable->cast<RotKeyFrame>();
-              self->time(content->cast<Value>()->var().as<real>());
+              auto self = loadable->cast<FrameEvent>();
+              self->name(content->cast<Value>()->var().as<string>());
               return Var(true);
               return null_var;

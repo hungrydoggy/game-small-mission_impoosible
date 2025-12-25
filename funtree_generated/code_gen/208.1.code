@@ -4,12 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 21 "assets/system/node_loader_format/common/color.nlf"
+#line 27 "assets/system/node_loader_format/bullet_physics/joint_attachment_point/relative.nlf"
               
               
-              auto value = Var(Color());
-              value.v<Color>().r(content->cast<Value>()->var().as<real>());
-              
-              ctx->setData("color.val", value);
+              auto self = loadable->cast<BulletRelativeJointAttachmentPoint>();
+              self->anchor_ratio_from_owner_to_opposite(content->asValue<real>());
               return Var(true);
               return null_var;

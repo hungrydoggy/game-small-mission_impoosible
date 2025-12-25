@@ -1,13 +1,13 @@
-auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
 
 
 
 
-#line 26 "assets/system/macroes/operator.inverse.mac"
-      
-      
-      auto& mac_params = self->params;
-      Var& v = mac_params.get(0)->cast<Value>()->var();
-      
-      return Var(dpc<Content>(make_shared<Value>(Var(REAL(1.0)) / v, content)));
-      return null_var;
+
+#line 31 "assets/system/macroes/string.join.mac"
+                          
+                          
+                          auto self = loadable->cast<Macro>();
+                          self->params.add(3, content);
+                          return Var(true);
+                          return null_var;

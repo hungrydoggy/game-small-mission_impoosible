@@ -8,6 +8,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
+#include "./110.0.code"
 
 
 
@@ -24,23 +25,26 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/macroes/operator.minus.mac",
-      make_shared<Code_SystemMacroesOperatorMinusMac>(),
+      "system/macroes/project.is_input_processable.mac",
+      make_shared<Code_SystemMacroesProjectIsinputprocessableMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
-
-
-static Var __code_0 (
-    vector<Var> const& params
-) {
-
-  #include "./110.0.code"
-}
 
 
 static Var __code_1 (
@@ -59,11 +63,10 @@ static Var __code_2 (
 }
 
 
-Var Code_SystemMacroesOperatorMinusMac::execute (
+Var Code_SystemMacroesProjectIsinputprocessableMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
-    case 0: return __code_0(params);
     case 1: return __code_1(params);
     case 2: return __code_2(params);
     default:

@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/graphics/draw_option/depth_option.nlf",
-      make_shared<Code_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf>(),
+      "system/node_loader_format/etc/action/action_item.nlf",
+      make_shared<Code_SystemNodeloaderformatEtcActionActionitemNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -52,7 +63,7 @@ static Var __code_2 (
 }
 
 
-Var Code_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf::execute (
+Var Code_SystemNodeloaderformatEtcActionActionitemNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

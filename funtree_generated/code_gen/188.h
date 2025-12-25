@@ -1,5 +1,5 @@
-#ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_ACTIONS_REGISTER_BODY_NLF_H_
-#define AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_ACTIONS_REGISTER_BODY_NLF_H_
+#ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_ACTIONS_SET_UPDATABLE_NLF_H_
+#define AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_ACTIONS_SET_UPDATABLE_NLF_H_
 
 
 
@@ -13,7 +13,7 @@
 namespace appetizer {
 
 
-class GAMECONTENT_API Code_SystemNodeloaderformatActionsRegisterbodyNlf : public fun_tree::CodeSet {
+class FUNTREEGENERATED_API Code_SystemNodeloaderformatActionsSetupdatableNlf : public fun_tree::CodeSet {
 public:  // methods
   Var execute (int code_idx, vector<Var> const& params) override;
 
@@ -26,4 +26,4 @@ public:  // methods
 
 
 
-#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_ACTIONS_REGISTER_BODY_NLF_H_
+#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_ACTIONS_SET_UPDATABLE_NLF_H_

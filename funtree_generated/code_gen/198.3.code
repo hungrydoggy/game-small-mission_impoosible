@@ -4,9 +4,15 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 62 "assets/system/node_loader_format/bone_animation/scl_key_frame.nlf"
-              
-              auto self = loadable->cast<SclKeyFrame>();
-              self->interpolation(Interpolation::getFromString(content->cast<Value>()->var().as<string>()));
-              return Var(true);
-              return null_var;
+#line 77 "assets/system/node_loader_format/bone_animation/bone_animation.nlf"
+                      
+                      
+                      auto bkfi = ctx->loadSubNodeAs<BoneKeyFrameInfo>(node, content);
+                      unlikely (bkfi == null)
+                        return Var(false);
+                      
+                      auto self = loadable->cast<BoneAnimation>();
+                      self->bone_key_frame_infos().push_back(*bkfi);
+                      
+                      return Var(true);
+                      return null_var;

@@ -3,7 +3,7 @@ auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<
 
 
 
-#line 10 "assets/system/node_loader_format/actions/scale_x_by.nlf"
+#line 10 "assets/system/node_loader_format/actions/move_y_to.nlf"
       
       
       auto al = loadable->cast<ActionLoadable>();
@@ -16,7 +16,7 @@ auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<
       
       unlikely (al->getData("value").type() == Var::Type<ActionStateDataRef>()) {
         al->action =
-            action::ScaleXBy_withDataRef(
+            action::MoveYTo_withDataRef(
               al->getData("target_path", "."),
               al->getData("duration"   , 0.0),
               al->getData("value"      ).v<ActionStateDataRef>().key,
@@ -24,7 +24,7 @@ auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<
             );
       }else {
         al->action =
-            action::ScaleXBy(
+            action::MoveYTo(
               al->getData("target_path", "."),
               al->getData("duration"   , 0.0),
               al->getData("value"      ).v<real>(),

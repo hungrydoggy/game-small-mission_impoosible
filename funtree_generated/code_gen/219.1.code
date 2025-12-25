@@ -4,21 +4,12 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 23 "assets/system/node_loader_format/graphics/draw_option/stencil_operator.nlf"
+#line 21 "assets/system/node_loader_format/common/vector2.nlf"
               
               
-              #ifndef SERVER_ONLY
-              auto op_str = content->cast<Value>()->var().as<string>();
-              Util::upper(op_str);
+              auto value = Var(Vector2());
+              value.v<Vector2>().x(content->cast<Value>()->var().as<real>());
               
-              auto op_p = Util::find(StencilOperator::str_optyp_map(), op_str);
-              unlikely (op_p == null) {
-                LOG_ERR("unknown StencilOperator::opcType --- %s", op_str.c_str());
-                return Var(false);
-              }
-              auto self = loadable->cast<StencilOperator>();
-              self->when_stencil_fails = *op_p;
-              #endif
-              
+              ctx->setData("vector2.val", value);
               return Var(true);
               return null_var;

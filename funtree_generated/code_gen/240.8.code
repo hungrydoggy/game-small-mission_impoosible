@@ -4,11 +4,14 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 177 "assets/system/node_loader_format/game_component/projection_info.nlf"
+#line 215 "assets/system/node_loader_format/game_component/game_object.nlf"
               
               
-              auto self = loadable->cast<ProjectionInfo>();
-              self->need_default = false;
-              self->near_v = content->cast<Value>()->var().as<real>();
+              auto self = loadable->cast<GameObject>();
+              auto shape_list = make_shared<PhysicsShapeList>();
+              for (auto& shp : ctx->getData("physics_shapes").v<vector<shared_ptr<PhysicsShape>>>())
+                shape_list->shapes().push_back(shp);
+              
+              self->addTrait(shape_list);
               return Var(true);
               return null_var;

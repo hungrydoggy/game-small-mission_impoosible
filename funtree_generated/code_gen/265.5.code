@@ -4,11 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 108 "assets/system/node_loader_format/bullet_physics/joints/generic_6dof.nlf"
+#line 124 "assets/system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf"
               
               
-              auto self = loadable->cast<BulletJointInfo_General6DOF>();
-              auto& all = ctx->getData("vector3.val").v<Vector3>();
-              BulletWrapper::vector3ToBtVector3(all, self->angular_lower_limit);
+              auto self = loadable->cast<VertexDef::AttributeDef>();
+              self->offset = content->cast<Value>()->var().as<uint32_t>();
               return Var(true);
               return null_var;

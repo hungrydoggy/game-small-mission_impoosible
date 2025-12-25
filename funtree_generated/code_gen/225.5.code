@@ -4,12 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 158 "assets/system/node_loader_format/graphics/gpu_task/graphics_config.nlf"
+#line 101 "assets/system/node_loader_format/etc/bitmap_font_info.nlf"
               
               
-              auto value = content->resolveFilePath(content->asValue<string>());
-              
-              auto self = loadable->cast<GraphicsConfig>();
-              self->frag_shader(Shader::RM::load(value));
-              return Var(self->frag_shader() != null);
+              auto self = loadable->cast<BitmapFontInfo>();
+              self->align_padding = ctx->getData("lrtb_real.val").v<Lrtb<real>>();
+              return Var(true);
               return null_var;

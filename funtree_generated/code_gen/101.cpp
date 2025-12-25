@@ -8,7 +8,6 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./101.0.code"
 
 
 
@@ -25,15 +24,34 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/macroes/transform.make_position_from.mac",
-      make_shared<Code_SystemMacroesTransformMakepositionfromMac>(),
+      "system/macroes/operator.and.mac",
+      make_shared<Code_SystemMacroesOperatorAndMac>(),
       true
   );
-}
 
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
+}
+#endif
+
+
+
+static Var __code_0 (
+    vector<Var> const& params
+) {
+
+  #include "./101.0.code"
+}
 
 
 static Var __code_1 (
@@ -44,38 +62,12 @@ static Var __code_1 (
 }
 
 
-static Var __code_2 (
-    vector<Var> const& params
-) {
-
-  #include "./101.2.code"
-}
-
-
-static Var __code_3 (
-    vector<Var> const& params
-) {
-
-  #include "./101.3.code"
-}
-
-
-static Var __code_4 (
-    vector<Var> const& params
-) {
-
-  #include "./101.4.code"
-}
-
-
-Var Code_SystemMacroesTransformMakepositionfromMac::execute (
+Var Code_SystemMacroesOperatorAndMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
+    case 0: return __code_0(params);
     case 1: return __code_1(params);
-    case 2: return __code_2(params);
-    case 3: return __code_3(params);
-    case 4: return __code_4(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"101.cpp\"", code_idx);
       return null_var;

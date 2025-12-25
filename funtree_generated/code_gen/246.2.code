@@ -4,10 +4,21 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 62 "assets/system/node_loader_format/game_component/scene.nlf"
+#line 44 "assets/system/node_loader_format/graphics/draw_option/blend_option.nlf"
               
               
-              auto self = loadable->cast<Scene>();
-              self->ambient(ctx->getData("color.val").v<Color>());
+              #ifndef SERVER_ONLY
+              auto factor_str = content->cast<Value>()->var().as<string>();
+              Util::upper(factor_str);
+              
+              auto factor_p = Util::find(BlendOption::str_factor_map(), factor_str);
+              unlikely (factor_p == null) {
+                LOG_ERR("unknown BlendOption::FactorType --- %s", factor_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<BlendOptionInfo>();
+              self->src_factor = *factor_p;
+              #endif
+              
               return Var(true);
               return null_var;

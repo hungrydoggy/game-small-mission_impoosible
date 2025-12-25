@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 40 "assets/system/macroes/map.key_by_idx.mac"
+#line 25 "assets/system/macroes/string.format.mac"
                   
                   
-                  auto self = dpc<Macro>(loadable);
-                  self->params.set(1, content);
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(0, content);
                   return Var(true);
                   return null_var;

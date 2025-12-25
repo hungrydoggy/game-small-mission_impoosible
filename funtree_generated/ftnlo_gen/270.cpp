@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"VertexAnimationTextureStateSelector", "VATStateSelector", },
-      vector<string>{"ObjectTraitGroup", "VertexAnimationTextureStateGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestateselectorNlf>(),
+      vector<string>{"VertexProperty", },
+      vector<string>{},
+      make_shared<NodeLoader_SystemNodeloaderformatMeshVertexpropertyNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestateselectorNlf::loadable_class () const {
-  static string cls = "VertexAnimationTextureStateSelector";
+string const& NodeLoader_SystemNodeloaderformatMeshVertexpropertyNlf::loadable_class () const {
+  static string cls = "VertexProperty";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestateselectorNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<VertexAnimationTextureStateSelector>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatMeshVertexpropertyNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<VertexProperty>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestateselectorNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatMeshVertexpropertyNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationte
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestateselectorNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatMeshVertexpropertyNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,46 +84,66 @@ bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationte
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestateselectorNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatMeshVertexpropertyNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "vertex_animation_texture_states",
-            "stt",
-            vector<string>{ "vat_states", },
+            "usage",
+            "usg",
+            vector<string>{ },
             true,
             vector<string>{ },
-            make_shared<SequenceFormat>(
-              1,
-              -1,
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::OBJECT,
-                  0,
-                  "VertexAnimationTextureStateItem",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_state_selector.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_state_selector.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/mesh/vertex_property.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/mesh/vertex_property.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },
           AttributeLoader{
-            "time_scale",
-            "tsc",
+            "type",
+            "typ",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/mesh/vertex_property.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/mesh/vertex_property.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "length",
+            "len",
             vector<string>{ },
             false,
             vector<string>{ },
@@ -127,13 +157,13 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcVertexanimationte
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_state_selector.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/mesh/vertex_property.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_state_selector.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/mesh/vertex_property.nlf");
                   return Var(false);
                 }
-                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

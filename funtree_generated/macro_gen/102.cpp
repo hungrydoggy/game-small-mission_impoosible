@@ -23,31 +23,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Sequence.makeIntSequence", "seq.makeIntSeq", "seq.intSeq", },
-      make_shared<Macro_SystemMacroesSequenceMakeintsequenceMac>(),
+      vector<string>{"Operator.divide", "divide", "/", },
+      make_shared<Macro_SystemMacroesOperatorDivideMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesSequenceMakeintsequenceMac::loadable_class () const {
+string const& Macro_SystemMacroesOperatorDivideMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesSequenceMakeintsequenceMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesOperatorDivideMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesSequenceMakeintsequenceMac::preEmbody (
+bool Macro_SystemMacroesOperatorDivideMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -56,7 +65,7 @@ bool Macro_SystemMacroesSequenceMakeintsequenceMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesSequenceMakeintsequenceMac::_preLoad (
+bool Macro_SystemMacroesOperatorDivideMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -65,7 +74,7 @@ bool Macro_SystemMacroesSequenceMakeintsequenceMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesSequenceMakeintsequenceMac::_postLoad (
+bool Macro_SystemMacroesOperatorDivideMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,133 +83,51 @@ bool Macro_SystemMacroesSequenceMakeintsequenceMac::_postLoad (
 }
 
 
-static shared_ptr<Content> __on_call_code_4 (
+static shared_ptr<Content> __on_call_code_1 (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.make_int_sequence.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.divide.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/sequence.make_int_sequence.mac");
+    LOG_ERR("code_set is null --- system/macroes/operator.divide.mac");
     return null;
   }
 
-  auto result = code_set->execute(4, {Var(node), Var(content), Var(self)});
+  auto result = code_set->execute(1, {Var(node), Var(content), Var(self)});
   return result.v<shared_ptr<Content>>();
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesSequenceMakeintsequenceMac::execute (
+shared_ptr<Content> Macro_SystemMacroesOperatorDivideMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
     shared_ptr<Macro> const& macro
 ) {
   switch (code_idx) {
-    case 4: return __on_call_code_4(node, content, macro);
+    case 1: return __on_call_code_1(node, content, macro);
     default:
       LOG_ERR("unknown code_idx %u --- \"102.cpp\"", code_idx);
       return null;
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesSequenceMakeintsequenceMac::execute (
+shared_ptr<Content> Macro_SystemMacroesOperatorDivideMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
 ) {
-  return execute(node, content, 4, macro);
+  return execute(node, content, 1, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesSequenceMakeintsequenceMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesOperatorDivideMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<FormatGroup>(
+    make_shared<SequenceFormat>(
+      1,
+      -1,
       vector<shared_ptr<Format>>{
-        make_shared<MapFormat>(
-          vector<vector<AttributeLoader>>{
-            vector<AttributeLoader>{
-              AttributeLoader{
-                "start",
-                "sta",
-                vector<string>{ },
-                false,
-                vector<string>{ },
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.make_int_sequence.mac");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/macroes/sequence.make_int_sequence.mac");
-                      return Var(false);
-                    }
-                    return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                )
-              },
-              AttributeLoader{
-                "end",
-                "end",
-                vector<string>{ },
-                true,
-                vector<string>{ },
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.make_int_sequence.mac");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/macroes/sequence.make_int_sequence.mac");
-                      return Var(false);
-                    }
-                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                )
-              },
-              AttributeLoader{
-                "increment",
-                "inc",
-                vector<string>{ },
-                false,
-                vector<string>{ },
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.make_int_sequence.mac");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/macroes/sequence.make_int_sequence.mac");
-                      return Var(false);
-                    }
-                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                )
-              },
-            },
-          }
-        ),
         make_shared<ValueFormat>(
           Content::Type::VALUE,
           VarContentTypes::NUMBER,
@@ -211,13 +138,13 @@ shared_ptr<Format> const&  Macro_SystemMacroesSequenceMakeintsequenceMac::_getFo
               shared_ptr<Node> const& node,
               shared_ptr<Content> const& content
           ) {
-            static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.make_int_sequence.mac");
+            static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.divide.mac");
             auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
             unlikely (code_set == null) {
-              LOG_ERR("code_set is null --- system/macroes/sequence.make_int_sequence.mac");
+              LOG_ERR("code_set is null --- system/macroes/operator.divide.mac");
               return Var(false);
             }
-            return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+            return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
           }
         ),
       }

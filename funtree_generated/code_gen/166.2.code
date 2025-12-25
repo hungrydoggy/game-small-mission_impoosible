@@ -4,20 +4,9 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 48 "assets/system/node_loader_format/actions/sequence.nlf"
-                      
-                      
-                      auto self = loadable->cast<ActionLoadable>();
-                      unlikely (self->hasData("children") == false)
-                        self->setData("children", Var(vector<shared_ptr<Action>>()));
-                      
-                      auto& chl = self->getDataRef("children").v<vector<shared_ptr<Action>>>();
-                      
-                      
-                      auto action_loader = ctx->loadSubNodeAs<ActionLoadable>(node, content);
-                      unlikely (action_loader == null)
-                        return Var(false);
-                      
-                      chl.push_back(action_loader->action);
-                      return Var(true);
-                      return null_var;
+#line 37 "assets/system/node_loader_format/actions/play_sprite.nlf"
+              
+              auto self = loadable->cast<ActionLoadable>();
+              self->setData("target_path", content->cast<Value>()->var());
+              return Var(true);
+              return null_var;

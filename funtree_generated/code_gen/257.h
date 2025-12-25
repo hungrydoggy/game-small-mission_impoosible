@@ -1,8 +1,8 @@
-#ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_STATE_SERIALIZER_TEXT_VIEW_NLF_H_
-#define AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_STATE_SERIALIZER_TEXT_VIEW_NLF_H_
+#ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_GPU_TASK_GPU_TASK_DEF_NLF_H_
+#define AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_GPU_TASK_GPU_TASK_DEF_NLF_H_
 
 
-
+#ifndef SERVER_ONLY
 
 
 #include <common/loader/fun_tree/_code_set.h>
@@ -13,7 +13,7 @@
 namespace appetizer {
 
 
-class GAMECONTENT_API Code_SystemNodeloaderformatStateserializerTextviewNlf : public fun_tree::CodeSet {
+class FUNTREEGENERATED_API Code_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf : public fun_tree::CodeSet {
 public:  // methods
   Var execute (int code_idx, vector<Var> const& params) override;
 
@@ -23,7 +23,7 @@ public:  // methods
 }
 
 
+#endif
 
 
-
-#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_STATE_SERIALIZER_TEXT_VIEW_NLF_H_
+#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_GPU_TASK_GPU_TASK_DEF_NLF_H_

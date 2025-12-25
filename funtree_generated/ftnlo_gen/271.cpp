@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"VertexAnimationTextureState", "VATState", "VertexAnimationTextureStateSingle", "VATStateSingle", },
-      vector<string>{"ObjectTraitGroup", "VertexAnimationTextureStateGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestatesingleNlf>(),
+      vector<string>{"PhysicsJointItem", "JointItem", },
+      vector<string>{},
+      make_shared<NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestatesingleNlf::loadable_class () const {
-  static string cls = "VertexAnimationTextureStateSingle";
+string const& NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::loadable_class () const {
+  static string cls = "PhysicsJointItem";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestatesingleNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<VertexAnimationTextureStateSingle>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<PhysicsJointItem>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestatesingleNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationte
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestatesingleNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,46 +84,20 @@ bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationte
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtexturestatesingleNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "vertex_animation_texture",
-            "vat",
+            "name",
+            "nam",
             vector<string>{ },
             true,
             vector<string>{ },
             make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "VertexAnimationTexture",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_state_single.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_state_single.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "time_scale",
-            "tsc",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
               Content::Type::VALUE,
-              VarContentTypes::NUMBER,
+              VarContentTypes::STRING,
               "",
               [](
                   FormatContext& ctx,
@@ -121,13 +105,91 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcVertexanimationte
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_state_single.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/physics/physics_joint_item.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_state_single.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/physics/physics_joint_item.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "opposite_path",
+            "opp",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/physics/physics_joint_item.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/physics/physics_joint_item.nlf");
                   return Var(false);
                 }
                 return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "need_register_by_default",
+            "reg",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::BOOL,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/physics/physics_joint_item.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/physics/physics_joint_item.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "joint",
+            "jnt",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::OBJECT,
+              0,
+              "PhysicsJointGroup",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/physics/physics_joint_item.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/physics/physics_joint_item.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

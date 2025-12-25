@@ -24,14 +24,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
       "system/macroes/map.merge.mac",
       make_shared<Code_SystemMacroesMapMergeMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 

@@ -1,8 +1,5 @@
-auto self = params[0].as<GameObject*>();  auto body = params[1].as<BulletBody*>();  
-#line 30 "assets/objects/items/heart.obj"
-        
-        
-        auto bt_body = body->bt_body();
-        bt_body->setLinearFactor (btVector3(1, 1, 0));
-        bt_body->setAngularFactor(btVector3(0, 0, 0));
-        return null_var;
+auto fsm = params[0].as<Fsm*>();  
+#line 17 "assets/objects/char.main/playable.obj.fsm"
+          
+          __playSprite(fsm->owner(), "idle");
+          return null_var;

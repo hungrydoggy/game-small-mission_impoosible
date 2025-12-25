@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 88 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf"
+#line 103 "assets/system/node_loader_format/mesh/mesh.nlf"
               
               
-              auto self = loadable->cast<VAT>();
-              self->duration(content->asValue<double>());
+              auto self = loadable->cast<Mesh>();
+              self->bind_shape_matrix(ctx->getData("matrix.val").v<Matrix>());
               return Var(true);
               return null_var;

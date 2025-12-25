@@ -4,11 +4,18 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 115 "assets/system/node_loader_format/game_component/projection_info.nlf"
+#line 137 "assets/system/node_loader_format/game_component/game_object.nlf"
               
               
-              auto self = loadable->cast<ProjectionInfo>();
-              self->need_default = false;
-              self->bottom = content->cast<Value>()->var().as<real>();
+              auto view_def = ctx->loadSubNodeAs<ViewDef>(node, content);
+              unlikely (view_def == null)
+                return Var(false);
+              
+              auto view = make_shared<View>();
+              view->def(view_def);
+              
+              auto self = loadable->cast<GameObject>();
+              self->addTrait(view);
+              
               return Var(true);
               return null_var;

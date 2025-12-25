@@ -1,4 +1,4 @@
 
-#line 5 "assets/system/node_loader_format/common/vector3.nlf"
+#line 5 "assets/system/node_loader_format/common/color.nlf"
       
-      #include <util/vector3.h>
+      #include <common/color/color.h>

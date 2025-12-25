@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 26 "assets/system/node_loader_format/graphics/gpu_task/vertex_def.nlf"
+#line 25 "assets/system/node_loader_format/fsm/fsm_state.nlf"
               
               
-              auto self = loadable->cast<VertexDef>();
-              self->vertex_bytes(content->cast<Value>()->var().as<size_t>());
+              auto self = loadable->cast<FSMState>();
+              self->name(content->asValue<string>());
               return Var(true);
               return null_var;

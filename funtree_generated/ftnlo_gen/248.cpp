@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"Camera", "Camera", },
-      vector<string>{"GameComponentGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatGamecomponentCameraNlf>(),
+      vector<string>{"DrawOption", },
+      vector<string>{},
+      make_shared<NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatGamecomponentCameraNlf::loadable_class () const {
-  static string cls = "Camera";
+string const& NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::loadable_class () const {
+  static string cls = "DrawOption";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGamecomponentCameraNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<Camera>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<DrawOption>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGamecomponentCameraNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatGamecomponentCameraNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGamecomponentCameraNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,64 +84,24 @@ bool NodeLoader_SystemNodeloaderformatGamecomponentCameraNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGamecomponentCameraNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "name",
-            "nam",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/game_component.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "position",
-            "pos",
+            "use",
+            "use",
             vector<string>{ },
             false,
             vector<string>{ },
             make_shared<SequenceFormat>(
-              3,
-              3,
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/game_component.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              },
+              0,
+              0,
               vector<shared_ptr<Format>>{
                 make_shared<ValueFormat>(
                   Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
+                  VarContentTypes::STRING,
                   "",
                   [](
                       FormatContext& ctx,
@@ -139,83 +109,31 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGamecomponentCameraN
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
                       return Var(false);
                     }
                     return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
                   }
                 ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
               }
             )
           },
           AttributeLoader{
-            "rotation",
-            "rot",
+            "unuse",
+            "unu",
             vector<string>{ },
             false,
             vector<string>{ },
             make_shared<SequenceFormat>(
-              3,
-              4,
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/game_component.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              },
+              0,
+              0,
               vector<shared_ptr<Format>>{
                 make_shared<ValueFormat>(
                   Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
+                  VarContentTypes::STRING,
                   "",
                   [](
                       FormatContext& ctx,
@@ -223,401 +141,125 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGamecomponentCameraN
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/quaternion.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/quaternion.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/quaternion.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/quaternion.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
                       return Var(false);
                     }
                     return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
                   }
                 ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/quaternion.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/quaternion.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/quaternion.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/quaternion.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
               }
             )
           },
           AttributeLoader{
-            "scale",
-            "scl",
+            "blend_option",
+            "bln",
             vector<string>{ },
             false,
             vector<string>{ },
             make_shared<SequenceFormat>(
-              3,
-              3,
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/game_component.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              },
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-              }
-            )
-          },
-          AttributeLoader{
-            "color",
-            "col",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<SequenceFormat>(
-              4,
-              4,
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/game_component.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              },
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/color.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/color.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/color.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/color.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/color.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/color.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/color.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/color.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-              }
-            )
-          },
-          AttributeLoader{
-            "is_drawable",
-            "dra",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::BOOL,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/game_component.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(6, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "is_updatable",
-            "upd",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::BOOL,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/game_component.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(7, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "state_serializers",
-            "sts",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<SequenceFormat>(
-              -1,
-              -1,
+              0,
+              0,
               vector<shared_ptr<Format>>{
                 make_shared<ValueFormat>(
                   Content::Type::OBJECT,
                   0,
-                  "StateSerializerGroup",
+                  "BlendOption",
                   [](
                       FormatContext& ctx,
                       shared_ptr<NodeLoadable> const& loadable,
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/game_component.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
                       return Var(false);
                     }
-                    return code_set->execute(8, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
                   }
                 ),
               }
             )
           },
           AttributeLoader{
-            "children",
-            "chl",
+            "depth_option",
+            "dpt",
             vector<string>{ },
             false,
-            vector<string>{ },
-            make_shared<SequenceFormat>(
-              -1,
-              -1,
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::OBJECT,
-                  0,
-                  "GameComponentGroup",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/game_component.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/game_component/game_component.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(9, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-              }
-            )
-          },
-          AttributeLoader{
-            "projection",
-            "prj",
-            vector<string>{ },
-            true,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::OBJECT,
               0,
-              "Projection",
+              "DepthOption",
               [](
                   FormatContext& ctx,
                   shared_ptr<NodeLoadable> const& loadable,
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/game_component/camera.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/game_component/camera.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
                   return Var(false);
                 }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "stencil_option",
+            "stc",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::OBJECT,
+              0,
+              "StencilOption",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "back_stencil_option",
+            "bst",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::OBJECT,
+              0,
+              "StencilOption",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(6, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

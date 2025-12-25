@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/macroes/game_component.get_data.mac",
-      make_shared<Code_SystemMacroesGamecomponentGetdataMac>(),
+      "system/macroes/convert.to_int.mac",
+      make_shared<Code_SystemMacroesConvertTointMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -60,7 +71,7 @@ static Var __code_3 (
 }
 
 
-Var Code_SystemMacroesGamecomponentGetdataMac::execute (
+Var Code_SystemMacroesConvertTointMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

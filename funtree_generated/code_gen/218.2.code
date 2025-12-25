@@ -4,21 +4,9 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 44 "assets/system/node_loader_format/graphics/draw_option/blend_option.nlf"
+#line 42 "assets/system/node_loader_format/common/resolution.nlf"
               
               
-              #ifndef SERVER_ONLY
-              auto factor_str = content->cast<Value>()->var().as<string>();
-              Util::upper(factor_str);
-              
-              auto factor_p = Util::find(BlendOption::str_factor_map(), factor_str);
-              unlikely (factor_p == null) {
-                LOG_ERR("unknown BlendOption::FactorType --- %s", factor_str.c_str());
-                return Var(false);
-              }
-              auto self = loadable->cast<BlendOptionInfo>();
-              self->src_factor = *factor_p;
-              #endif
-              
+              ctx->setData("resolution.val.h", Var(content->cast<Value>()->var().as<int>()));
               return Var(true);
               return null_var;

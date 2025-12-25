@@ -3,34 +3,12 @@ auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<
 
 
 
-#line 25 "assets/system/node_loader_format/actions/move_x_to.nlf"
+#line 16 "assets/system/node_loader_format/actions/script.nlf"
       
       
       auto al = loadable->cast<ActionLoadable>();
-      auto interp = Interpolation::getFromString(al->getData("interpolation", "linear"));
-      unlikely (interp == null) {
-        LOG_ERR("unknown interpolation --- %s", al->getData("interpolation", "").c_str());
-        return Var(false);
-      }
-      
-      
-      unlikely (al->getData("value").type() == Var::Type<ActionStateDataRef>()) {
-        al->action =
-            action::MoveXTo_withDataRef(
-              al->getData("target_path", "."),
-              al->getData("duration"   , 0.0),
-              al->getData("value"      ).v<ActionStateDataRef>().key,
-              interp
-            );
-      }else {
-        al->action =
-            action::MoveXTo(
-              al->getData("target_path", "."),
-              al->getData("duration"   , 0.0),
-              al->getData("value"      ).v<real>(),
-              interp
-            );
-      }
-      
+      auto script         = al->getData("script"        , (ScriptFunc)null);
+      auto reverse_script = al->getData("reverse_script", (ScriptFunc)null);
+      al->action = action::Script(script, reverse_script);
       return Var(true);
       return null_var;

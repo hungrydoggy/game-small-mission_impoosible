@@ -4,12 +4,14 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 21 "assets/system/node_loader_format/common/rectangle_uint.nlf"
+#line 25 "assets/system/node_loader_format/bullet_physics/joint_attachment_point/absolute.nlf"
               
               
-              auto value = Var(Rectangle<uint>());
-              value.v<Rectangle<uint>>().x(content->cast<Value>()->var().as<uint>());
+              auto& pow = ctx->getData("vector3.val").v<Vector3>();
+              btVector3 result;
+              BulletWrapper::vector3ToBtVector3(pow, result);
               
-              ctx->setData("rectangle_uint.val", value);
+              auto self = loadable->cast<BulletAbsoluteJointAttachmentPoint>();
+              self->attachment_point_in_owner(result);
               return Var(true);
               return null_var;

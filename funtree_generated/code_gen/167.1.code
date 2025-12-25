@@ -3,10 +3,10 @@ auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<
 
 
 
-#line 16 "assets/system/node_loader_format/actions/activate.nlf"
+#line 16 "assets/system/node_loader_format/actions/register_body.nlf"
       
       
       auto al = loadable->cast<ActionLoadable>();
-      al->action = action::Activate(al->getData("target_path", "."));
+      al->action = action::RegisterBody(al->getData("target_path", "."));
       return Var(true);
       return null_var;

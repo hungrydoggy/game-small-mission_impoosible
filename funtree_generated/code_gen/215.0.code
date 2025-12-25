@@ -1,4 +1,5 @@
 
-#line 4 "assets/system/node_loader_format/mesh/mesh.nlf"
+#line 5 "assets/system/node_loader_format/common/quaternion.nlf"
       
-      #include <resource/mesh/mesh.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>

@@ -11,6 +11,7 @@
 
 
 
+#include "./24.0.code"
 
 
 
@@ -24,23 +25,26 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "objects/items/heart.obj",
-      make_shared<Code_ObjectsItemsHeartObj>(),
+      "objects/char.main/playable.obj.fsm",
+      make_shared<Code_ObjectsCharMainPlayableObjFsm>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
-
-
-static Var __code_0 (
-    vector<Var> const& params
-) {
-
-  #include "./24.0.code"
-}
 
 
 static Var __code_1 (
@@ -67,14 +71,139 @@ static Var __code_3 (
 }
 
 
-Var Code_ObjectsItemsHeartObj::execute (
+static Var __code_4 (
+    vector<Var> const& params
+) {
+
+  #include "./24.4.code"
+}
+
+
+static Var __code_5 (
+    vector<Var> const& params
+) {
+
+  #include "./24.5.code"
+}
+
+
+static Var __code_6 (
+    vector<Var> const& params
+) {
+
+  #include "./24.6.code"
+}
+
+
+static Var __code_7 (
+    vector<Var> const& params
+) {
+
+  #include "./24.7.code"
+}
+
+
+static Var __code_8 (
+    vector<Var> const& params
+) {
+
+  #include "./24.8.code"
+}
+
+
+static Var __code_9 (
+    vector<Var> const& params
+) {
+
+  #include "./24.9.code"
+}
+
+
+static Var __code_10 (
+    vector<Var> const& params
+) {
+
+  #include "./24.10.code"
+}
+
+
+static Var __code_11 (
+    vector<Var> const& params
+) {
+
+  #include "./24.11.code"
+}
+
+
+static Var __code_12 (
+    vector<Var> const& params
+) {
+
+  #include "./24.12.code"
+}
+
+
+static Var __code_13 (
+    vector<Var> const& params
+) {
+
+  #include "./24.13.code"
+}
+
+
+static Var __code_14 (
+    vector<Var> const& params
+) {
+
+  #include "./24.14.code"
+}
+
+
+static Var __code_15 (
+    vector<Var> const& params
+) {
+
+  #include "./24.15.code"
+}
+
+
+static Var __code_16 (
+    vector<Var> const& params
+) {
+
+  #include "./24.16.code"
+}
+
+
+static Var __code_17 (
+    vector<Var> const& params
+) {
+
+  #include "./24.17.code"
+}
+
+
+Var Code_ObjectsCharMainPlayableObjFsm::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
-    case 0: return __code_0(params);
     case 1: return __code_1(params);
     case 2: return __code_2(params);
     case 3: return __code_3(params);
+    case 4: return __code_4(params);
+    case 5: return __code_5(params);
+    case 6: return __code_6(params);
+    case 7: return __code_7(params);
+    case 8: return __code_8(params);
+    case 9: return __code_9(params);
+    case 10: return __code_10(params);
+    case 11: return __code_11(params);
+    case 12: return __code_12(params);
+    case 13: return __code_13(params);
+    case 14: return __code_14(params);
+    case 15: return __code_15(params);
+    case 16: return __code_16(params);
+    case 17: return __code_17(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"24.cpp\"", code_idx);
       return null_var;
@@ -84,6 +213,7 @@ Var Code_ObjectsItemsHeartObj::execute (
 
 }
 
+#include "./24.18.code"
 
 
 

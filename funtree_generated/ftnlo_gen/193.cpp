@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"Action.SetSpriteCellIndex", "SetSpriteCellIndex", },
+      vector<string>{"Action.UnregisterBody", "UnregisterBody", },
       vector<string>{"ActionGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatActionsSetspritecellindexNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatActionsUnregisterbodyNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatActionsSetspritecellindexNlf::loadable_class () const {
+string const& NodeLoader_SystemNodeloaderformatActionsUnregisterbodyNlf::loadable_class () const {
   static string cls = "ActionLoadable";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsSetspritecellindexNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool NodeLoader_SystemNodeloaderformatActionsUnregisterbodyNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<ActionLoadable>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsSetspritecellindexNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatActionsUnregisterbodyNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatActionsSetspritecellindexNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsSetspritecellindexNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatActionsUnregisterbodyNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -70,10 +80,10 @@ bool NodeLoader_SystemNodeloaderformatActionsSetspritecellindexNlf::_postLoad (
   if (super_ok == false)
     return false;
 
-  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/set_sprite_cell_index.nlf");
+  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/unregister_body.nlf");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/node_loader_format/actions/set_sprite_cell_index.nlf");
+    LOG_ERR("code_set is null --- system/node_loader_format/actions/unregister_body.nlf");
     return null;
   }
 
@@ -83,7 +93,7 @@ bool NodeLoader_SystemNodeloaderformatActionsSetspritecellindexNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsSetspritecellindexNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsUnregisterbodyNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
@@ -104,39 +114,13 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsSetspritecell
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/set_sprite_cell_index.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/unregister_body.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/actions/set_sprite_cell_index.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/actions/unregister_body.nlf");
                   return Var(false);
                 }
                 return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "index",
-            "idx",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/set_sprite_cell_index.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/actions/set_sprite_cell_index.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

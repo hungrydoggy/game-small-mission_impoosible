@@ -4,10 +4,11 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 82 "assets/system/node_loader_format/state_serializer/data.nlf"
+#line 50 "assets/system/node_loader_format/graphics/gpu_task/attachment_ref.nlf"
               
               
-              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              auto self = loadable->cast<AttachmentInfo>();
               self->name = content->asValue<string>();
+              
               return Var(true);
               return null_var;

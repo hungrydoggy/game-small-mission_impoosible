@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/actions/set_action.nlf",
-      make_shared<Code_SystemNodeloaderformatActionsSetactionNlf>(),
+      "system/node_loader_format/actions/templates/value_quaternion.nlf",
+      make_shared<Code_SystemNodeloaderformatActionsTemplatesValuequaternionNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -68,15 +79,7 @@ static Var __code_4 (
 }
 
 
-static Var __code_5 (
-    vector<Var> const& params
-) {
-
-  #include "./190.5.code"
-}
-
-
-Var Code_SystemNodeloaderformatActionsSetactionNlf::execute (
+Var Code_SystemNodeloaderformatActionsTemplatesValuequaternionNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
@@ -84,7 +87,6 @@ Var Code_SystemNodeloaderformatActionsSetactionNlf::execute (
     case 2: return __code_2(params);
     case 3: return __code_3(params);
     case 4: return __code_4(params);
-    case 5: return __code_5(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"190.cpp\"", code_idx);
       return null_var;

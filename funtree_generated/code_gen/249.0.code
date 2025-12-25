@@ -1,4 +1,4 @@
 
-#line 6 "assets/system/node_loader_format/fsm/fsm_state.nlf"
+#line 4 "assets/system/node_loader_format/graphics/draw_option/stencil_function.nlf"
       
-      #include <fsm/fsm_state.h>
+      #include <common/draw_option/draw_option.h>

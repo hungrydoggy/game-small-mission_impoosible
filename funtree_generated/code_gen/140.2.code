@@ -4,14 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 44 "assets/system/node_loader_format/view/sprite/cell_action_call_info.nlf"
-              
-              
-              auto action_loader = ctx->loadSubNodeAs<ActionLoadable>(node, content);
-              unlikely (action_loader == null)
-                return Var(false);
-              
-              auto self = loadable->cast<CellActionCallInfo>();
-              self->action = action_loader->action;
-              return Var(true);
-              return null_var;
+#line 40 "assets/system/macroes/transform.make_scale_from.mac"
+                  
+                  
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(1, make_shared<Value>(ctx->getData("vector3.val"), content));
+                  return Var(true);
+                  return null_var;

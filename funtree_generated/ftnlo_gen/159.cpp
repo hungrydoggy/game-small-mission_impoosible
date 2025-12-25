@@ -7,7 +7,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./144.0.code"
+#include "./145.0.code"
 
 
 
@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"Action.ScaleXBy", "ScaleXBy", },
+      vector<string>{"Action.MoveYTo", "MoveYTo", },
       vector<string>{"ActionGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatActionsScalexbyNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatActionsMoveytoNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatActionsScalexbyNlf::loadable_class () const {
+string const& NodeLoader_SystemNodeloaderformatActionsMoveytoNlf::loadable_class () const {
   static string cls = "ActionLoadable";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsScalexbyNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool NodeLoader_SystemNodeloaderformatActionsMoveytoNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<ActionLoadable>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsScalexbyNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatActionsMoveytoNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatActionsScalexbyNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsScalexbyNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatActionsMoveytoNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -70,10 +80,10 @@ bool NodeLoader_SystemNodeloaderformatActionsScalexbyNlf::_postLoad (
   if (super_ok == false)
     return false;
 
-  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/scale_x_by.nlf");
+  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/move_y_to.nlf");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/node_loader_format/actions/scale_x_by.nlf");
+    LOG_ERR("code_set is null --- system/node_loader_format/actions/move_y_to.nlf");
     return null;
   }
 
@@ -83,7 +93,7 @@ bool NodeLoader_SystemNodeloaderformatActionsScalexbyNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsScalexbyNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsMoveytoNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{

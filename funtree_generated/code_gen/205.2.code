@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 41 "assets/system/node_loader_format/common/quaternion.nlf"
+#line 45 "assets/system/node_loader_format/bullet_physics/bullet_physics.nlf"
               
               
-              auto& value = ctx->getDataRef("quaternion.vec3");
-              value.v<Vector3>().y(content->cast<Value>()->var().as<real>());
+              auto self = loadable->cast<BulletWrapper>();
+              self->time_step(content->cast<Value>()->var().as<real>());
               return Var(true);
               return null_var;

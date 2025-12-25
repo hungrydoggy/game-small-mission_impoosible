@@ -1,4 +1,4 @@
 
-#line 4 "assets/system/node_loader_format/graphics/draw_option/stencil_option.nlf"
+#line 5 "assets/system/node_loader_format/common/vector3.nlf"
       
-      #include <common/draw_option/draw_option.h>
+      #include <util/vector3.h>

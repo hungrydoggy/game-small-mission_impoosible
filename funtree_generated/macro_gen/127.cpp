@@ -23,40 +23,58 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Operator.plus", "plus", "+", },
-      make_shared<Macro_SystemMacroesOperatorPlusMac>(),
+      vector<string>{"Sequence.map", "seq.map", },
+      make_shared<Macro_SystemMacroesSequenceMapMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesOperatorPlusMac::loadable_class () const {
+string const& Macro_SystemMacroesSequenceMapMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesOperatorPlusMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesSequenceMapMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesOperatorPlusMac::preEmbody (
+bool Macro_SystemMacroesSequenceMapMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
 ) {
-  return true;
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.map.mac");
+  auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+  unlikely (code_set == null) {
+    LOG_ERR("code_set is null --- system/macroes/sequence.map.mac");
+    return null;
+  }
+
+  auto result = code_set->execute(6, {Var(node), Var(call_params), Var(embody_func)});
+  return result.as<bool>();
+
 }
 
 
-bool Macro_SystemMacroesOperatorPlusMac::_preLoad (
+bool Macro_SystemMacroesSequenceMapMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -65,7 +83,7 @@ bool Macro_SystemMacroesOperatorPlusMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesOperatorPlusMac::_postLoad (
+bool Macro_SystemMacroesSequenceMapMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,91 +92,227 @@ bool Macro_SystemMacroesOperatorPlusMac::_postLoad (
 }
 
 
-static shared_ptr<Content> __on_call_code_2 (
+static shared_ptr<Content> __on_call_code_7 (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.plus.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.map.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/operator.plus.mac");
+    LOG_ERR("code_set is null --- system/macroes/sequence.map.mac");
     return null;
   }
 
-  auto result = code_set->execute(2, {Var(node), Var(content), Var(self)});
+  auto result = code_set->execute(7, {Var(node), Var(content), Var(self)});
   return result.v<shared_ptr<Content>>();
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesOperatorPlusMac::execute (
+shared_ptr<Content> Macro_SystemMacroesSequenceMapMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
     shared_ptr<Macro> const& macro
 ) {
   switch (code_idx) {
-    case 2: return __on_call_code_2(node, content, macro);
+    case 7: return __on_call_code_7(node, content, macro);
     default:
       LOG_ERR("unknown code_idx %u --- \"127.cpp\"", code_idx);
       return null;
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesOperatorPlusMac::execute (
+shared_ptr<Content> Macro_SystemMacroesSequenceMapMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
 ) {
-  return execute(node, content, 2, macro);
+  return execute(node, content, 7, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesOperatorPlusMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesSequenceMapMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<SequenceFormat>(
-      1,
-      -1,
+    make_shared<FormatGroup>(
       vector<shared_ptr<Format>>{
-        make_shared<FormatGroup>(
-          vector<shared_ptr<Format>>{
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.plus.mac");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/operator.plus.mac");
-                  return Var(false);
-                }
-                return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            ),
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.plus.mac");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/operator.plus.mac");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            ),
+        make_shared<MapFormat>(
+          vector<vector<AttributeLoader>>{
+            vector<AttributeLoader>{
+              AttributeLoader{
+                "source",
+                "src",
+                vector<string>{ },
+                true,
+                vector<string>{ },
+                make_shared<SequenceFormat>(
+                  0,
+                  -1,
+                  vector<shared_ptr<Format>>{
+                    make_shared<ValueFormat>(
+                      Content::Type::ANY,
+                      0,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.map.mac");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/macroes/sequence.map.mac");
+                          return Var(false);
+                        }
+                        return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                  }
+                )
+              },
+              AttributeLoader{
+                "node",
+                "nod",
+                vector<string>{ },
+                true,
+                vector<string>{ },
+                make_shared<ValueFormat>(
+                  Content::Type::ANY,
+                  0,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.map.mac");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/macroes/sequence.map.mac");
+                      return Var(false);
+                    }
+                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                )
+              },
+              AttributeLoader{
+                "element_ref_name",
+                "enm",
+                vector<string>{ },
+                false,
+                vector<string>{ },
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::STRING,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.map.mac");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/macroes/sequence.map.mac");
+                      return Var(false);
+                    }
+                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                )
+              },
+              AttributeLoader{
+                "index_ref_name",
+                "idx",
+                vector<string>{ },
+                false,
+                vector<string>{ },
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::STRING,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.map.mac");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/macroes/sequence.map.mac");
+                      return Var(false);
+                    }
+                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                )
+              },
+              AttributeLoader{
+                "count_ref_name",
+                "cnt",
+                vector<string>{ },
+                false,
+                vector<string>{ },
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::STRING,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.map.mac");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/macroes/sequence.map.mac");
+                      return Var(false);
+                    }
+                    return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                )
+              },
+            },
+          }
+        ),
+        make_shared<MapFormat>(
+          vector<vector<AttributeLoader>>{
+            vector<AttributeLoader>{
+              AttributeLoader{
+                "result",
+                "res",
+                vector<string>{ },
+                true,
+                vector<string>{ },
+                make_shared<SequenceFormat>(
+                  0,
+                  -1,
+                  vector<shared_ptr<Format>>{
+                    make_shared<ValueFormat>(
+                      Content::Type::ANY,
+                      0,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.map.mac");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/macroes/sequence.map.mac");
+                          return Var(false);
+                        }
+                        return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                  }
+                )
+              },
+            },
           }
         ),
       }

@@ -4,14 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 45 "assets/system/node_loader_format/etc/action/action_item.nlf"
+#line 53 "assets/system/node_loader_format/state_serializer/transform.nlf"
               
               
-              auto action_loader = ctx->loadSubNodeAs<ActionLoadable>(node, content);
-              unlikely (action_loader == null)
-                return Var(false);
-              
-              auto self = loadable->cast<ActionItem>();
-              self->action = action_loader->action;
+              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              self->name = content->asValue<string>();
               return Var(true);
               return null_var;

@@ -1,5 +1,4 @@
 
-#line 4 "assets/system/node_loader_format/bone_animation/pos_key_frame.nlf"
+#line 4 "assets/system/node_loader_format/bone_animation/bone_key_frame_info.nlf"
       
       #include <resource/bone_animation/bone_animation.h>
-      #include <util/vector3.h>

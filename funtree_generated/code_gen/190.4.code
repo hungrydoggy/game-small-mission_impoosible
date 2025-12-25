@@ -4,9 +4,11 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 87 "assets/system/node_loader_format/actions/set_action.nlf"
-                  
-                  auto self = loadable->cast<ActionLoadable>();
-                  self->setData("name", content->cast<Value>()->var());
-                  return Var(true);
-                  return null_var;
+#line 80 "assets/system/node_loader_format/actions/templates/value_quaternion.nlf"
+              
+              
+              auto self = loadable->cast<ActionLoadable>();
+              auto& vec3 = self->getData("value").v<Vector3>();
+              self->setData("value", Var(Quaternion(vec3.x(), vec3.y(), vec3.z(), content->cast<Value>()->var().as<real>())));
+              return Var(true);
+              return null_var;

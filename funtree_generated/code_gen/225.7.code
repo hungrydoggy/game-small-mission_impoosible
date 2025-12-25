@@ -4,19 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 204 "assets/system/node_loader_format/graphics/gpu_task/graphics_config.nlf"
+#line 141 "assets/system/node_loader_format/etc/bitmap_font_info.nlf"
               
               
-              auto prp_str = content->cast<Value>()->var().as<string>();
-              Util::upper(prp_str);
-              
-              auto prp_p = Util::find(VideoMemoryPack::vmpprop_enm_map(), prp_str);
-              unlikely (prp_p == null) {
-                CNT_LOG_ERR(content, "unknown VideoMemoryPack::Property --- %s", prp_str.c_str());
-                return Var(false);
-              }
-              auto self = loadable->cast<GraphicsConfig>();
-              self->vert_vmp_property(*prp_p);
-              
+              auto self = loadable->cast<BitmapFontInfo>();
+              self->characters = content->cast<Value>()->var().as<string>();
               return Var(true);
               return null_var;

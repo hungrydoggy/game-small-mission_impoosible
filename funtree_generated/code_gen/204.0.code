@@ -1,4 +1,8 @@
 
-#line 6 "assets/system/node_loader_format/physics/physics_shape_list.nlf"
+#line 5 "assets/system/node_loader_format/bullet_physics/bullet_body.nlf"
       
-      #include <physics/physics_shape.h>
+      #include <physics/bullet/bullet_body.h>
+      #include <physics/bullet/bullet_joint.h>
+      #include <physics/bullet/bullet_joint_info.h>
+      #include <physics/_physics_joint_item.h>
+      #include <util/vector3.h>

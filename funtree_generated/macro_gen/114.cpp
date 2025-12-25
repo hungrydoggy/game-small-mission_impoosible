@@ -24,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Sequence.pick", "seq.pick", },
-      make_shared<Macro_SystemMacroesSequencePickMac>(),
+      vector<string>{"Random.drawReal", "rand.drawReal", "rand.draw", },
+      make_shared<Macro_SystemMacroesRandomDrawrealMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesSequencePickMac::loadable_class () const {
+string const& Macro_SystemMacroesRandomDrawrealMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesSequencePickMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesRandomDrawrealMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesSequencePickMac::preEmbody (
+bool Macro_SystemMacroesRandomDrawrealMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -57,7 +66,7 @@ bool Macro_SystemMacroesSequencePickMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesSequencePickMac::_preLoad (
+bool Macro_SystemMacroesRandomDrawrealMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -66,7 +75,7 @@ bool Macro_SystemMacroesSequencePickMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesSequencePickMac::_postLoad (
+bool Macro_SystemMacroesRandomDrawrealMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -80,10 +89,10 @@ static shared_ptr<Content> __on_call_code_2 (
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.pick.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/random.draw_real.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/sequence.pick.mac");
+    LOG_ERR("code_set is null --- system/macroes/random.draw_real.mac");
     return null;
   }
 
@@ -92,7 +101,7 @@ static shared_ptr<Content> __on_call_code_2 (
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesSequencePickMac::execute (
+shared_ptr<Content> Macro_SystemMacroesRandomDrawrealMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
@@ -106,7 +115,7 @@ shared_ptr<Content> Macro_SystemMacroesSequencePickMac::execute (
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesSequencePickMac::execute (
+shared_ptr<Content> Macro_SystemMacroesRandomDrawrealMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
@@ -114,15 +123,15 @@ shared_ptr<Content> Macro_SystemMacroesSequencePickMac::execute (
   return execute(node, content, 2, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesSequencePickMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesRandomDrawrealMac::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<SequenceFormat>(
-      1,
-      -1,
+      0,
+      2,
       vector<shared_ptr<Format>>{
         make_shared<ValueFormat>(
-          Content::Type::ANY,
-          0,
+          Content::Type::VALUE,
+          VarContentTypes::NUMBER,
           "",
           [](
               FormatContext& ctx,
@@ -130,10 +139,10 @@ shared_ptr<Format> const&  Macro_SystemMacroesSequencePickMac::_getFormat () {
               shared_ptr<Node> const& node,
               shared_ptr<Content> const& content
           ) {
-            static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.pick.mac");
+            static uint code_path_id = PathRegistry::lookUp("system/macroes/random.draw_real.mac");
             auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
             unlikely (code_set == null) {
-              LOG_ERR("code_set is null --- system/macroes/sequence.pick.mac");
+              LOG_ERR("code_set is null --- system/macroes/random.draw_real.mac");
               return Var(false);
             }
             return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});

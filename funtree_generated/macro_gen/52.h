@@ -1,5 +1,5 @@
-#ifndef AUTO_GENERATED_FUN_TREE_NODE_LOADER_MACRO_CODE_SYSTEM_MACROES_TRANSFORM_MAKE_SCALE_FROM_MAC_MACRO_H_
-#define AUTO_GENERATED_FUN_TREE_NODE_LOADER_MACRO_CODE_SYSTEM_MACROES_TRANSFORM_MAKE_SCALE_FROM_MAC_MACRO_H_
+#ifndef AUTO_GENERATED_FUN_TREE_NODE_LOADER_MACRO_CODE_SYSTEM_MACROES_COLOR_FROM_CODE_MAC_MACRO_H_
+#define AUTO_GENERATED_FUN_TREE_NODE_LOADER_MACRO_CODE_SYSTEM_MACROES_COLOR_FROM_CODE_MAC_MACRO_H_
 
 
 
@@ -14,7 +14,7 @@ namespace appetizer {
 using std::shared_ptr;
 
 
-class GAMECONTENT_API Macro_SystemMacroesTransformMakescalefromMac : public fun_tree::MacroLoader {
+class FUNTREEGENERATED_API Macro_SystemMacroesColorFromcodeMac : public fun_tree::MacroLoader {
 public: // inner types
   using Content       = fun_tree::Content;
   using EmbodyFunc    = fun_tree::EmbodyFunc;
@@ -74,4 +74,4 @@ private: // methods
 
 
 
-#endif  // ifndef AUTO_GENERATED_FUN_TREE_NODE_LOADER_MACRO_CODE_SYSTEM_MACROES_TRANSFORM_MAKE_SCALE_FROM_MAC_MACRO_H_
+#endif  // ifndef AUTO_GENERATED_FUN_TREE_NODE_LOADER_MACRO_CODE_SYSTEM_MACROES_COLOR_FROM_CODE_MAC_MACRO_H_

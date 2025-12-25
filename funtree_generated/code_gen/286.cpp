@@ -12,7 +12,6 @@
 
 
 
-#include "./286.1.code"
 
 
 
@@ -26,15 +25,34 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "scenes/game.scn.fsm",
-      make_shared<Code_ScenesGameScnFsm>(),
+      "system/node_loader_format/view/sprite/cell_action_call_info.nlf",
+      make_shared<Code_SystemNodeloaderformatViewSpriteCellactioncallinfoNlf>(),
       true
   );
-}
 
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
+}
+#endif
+
+
+
+static Var __code_1 (
+    vector<Var> const& params
+) {
+
+  #include "./286.1.code"
+}
 
 
 static Var __code_2 (
@@ -45,20 +63,12 @@ static Var __code_2 (
 }
 
 
-static Var __code_3 (
-    vector<Var> const& params
-) {
-
-  #include "./286.3.code"
-}
-
-
-Var Code_ScenesGameScnFsm::execute (
+Var Code_SystemNodeloaderformatViewSpriteCellactioncallinfoNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
+    case 1: return __code_1(params);
     case 2: return __code_2(params);
-    case 3: return __code_3(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"286.cpp\"", code_idx);
       return null_var;
@@ -68,7 +78,6 @@ Var Code_ScenesGameScnFsm::execute (
 
 }
 
-#include "./286.4.code"
 
 
 

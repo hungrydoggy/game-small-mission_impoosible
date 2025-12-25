@@ -4,18 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 43 "assets/system/node_loader_format/mesh/vertex_property.nlf"
+#line 40 "assets/system/node_loader_format/common/rectangle_uint.nlf"
               
               
-              auto typ_str = content->cast<Value>()->var().as<string>();
-              Util::upper(typ_str);
-              auto typ_p = Util::find(VertexProperty::type_enum_map(), typ_str);
-              unlikely (typ_p == null) {
-                CNT_LOG_ERR(content, "unknown VertexProperty::Type --- %s", typ_str.c_str());
-                return Var(false);
-              }
-              
-              auto self = loadable->cast<VertexProperty>();
-              self->type(*typ_p);
+              auto& value = ctx->getDataRef("rectangle_uint.val");
+              value.v<Rectangle<uint>>().y(content->cast<Value>()->var().as<uint>());
               return Var(true);
               return null_var;

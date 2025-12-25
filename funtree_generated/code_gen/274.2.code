@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 43 "assets/system/node_loader_format/etc/bitmap_font_info.nlf"
+#line 82 "assets/system/node_loader_format/state_serializer/data.nlf"
               
               
-              auto self = loadable->cast<BitmapFontInfo>();
-              self->path_suffix = content->cast<Value>()->var().as<string>();
+              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              self->name = content->asValue<string>();
               return Var(true);
               return null_var;

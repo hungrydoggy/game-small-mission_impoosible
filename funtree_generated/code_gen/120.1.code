@@ -4,10 +4,9 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 39 "assets/system/macroes/condition.if.mac"
+#line 43 "assets/system/macroes/sequence.filter.mac"
                   
                   
-                  auto self = loadable->cast<Macro>();
-                  self->params.set(1, content);
+                  // (processed on pre_embody)
                   return Var(true);
                   return null_var;

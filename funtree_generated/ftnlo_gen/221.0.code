@@ -1,4 +1,6 @@
 
-#line 4 "assets/system/node_loader_format/graphics/draw_option/depth_option.nlf"
+#line 4 "assets/system/node_loader_format/etc/action/action_item.nlf"
       
-      #include <common/draw_option/draw_option.h>
+      #include <action/_action_loadable.h>
+      #include <action/action_item.h>
+      #include <game_component/game_component.h>

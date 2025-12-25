@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"ActionItem", },
-      vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf>(),
+      vector<string>{"TransformStateSerializer", "TransformSttSer", },
+      vector<string>{"StateSerializerGroup", },
+      make_shared<NodeLoader_SystemNodeloaderformatStateserializerTransformNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::loadable_class () const {
-  static string cls = "ActionItem";
+string const& NodeLoader_SystemNodeloaderformatStateserializerTransformNlf::loadable_class () const {
+  static string cls = "StateSerializerNodeLoadable";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<ActionItem>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatStateserializerTransformNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<StateSerializerNodeLoadable>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatStateserializerTransformNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatStateserializerTransformNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -70,11 +80,20 @@ bool NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::_postLoad (
   if (super_ok == false)
     return false;
 
-  return true;
+  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/state_serializer/transform.nlf");
+  auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+  unlikely (code_set == null) {
+    LOG_ERR("code_set is null --- system/node_loader_format/state_serializer/transform.nlf");
+    return null;
+  }
+
+  auto result = code_set->execute(1, {Var(&ctx), Var(node), Var(loadable)});
+  return result.as<bool>();
+
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatStateserializerTransformNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
@@ -83,7 +102,7 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionitemN
             "name",
             "nam",
             vector<string>{ },
-            true,
+            false,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
@@ -95,36 +114,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionitemN
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/action/action_item.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/state_serializer/transform.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/etc/action/action_item.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "action",
-            "act",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "ActionGroup",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/action/action_item.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/etc/action/action_item.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/state_serializer/transform.nlf");
                   return Var(false);
                 }
                 return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});

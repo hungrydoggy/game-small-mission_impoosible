@@ -1,4 +1,4 @@
-
+#ifndef SERVER_ONLY
 
 #include "./265.h"
 
@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/bullet_physics/joints/generic_6dof.nlf",
-      make_shared<Code_SystemNodeloaderformatBulletphysicsJointsGeneric6dofNlf>(),
+      "system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf",
+      make_shared<Code_SystemNodeloaderformatGraphicsGputaskVertexattributedefNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -76,15 +87,7 @@ static Var __code_5 (
 }
 
 
-static Var __code_6 (
-    vector<Var> const& params
-) {
-
-  #include "./265.6.code"
-}
-
-
-Var Code_SystemNodeloaderformatBulletphysicsJointsGeneric6dofNlf::execute (
+Var Code_SystemNodeloaderformatGraphicsGputaskVertexattributedefNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
@@ -93,7 +96,6 @@ Var Code_SystemNodeloaderformatBulletphysicsJointsGeneric6dofNlf::execute (
     case 3: return __code_3(params);
     case 4: return __code_4(params);
     case 5: return __code_5(params);
-    case 6: return __code_6(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"265.cpp\"", code_idx);
       return null_var;
@@ -106,4 +108,4 @@ Var Code_SystemNodeloaderformatBulletphysicsJointsGeneric6dofNlf::execute (
 
 
 
-
+#endif

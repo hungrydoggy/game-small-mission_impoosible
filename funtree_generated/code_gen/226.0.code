@@ -1,4 +1,4 @@
 
-#line 7 "assets/system/node_loader_format/graphics/gpu_task/attachment_ref.nlf"
+#line 4 "assets/system/node_loader_format/etc/game_base_axis.nlf"
       
-      #include <gpu_task/_gpu_task_def_config.h>
+      #include <_game_base_axis.h>

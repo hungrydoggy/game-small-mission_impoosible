@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 68 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf"
-              
-              
-              auto self = loadable->cast<VAT>();
-              self->scale(content->asValue<real>());
-              return Var(true);
-              return null_var;
+#line 85 "assets/system/node_loader_format/mesh/mesh.nlf"
+                      
+                      
+                      auto self = loadable->cast<Mesh>();
+                      self->indices().push_back(content->cast<Value>()->var().as<uint>());
+                      return Var(true);
+                      return null_var;

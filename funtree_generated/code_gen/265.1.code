@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 28 "assets/system/node_loader_format/bullet_physics/joints/generic_6dof.nlf"
+#line 26 "assets/system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf"
               
               
-              auto self = loadable->cast<BulletJointInfo_General6DOF>();
-              self->disable_collisions_between_linked_bodies = content->asValue<bool>();
+              auto self = loadable->cast<VertexDef::AttributeDef>();
+              self->usage = content->cast<Value>()->var().as<string>();
               return Var(true);
               return null_var;

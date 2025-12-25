@@ -1,5 +1,5 @@
-#ifndef AUTO_GENERATED_FUN_TREE_CODE_OBJECTS_ITEMS_COIN_OBJ_H_
-#define AUTO_GENERATED_FUN_TREE_CODE_OBJECTS_ITEMS_COIN_OBJ_H_
+#ifndef AUTO_GENERATED_FUN_TREE_CODE_OBJECTS_CHAR_MAIN_PLAYABLE_OBJ_H_
+#define AUTO_GENERATED_FUN_TREE_CODE_OBJECTS_CHAR_MAIN_PLAYABLE_OBJ_H_
 
 
 
@@ -13,7 +13,7 @@
 namespace appetizer {
 
 
-class GAMECONTENT_API Code_ObjectsItemsCoinObj : public fun_tree::CodeSet {
+class FUNTREEGENERATED_API Code_ObjectsCharMainPlayableObj : public fun_tree::CodeSet {
 public:  // methods
   Var execute (int code_idx, vector<Var> const& params) override;
 
@@ -26,4 +26,4 @@ public:  // methods
 
 
 
-#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_OBJECTS_ITEMS_COIN_OBJ_H_
+#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_OBJECTS_CHAR_MAIN_PLAYABLE_OBJ_H_

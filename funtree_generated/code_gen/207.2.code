@@ -4,10 +4,14 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 40 "assets/system/node_loader_format/common/rectangle_uint.nlf"
+#line 47 "assets/system/node_loader_format/bullet_physics/joint_attachment_point/absolute.nlf"
               
               
-              auto& value = ctx->getDataRef("rectangle_uint.val");
-              value.v<Rectangle<uint>>().y(content->cast<Value>()->var().as<uint>());
+              auto& oow = ctx->getData("quaternion.val").v<Quaternion>();
+              btQuaternion result;
+              BulletWrapper::quaternionToBtQuaternion(oow, result);
+              
+              auto self = loadable->cast<BulletAbsoluteJointAttachmentPoint>();
+              self->attachment_orientation_in_owner(result);
               return Var(true);
               return null_var;

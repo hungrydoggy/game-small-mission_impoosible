@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 24 "assets/system/node_loader_format/bone_animation/frame_event.nlf"
+#line 23 "assets/system/node_loader_format/app_info.nlf"
               
               
-              auto self = loadable->cast<FrameEvent>();
-              self->name(content->cast<Value>()->var().as<string>());
+              auto self = loadable->cast<AppInfo>();
+              self->name = content->cast<Value>()->var().as<string>();
               return Var(true);
               return null_var;

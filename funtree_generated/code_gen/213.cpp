@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/common/vector2.nlf",
-      make_shared<Code_SystemNodeloaderformatCommonVector2Nlf>(),
+      "system/node_loader_format/common/lrtb_uint.nlf",
+      make_shared<Code_SystemNodeloaderformatCommonLrtbuintNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -52,12 +63,30 @@ static Var __code_2 (
 }
 
 
-Var Code_SystemNodeloaderformatCommonVector2Nlf::execute (
+static Var __code_3 (
+    vector<Var> const& params
+) {
+
+  #include "./213.3.code"
+}
+
+
+static Var __code_4 (
+    vector<Var> const& params
+) {
+
+  #include "./213.4.code"
+}
+
+
+Var Code_SystemNodeloaderformatCommonLrtbuintNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
     case 1: return __code_1(params);
     case 2: return __code_2(params);
+    case 3: return __code_3(params);
+    case 4: return __code_4(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"213.cpp\"", code_idx);
       return null_var;

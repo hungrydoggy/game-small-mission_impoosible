@@ -4,8 +4,7 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 20 "assets/system/macroes/sequence.pick.mac"
-                  
+#line 22 "assets/system/macroes/random.draw_real.mac"
                   
                   auto self = dpc<Macro>(loadable);
                   self->params.add(content);

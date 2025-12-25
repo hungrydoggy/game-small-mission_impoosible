@@ -4,11 +4,9 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 42 "assets/system/node_loader_format/actions/templates/value_quaternion.nlf"
-              
+#line 37 "assets/system/node_loader_format/actions/deactivate.nlf"
               
               auto self = loadable->cast<ActionLoadable>();
-              auto& value = self->getDataRef("value");
-              value.v<Vector3>().y(content->cast<Value>()->var().as<real>());
+              self->setData("target_path", content->cast<Value>()->var());
               return Var(true);
               return null_var;

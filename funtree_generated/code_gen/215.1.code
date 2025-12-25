@@ -4,14 +4,12 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 29 "assets/system/node_loader_format/mesh/mesh.nlf"
-                      
-                      
-                      auto vp = ctx->loadSubNodeAs<VertexProperty>(node, content);
-                      unlikely (vp == null)
-                        return Var(false);
-                      
-                      auto self = loadable->cast<Mesh>();
-                      self->vertex_properties().push_back(*vp);
-                      return Var(true);
-                      return null_var;
+#line 22 "assets/system/node_loader_format/common/quaternion.nlf"
+              
+              
+              auto value = Var(Vector3());
+              value.v<Vector3>().x(content->cast<Value>()->var().as<real>());
+              
+              ctx->setData("quaternion.vec3", value);
+              return Var(true);
+              return null_var;

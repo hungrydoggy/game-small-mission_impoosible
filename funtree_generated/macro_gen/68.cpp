@@ -24,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"PhysicsShape.makeHalfSizeFromImageSize", "Shape.makeHalfSizeFromImageSize", "shp.hszFromImg", },
-      make_shared<Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac>(),
+      vector<string>{"GameComponent.getName", "Component.getName", "cmp.nam", },
+      make_shared<Macro_SystemMacroesGamecomponentGetnameMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::loadable_class () const {
+string const& Macro_SystemMacroesGamecomponentGetnameMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesGamecomponentGetnameMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::preEmbody (
+bool Macro_SystemMacroesGamecomponentGetnameMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -57,7 +66,7 @@ bool Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::_preLoad (
+bool Macro_SystemMacroesGamecomponentGetnameMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -66,7 +75,7 @@ bool Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::_postLoad (
+bool Macro_SystemMacroesGamecomponentGetnameMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -80,10 +89,10 @@ static shared_ptr<Content> __on_call_code_2 (
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/physics_shape.make_half_size_from_image_size.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_name.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/physics_shape.make_half_size_from_image_size.mac");
+    LOG_ERR("code_set is null --- system/macroes/game_component.get_name.mac");
     return null;
   }
 
@@ -92,7 +101,7 @@ static shared_ptr<Content> __on_call_code_2 (
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::execute (
+shared_ptr<Content> Macro_SystemMacroesGamecomponentGetnameMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
@@ -106,7 +115,7 @@ shared_ptr<Content> Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac:
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::execute (
+shared_ptr<Content> Macro_SystemMacroesGamecomponentGetnameMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
@@ -114,7 +123,7 @@ shared_ptr<Content> Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac:
   return execute(node, content, 2, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesGamecomponentGetnameMac::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ValueFormat>(
       Content::Type::VALUE,
@@ -126,10 +135,10 @@ shared_ptr<Format> const&  Macro_SystemMacroesPhysicsshapeMakehalfsizefromimages
           shared_ptr<Node> const& node,
           shared_ptr<Content> const& content
       ) {
-        static uint code_path_id = PathRegistry::lookUp("system/macroes/physics_shape.make_half_size_from_image_size.mac");
+        static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_name.mac");
         auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
         unlikely (code_set == null) {
-          LOG_ERR("code_set is null --- system/macroes/physics_shape.make_half_size_from_image_size.mac");
+          LOG_ERR("code_set is null --- system/macroes/game_component.get_name.mac");
           return Var(false);
         }
         return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});

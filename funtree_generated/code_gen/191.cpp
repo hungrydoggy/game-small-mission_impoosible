@@ -8,7 +8,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./144.0.code"
+#include "./191.0.code"
 
 
 
@@ -25,30 +25,59 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/actions/scale_z_to.nlf",
-      make_shared<Code_SystemNodeloaderformatActionsScaleztoNlf>(),
+      "system/node_loader_format/actions/templates/value_vector3.nlf",
+      make_shared<Code_SystemNodeloaderformatActionsTemplatesValuevector3Nlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-static Var __code_0 (
+static Var __code_1 (
     vector<Var> const& params
 ) {
 
-  #include "./191.0.code"
+  #include "./191.1.code"
 }
 
 
-Var Code_SystemNodeloaderformatActionsScaleztoNlf::execute (
+static Var __code_2 (
+    vector<Var> const& params
+) {
+
+  #include "./191.2.code"
+}
+
+
+static Var __code_3 (
+    vector<Var> const& params
+) {
+
+  #include "./191.3.code"
+}
+
+
+Var Code_SystemNodeloaderformatActionsTemplatesValuevector3Nlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
-    case 0: return __code_0(params);
+    case 1: return __code_1(params);
+    case 2: return __code_2(params);
+    case 3: return __code_3(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"191.cpp\"", code_idx);
       return null_var;

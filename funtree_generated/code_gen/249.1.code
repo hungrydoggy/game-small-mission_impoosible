@@ -4,10 +4,21 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 25 "assets/system/node_loader_format/fsm/fsm_state.nlf"
+#line 23 "assets/system/node_loader_format/graphics/draw_option/stencil_function.nlf"
               
               
-              auto self = loadable->cast<FSMState>();
-              self->name(content->asValue<string>());
+              #ifndef SERVER_ONLY
+              auto fun_str = content->cast<Value>()->var().as<string>();
+              Util::upper(fun_str);
+              
+              auto fun_p = Util::find(StencilFunction::str_funtyp_map(), fun_str);
+              unlikely (fun_p == null) {
+                LOG_ERR("unknown StencilFunction::FuncType --- %s", fun_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<StencilFunction>();
+              self->func = *fun_p;
+              #endif
+              
               return Var(true);
               return null_var;

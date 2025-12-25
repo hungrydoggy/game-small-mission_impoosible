@@ -7,7 +7,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./166.0.code"
+#include "./165.0.code"
 
 
 
@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"Action.Repeat", "Repeat", },
+      vector<string>{"Action.PlaySound", "PlaySound", },
       vector<string>{"ActionGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatActionsRepeatNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatActionsPlaysoundNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatActionsRepeatNlf::loadable_class () const {
+string const& NodeLoader_SystemNodeloaderformatActionsPlaysoundNlf::loadable_class () const {
   static string cls = "ActionLoadable";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsRepeatNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool NodeLoader_SystemNodeloaderformatActionsPlaysoundNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<ActionLoadable>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsRepeatNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatActionsPlaysoundNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatActionsRepeatNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsRepeatNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatActionsPlaysoundNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -70,61 +80,81 @@ bool NodeLoader_SystemNodeloaderformatActionsRepeatNlf::_postLoad (
   if (super_ok == false)
     return false;
 
-  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/repeat.nlf");
+  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/play_sound.nlf");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/node_loader_format/actions/repeat.nlf");
+    LOG_ERR("code_set is null --- system/node_loader_format/actions/play_sound.nlf");
     return null;
   }
 
-  auto result = code_set->execute(0, {Var(&ctx), Var(node), Var(loadable)});
+  auto result = code_set->execute(1, {Var(&ctx), Var(node), Var(loadable)});
   return result.as<bool>();
 
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsRepeatNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsPlaysoundNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "children",
-            "chl",
+            "target_path",
+            "tar",
             vector<string>{ },
-            true,
+            false,
             vector<string>{ },
-            make_shared<SequenceFormat>(
-              0,
-              0,
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::OBJECT,
-                  0,
-                  "ActionGroup",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/sequence.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/actions/sequence.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/play_sound.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/actions/play_sound.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },
           AttributeLoader{
-            "count",
-            "cnt",
+            "sound_path",
+            "pth",
             vector<string>{ },
-            true,
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/play_sound.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/actions/play_sound.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "volume",
+            "vol",
+            vector<string>{ },
+            false,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
@@ -136,13 +166,39 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsRepeatNlf::_g
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/repeat.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/play_sound.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/actions/repeat.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/actions/play_sound.nlf");
                   return Var(false);
                 }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "mode",
+            "mod",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/play_sound.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/actions/play_sound.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

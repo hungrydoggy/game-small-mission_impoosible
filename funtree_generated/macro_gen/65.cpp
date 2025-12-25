@@ -8,6 +8,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
+#include "./65.0.code"
 
 
 
@@ -23,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Sequence.concat", "seq.concat", },
-      make_shared<Macro_SystemMacroesSequenceConcatMac>(),
+      vector<string>{"GameComponent.getChildrenNames", "Component.getChildrenNames", "cmp.chl", },
+      make_shared<Macro_SystemMacroesGamecomponentGetchildrennamesMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesSequenceConcatMac::loadable_class () const {
+string const& Macro_SystemMacroesGamecomponentGetchildrennamesMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesSequenceConcatMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesGamecomponentGetchildrennamesMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesSequenceConcatMac::preEmbody (
+bool Macro_SystemMacroesGamecomponentGetchildrennamesMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -56,7 +66,7 @@ bool Macro_SystemMacroesSequenceConcatMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesSequenceConcatMac::_preLoad (
+bool Macro_SystemMacroesGamecomponentGetchildrennamesMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -65,7 +75,7 @@ bool Macro_SystemMacroesSequenceConcatMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesSequenceConcatMac::_postLoad (
+bool Macro_SystemMacroesGamecomponentGetchildrennamesMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,76 +84,64 @@ bool Macro_SystemMacroesSequenceConcatMac::_postLoad (
 }
 
 
-static shared_ptr<Content> __on_call_code_1 (
+static shared_ptr<Content> __on_call_code_2 (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.concat.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_children_names.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/sequence.concat.mac");
+    LOG_ERR("code_set is null --- system/macroes/game_component.get_children_names.mac");
     return null;
   }
 
-  auto result = code_set->execute(1, {Var(node), Var(content), Var(self)});
+  auto result = code_set->execute(2, {Var(node), Var(content), Var(self)});
   return result.v<shared_ptr<Content>>();
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesSequenceConcatMac::execute (
+shared_ptr<Content> Macro_SystemMacroesGamecomponentGetchildrennamesMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
     shared_ptr<Macro> const& macro
 ) {
   switch (code_idx) {
-    case 1: return __on_call_code_1(node, content, macro);
+    case 2: return __on_call_code_2(node, content, macro);
     default:
       LOG_ERR("unknown code_idx %u --- \"65.cpp\"", code_idx);
       return null;
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesSequenceConcatMac::execute (
+shared_ptr<Content> Macro_SystemMacroesGamecomponentGetchildrennamesMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
 ) {
-  return execute(node, content, 1, macro);
+  return execute(node, content, 2, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesSequenceConcatMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesGamecomponentGetchildrennamesMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<SequenceFormat>(
-      0,
-      -1,
-      vector<shared_ptr<Format>>{
-        make_shared<SequenceFormat>(
-          0,
-          -1,
-          vector<shared_ptr<Format>>{
-            make_shared<ValueFormat>(
-              Content::Type::ANY,
-              0,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.concat.mac");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/sequence.concat.mac");
-                  return Var(false);
-                }
-                return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            ),
-          }
-        ),
+    make_shared<ValueFormat>(
+      Content::Type::VALUE,
+      VarContentTypes::STRING,
+      "",
+      [](
+          FormatContext& ctx,
+          shared_ptr<NodeLoadable> const& loadable,
+          shared_ptr<Node> const& node,
+          shared_ptr<Content> const& content
+      ) {
+        static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_children_names.mac");
+        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+        unlikely (code_set == null) {
+          LOG_ERR("code_set is null --- system/macroes/game_component.get_children_names.mac");
+          return Var(false);
+        }
+        return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
       }
     )
 ;

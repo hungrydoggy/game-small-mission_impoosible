@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/etc/action/action_state_data_ref.nlf",
-      make_shared<Code_SystemNodeloaderformatEtcActionActionstatedatarefNlf>(),
+      "system/node_loader_format/state_serializer/text_view.nlf",
+      make_shared<Code_SystemNodeloaderformatStateserializerTextviewNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -44,11 +55,20 @@ static Var __code_1 (
 }
 
 
-Var Code_SystemNodeloaderformatEtcActionActionstatedatarefNlf::execute (
+static Var __code_2 (
+    vector<Var> const& params
+) {
+
+  #include "./279.2.code"
+}
+
+
+Var Code_SystemNodeloaderformatStateserializerTextviewNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
     case 1: return __code_1(params);
+    case 2: return __code_2(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"279.cpp\"", code_idx);
       return null_var;

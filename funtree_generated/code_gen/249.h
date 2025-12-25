@@ -1,5 +1,5 @@
-#ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_FSM_FSM_STATE_NLF_H_
-#define AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_FSM_FSM_STATE_NLF_H_
+#ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_DRAW_OPTION_STENCIL_FUNCTION_NLF_H_
+#define AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_DRAW_OPTION_STENCIL_FUNCTION_NLF_H_
 
 
 
@@ -13,7 +13,7 @@
 namespace appetizer {
 
 
-class GAMECONTENT_API Code_SystemNodeloaderformatFsmFsmstateNlf : public fun_tree::CodeSet {
+class FUNTREEGENERATED_API Code_SystemNodeloaderformatGraphicsDrawoptionStencilfunctionNlf : public fun_tree::CodeSet {
 public:  // methods
   Var execute (int code_idx, vector<Var> const& params) override;
 
@@ -26,4 +26,4 @@ public:  // methods
 
 
 
-#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_FSM_FSM_STATE_NLF_H_
+#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_DRAW_OPTION_STENCIL_FUNCTION_NLF_H_

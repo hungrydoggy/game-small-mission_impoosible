@@ -1,4 +1,4 @@
-#ifndef SERVER_ONLY
+
 
 #include "./231.h"
 
@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf",
-      make_shared<Code_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf>(),
+      "system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf",
+      make_shared<Code_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -76,7 +87,111 @@ static Var __code_5 (
 }
 
 
-Var Code_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf::execute (
+static Var __code_6 (
+    vector<Var> const& params
+) {
+
+  #include "./231.6.code"
+}
+
+
+static Var __code_7 (
+    vector<Var> const& params
+) {
+
+  #include "./231.7.code"
+}
+
+
+static Var __code_8 (
+    vector<Var> const& params
+) {
+
+  #include "./231.8.code"
+}
+
+
+static Var __code_9 (
+    vector<Var> const& params
+) {
+
+  #include "./231.9.code"
+}
+
+
+static Var __code_10 (
+    vector<Var> const& params
+) {
+
+  #include "./231.10.code"
+}
+
+
+static Var __code_11 (
+    vector<Var> const& params
+) {
+
+  #include "./231.11.code"
+}
+
+
+static Var __code_12 (
+    vector<Var> const& params
+) {
+
+  #include "./231.12.code"
+}
+
+
+static Var __code_13 (
+    vector<Var> const& params
+) {
+
+  #include "./231.13.code"
+}
+
+
+static Var __code_14 (
+    vector<Var> const& params
+) {
+
+  #include "./231.14.code"
+}
+
+
+static Var __code_15 (
+    vector<Var> const& params
+) {
+
+  #include "./231.15.code"
+}
+
+
+static Var __code_16 (
+    vector<Var> const& params
+) {
+
+  #include "./231.16.code"
+}
+
+
+static Var __code_17 (
+    vector<Var> const& params
+) {
+
+  #include "./231.17.code"
+}
+
+
+static Var __code_18 (
+    vector<Var> const& params
+) {
+
+  #include "./231.18.code"
+}
+
+
+Var Code_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
@@ -85,6 +200,19 @@ Var Code_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf::execute (
     case 3: return __code_3(params);
     case 4: return __code_4(params);
     case 5: return __code_5(params);
+    case 6: return __code_6(params);
+    case 7: return __code_7(params);
+    case 8: return __code_8(params);
+    case 9: return __code_9(params);
+    case 10: return __code_10(params);
+    case 11: return __code_11(params);
+    case 12: return __code_12(params);
+    case 13: return __code_13(params);
+    case 14: return __code_14(params);
+    case 15: return __code_15(params);
+    case 16: return __code_16(params);
+    case 17: return __code_17(params);
+    case 18: return __code_18(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"231.cpp\"", code_idx);
       return null_var;
@@ -97,4 +225,4 @@ Var Code_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf::execute (
 
 
 
-#endif
+

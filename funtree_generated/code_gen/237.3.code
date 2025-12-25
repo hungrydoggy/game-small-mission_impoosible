@@ -4,19 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 80 "assets/system/node_loader_format/graphics/gpu_task/extra_vmp_alloc_item.nlf"
+#line 75 "assets/system/node_loader_format/game_component/audio_listener.nlf"
               
               
-              auto prp_str = content->cast<Value>()->var().as<string>();
-              Util::upper(prp_str);
-              
-              auto prp_p = Util::find(VideoMemoryPack::vmpprop_enm_map(), prp_str);
-              unlikely (prp_p == null) {
-                CNT_LOG_ERR(content, "unknown VideoMemoryPack::Property --- %s", prp_str.c_str());
-                return Var(false);
-              }
-              auto self = loadable->cast<ExtraVmpAllocItem>();
-              self->vmp_property = *prp_p;
-              
+              auto self = loadable->cast<AudioListener>();
+              self->far_distance(content->cast<Value>()->var().as<real>());
               return Var(true);
               return null_var;

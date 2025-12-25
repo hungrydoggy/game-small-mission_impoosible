@@ -1,5 +1,4 @@
 
-#line 4 "assets/scenes/game.scn.fsm"
+#line 5 "assets/system/node_loader_format/view/sprite/cell_action_call_info.nlf"
       
-      #include <plugins/cooldown/cooldown.h>
-      #include <plugins/cooldown/cooldown_manager.h>
+      #include <view/sprite_view/_cell_action_call_info.h>

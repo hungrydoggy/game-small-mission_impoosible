@@ -1,5 +1,4 @@
 
-#line 4 "assets/system/node_loader_format/bone_animation/frame_event.nlf"
+#line 4 "assets/system/node_loader_format/app_info.nlf"
       
-      #include <resource/bone_animation/bone_animation.h>
-      #include <util/quaternion.h>
+      #include <app_info.h>

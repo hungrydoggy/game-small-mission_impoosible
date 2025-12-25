@@ -1,4 +1,4 @@
-#ifndef SERVER_ONLY
+
 
 #include "./236.h"
 
@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"VertexDef", "Vertex", },
+      vector<string>{"FiniteStateMachineState", "FSMState", "FsmState", },
       vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatFsmFsmstateNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::loadable_class () const {
-  static string cls = "VertexDef";
+string const& NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::loadable_class () const {
+  static string cls = "FiniteStateMachineState";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<VertexDef>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<FiniteStateMachineState>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,20 +84,20 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "vertex_bytes",
-            "byt",
+            "name",
+            "nam",
             vector<string>{ },
             true,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
-              VarContentTypes::NUMBER,
+              VarContentTypes::STRING,
               "",
               [](
                   FormatContext& ctx,
@@ -95,10 +105,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskVerte
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/vertex_def.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/vertex_def.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
                   return Var(false);
                 }
                 return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -106,34 +116,158 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskVerte
             )
           },
           AttributeLoader{
-            "attribute_defs",
-            "atl",
+            "on_enter",
+            "ent",
             vector<string>{ },
-            true,
+            false,
             vector<string>{ },
-            make_shared<SequenceFormat>(
+            make_shared<ValueFormat>(
+              Content::Type::CODE,
               0,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "on_update",
+            "upd",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::CODE,
               0,
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::OBJECT,
-                  0,
-                  "VertexAttributeDef",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/vertex_def.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/vertex_def.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "on_local_update",
+            "lup",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::CODE,
+              0,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "on_exit",
+            "ext",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::CODE,
+              0,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "message_receiver",
+            "msg",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::MAP,
+              0,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(6, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "local_message_receiver",
+            "lms",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::MAP,
+              0,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(7, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },
@@ -149,4 +283,4 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskVerte
 
 
 
-#endif
+

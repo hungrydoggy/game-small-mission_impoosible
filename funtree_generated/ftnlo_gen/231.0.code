@@ -1,4 +1,5 @@
 
-#line 6 "assets/system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf"
+#line 5 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf"
       
-      #include <gpu_task/gpu_task_def.h>
+      #include <etc/vertex_animation_texture/vertex_animation_texture.h>
+      #include <resource/texture/texture.h>

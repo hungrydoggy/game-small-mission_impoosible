@@ -4,19 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 83 "assets/system/node_loader_format/graphics/gpu_task/graphics_config.nlf"
+#line 43 "assets/system/node_loader_format/etc/bitmap_font_info.nlf"
               
               
-              auto tpl_str = content->cast<Value>()->var().as<string>();
-              Util::upper(tpl_str);
-              
-              auto tpl_p = Util::find(GpuHelper::topology_enm_map(), tpl_str);
-              unlikely (tpl_p == null) {
-                CNT_LOG_ERR(content, "unknown GpuHelper::PrimitiveTopology --- %s", tpl_str.c_str());
-                return Var(false);
-              }
-              auto self = loadable->cast<GraphicsConfig>();
-              self->topology(*tpl_p);
-              
+              auto self = loadable->cast<BitmapFontInfo>();
+              self->path_suffix = content->cast<Value>()->var().as<string>();
               return Var(true);
               return null_var;

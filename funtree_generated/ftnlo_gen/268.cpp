@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"App", },
+      vector<string>{"Bone", },
       vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatAppinfoNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatMeshBoneNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatAppinfoNlf::loadable_class () const {
-  static string cls = "AppInfo";
+string const& NodeLoader_SystemNodeloaderformatMeshBoneNlf::loadable_class () const {
+  static string cls = "Bone";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatAppinfoNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<AppInfo>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatMeshBoneNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<Bone>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatAppinfoNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatMeshBoneNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatAppinfoNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatAppinfoNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatMeshBoneNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,11 +84,37 @@ bool NodeLoader_SystemNodeloaderformatAppinfoNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatAppinfoNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatMeshBoneNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
+          AttributeLoader{
+            "sid",
+            "sid",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/mesh/bone.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/mesh/bone.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
           AttributeLoader{
             "name",
             "nam",
@@ -95,36 +131,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatAppinfoNlf::_getForm
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/mesh/bone.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "project_class_name",
-            "prj",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/mesh/bone.nlf");
                   return Var(false);
                 }
                 return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -132,236 +142,94 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatAppinfoNlf::_getForm
             )
           },
           AttributeLoader{
-            "windows",
-            "",
+            "transform_matrix",
+            "trm",
             vector<string>{ },
             false,
             vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "any",
+            make_shared<SequenceFormat>(
+              16,
+              16,
               [](
                   FormatContext& ctx,
                   shared_ptr<NodeLoadable> const& loadable,
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/mesh/bone.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/mesh/bone.nlf");
                   return Var(false);
                 }
                 return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              },
+              vector<shared_ptr<Format>>{
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/matrix.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/matrix.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
               }
             )
           },
           AttributeLoader{
-            "linux",
-            "",
+            "inv_bind_matrix",
+            "ibm",
             vector<string>{ },
             false,
             vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "any",
+            make_shared<SequenceFormat>(
+              16,
+              16,
               [](
                   FormatContext& ctx,
                   shared_ptr<NodeLoadable> const& loadable,
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/mesh/bone.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/mesh/bone.nlf");
                   return Var(false);
                 }
                 return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "osx",
-            "",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "any",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "steamdeck",
-            "",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "any",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(6, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "android",
-            "",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "any",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(7, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "ios",
-            "",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "any",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(8, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "web",
-            "",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "any",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(9, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "editor",
-            "",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "any",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(10, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "default",
-            "",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "any",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/app_info.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/app_info.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(11, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              },
+              vector<shared_ptr<Format>>{
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/matrix.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/matrix.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
               }
             )
           },

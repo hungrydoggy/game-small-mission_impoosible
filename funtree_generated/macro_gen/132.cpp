@@ -8,7 +8,6 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./132.0.code"
 
 
 
@@ -24,31 +23,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Math.log10", "math.log10", "log10", },
-      make_shared<Macro_SystemMacroesMathLog10Mac>(),
+      vector<string>{"Sequence.size", "seq.size", },
+      make_shared<Macro_SystemMacroesSequenceSizeMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesMathLog10Mac::loadable_class () const {
+string const& Macro_SystemMacroesSequenceSizeMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesMathLog10Mac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesSequenceSizeMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesMathLog10Mac::preEmbody (
+bool Macro_SystemMacroesSequenceSizeMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -57,7 +65,7 @@ bool Macro_SystemMacroesMathLog10Mac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesMathLog10Mac::_preLoad (
+bool Macro_SystemMacroesSequenceSizeMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -66,7 +74,7 @@ bool Macro_SystemMacroesMathLog10Mac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesMathLog10Mac::_postLoad (
+bool Macro_SystemMacroesSequenceSizeMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -75,64 +83,70 @@ bool Macro_SystemMacroesMathLog10Mac::_postLoad (
 }
 
 
-static shared_ptr<Content> __on_call_code_2 (
+static shared_ptr<Content> __on_call_code_1 (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/math.log10.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.size.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/math.log10.mac");
+    LOG_ERR("code_set is null --- system/macroes/sequence.size.mac");
     return null;
   }
 
-  auto result = code_set->execute(2, {Var(node), Var(content), Var(self)});
+  auto result = code_set->execute(1, {Var(node), Var(content), Var(self)});
   return result.v<shared_ptr<Content>>();
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesMathLog10Mac::execute (
+shared_ptr<Content> Macro_SystemMacroesSequenceSizeMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
     shared_ptr<Macro> const& macro
 ) {
   switch (code_idx) {
-    case 2: return __on_call_code_2(node, content, macro);
+    case 1: return __on_call_code_1(node, content, macro);
     default:
       LOG_ERR("unknown code_idx %u --- \"132.cpp\"", code_idx);
       return null;
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesMathLog10Mac::execute (
+shared_ptr<Content> Macro_SystemMacroesSequenceSizeMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
 ) {
-  return execute(node, content, 2, macro);
+  return execute(node, content, 1, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesMathLog10Mac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesSequenceSizeMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<ValueFormat>(
-      Content::Type::VALUE,
-      VarContentTypes::NUMBER,
-      "",
-      [](
-          FormatContext& ctx,
-          shared_ptr<NodeLoadable> const& loadable,
-          shared_ptr<Node> const& node,
-          shared_ptr<Content> const& content
-      ) {
-        static uint code_path_id = PathRegistry::lookUp("system/macroes/math.log10.mac");
-        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-        unlikely (code_set == null) {
-          LOG_ERR("code_set is null --- system/macroes/math.log10.mac");
-          return Var(false);
-        }
-        return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+    make_shared<SequenceFormat>(
+      0,
+      -1,
+      vector<shared_ptr<Format>>{
+        make_shared<ValueFormat>(
+          Content::Type::ANY,
+          0,
+          "",
+          [](
+              FormatContext& ctx,
+              shared_ptr<NodeLoadable> const& loadable,
+              shared_ptr<Node> const& node,
+              shared_ptr<Content> const& content
+          ) {
+            static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.size.mac");
+            auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+            unlikely (code_set == null) {
+              LOG_ERR("code_set is null --- system/macroes/sequence.size.mac");
+              return Var(false);
+            }
+            return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+          }
+        ),
       }
     )
 ;

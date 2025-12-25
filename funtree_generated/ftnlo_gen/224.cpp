@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"VideoMemoryPack", },
+      vector<string>{"ActionStateDataRef", "ActionDataRef", },
       vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatGraphicsVideomemorypackNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatGraphicsVideomemorypackNlf::loadable_class () const {
-  static string cls = "VideoMemoryPack_LoadableInfo";
+string const& NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::loadable_class () const {
+  static string cls = "ActionStateDataRef";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsVideomemorypackNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<VideoMemoryPack_LoadableInfo>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<ActionStateDataRef>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsVideomemorypackNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatGraphicsVideomemorypackNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsVideomemorypackNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,15 +84,15 @@ bool NodeLoader_SystemNodeloaderformatGraphicsVideomemorypackNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsVideomemorypackNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "type",
-            "typ",
-            vector<string>{ },
+            "key",
+            "",
+            vector<string>{ "name", "nam", },
             true,
             vector<string>{ },
             make_shared<ValueFormat>(
@@ -95,91 +105,13 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsVideomemoryp
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/video_memory_pack.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/action/action_state_data_ref.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/video_memory_pack.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/action/action_state_data_ref.nlf");
                   return Var(false);
                 }
                 return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "property",
-            "prp",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/video_memory_pack.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/video_memory_pack.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "size_mb",
-            "siz",
-            vector<string>{ "size", },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/video_memory_pack.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/video_memory_pack.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "extra_size_mb",
-            "esz",
-            vector<string>{ "extra_size", },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/video_memory_pack.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/video_memory_pack.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

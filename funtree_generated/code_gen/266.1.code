@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 27 "assets/system/node_loader_format/bullet_physics/joint_attachment_point/relative.nlf"
+#line 26 "assets/system/node_loader_format/graphics/gpu_task/vertex_def.nlf"
               
               
-              auto self = loadable->cast<BulletRelativeJointAttachmentPoint>();
-              self->anchor_ratio_from_owner_to_opposite(content->asValue<real>());
+              auto self = loadable->cast<VertexDef>();
+              self->vertex_bytes(content->cast<Value>()->var().as<size_t>());
               return Var(true);
               return null_var;

@@ -4,19 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 23 "assets/system/node_loader_format/graphics/video_memory_pack.nlf"
+#line 24 "assets/system/node_loader_format/etc/action/action_state_data_ref.nlf"
               
               
-              auto typ_str = content->cast<Value>()->var().as<string>();
-              Util::upper(typ_str);
-              
-              auto typ_p = Util::find(VideoMemoryPack::typ_enm_map(), typ_str);
-              unlikely (typ_p == null) {
-                LOG_ERR("unknown VideoMemoryPack::Type --- %s", typ_str.c_str());
-                return Var(false);
-              }
-              
-              auto self = loadable->cast<VideoMemoryPack_LoadableInfo>();
-              self->type = *typ_p;
+              auto self = loadable->cast<ActionStateDataRef>();
+              self->key = content->asValue<string>();
               return Var(true);
               return null_var;

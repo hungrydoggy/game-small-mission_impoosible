@@ -4,11 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 47 "assets/system/node_loader_format/etc/game_base_axis.nlf"
+#line 86 "assets/system/node_loader_format/state_serializer/physics_body.nlf"
               
               
-              auto self = loadable->cast<GameBaseAxis>();
-              self->axis_size = content->cast<Value>()->var().as<uint>();
-              
+              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              self->name = content->asValue<string>();
               return Var(true);
               return null_var;

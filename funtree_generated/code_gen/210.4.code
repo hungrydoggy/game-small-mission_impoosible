@@ -4,10 +4,11 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 74 "assets/system/node_loader_format/common/lrtb_uint.nlf"
+#line 93 "assets/system/node_loader_format/bullet_physics/shape_infos/cylinder.nlf"
               
               
-              auto& value = ctx->getDataRef("lrtb_uint.val");
-              value.v<Lrtb<uint>>().b(content->cast<Value>()->var().as<uint>());
+              auto self = loadable->cast<BulletShapeInfo_Cylinder>();
+              auto& half_size = ctx->getData("vector3.val").v<Vector3>();
+              BulletWrapper::vector3ToBtVector3(half_size, self->half_extents);
               return Var(true);
               return null_var;

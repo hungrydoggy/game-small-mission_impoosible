@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/game_component/projection_info.nlf",
-      make_shared<Code_SystemNodeloaderformatGamecomponentProjectioninfoNlf>(),
+      "system/node_loader_format/game_component/game_object.nlf",
+      make_shared<Code_SystemNodeloaderformatGamecomponentGameobjectNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -108,7 +119,7 @@ static Var __code_9 (
 }
 
 
-Var Code_SystemNodeloaderformatGamecomponentProjectioninfoNlf::execute (
+Var Code_SystemNodeloaderformatGamecomponentGameobjectNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

@@ -24,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"GameComponent.isDrawable", "Component.isDrawable", "cmp.dra", },
-      make_shared<Macro_SystemMacroesGamecomponentIsdrawableMac>(),
+      vector<string>{"Math.tan", "math.tan", "tan", },
+      make_shared<Macro_SystemMacroesMathTanMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesGamecomponentIsdrawableMac::loadable_class () const {
+string const& Macro_SystemMacroesMathTanMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesGamecomponentIsdrawableMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesMathTanMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesGamecomponentIsdrawableMac::preEmbody (
+bool Macro_SystemMacroesMathTanMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -57,7 +66,7 @@ bool Macro_SystemMacroesGamecomponentIsdrawableMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesGamecomponentIsdrawableMac::_preLoad (
+bool Macro_SystemMacroesMathTanMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -66,7 +75,7 @@ bool Macro_SystemMacroesGamecomponentIsdrawableMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesGamecomponentIsdrawableMac::_postLoad (
+bool Macro_SystemMacroesMathTanMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -80,10 +89,10 @@ static shared_ptr<Content> __on_call_code_2 (
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.is_drawable.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/math.tan.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/game_component.is_drawable.mac");
+    LOG_ERR("code_set is null --- system/macroes/math.tan.mac");
     return null;
   }
 
@@ -92,7 +101,7 @@ static shared_ptr<Content> __on_call_code_2 (
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesGamecomponentIsdrawableMac::execute (
+shared_ptr<Content> Macro_SystemMacroesMathTanMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
@@ -106,7 +115,7 @@ shared_ptr<Content> Macro_SystemMacroesGamecomponentIsdrawableMac::execute (
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesGamecomponentIsdrawableMac::execute (
+shared_ptr<Content> Macro_SystemMacroesMathTanMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
@@ -114,11 +123,11 @@ shared_ptr<Content> Macro_SystemMacroesGamecomponentIsdrawableMac::execute (
   return execute(node, content, 2, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesGamecomponentIsdrawableMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesMathTanMac::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ValueFormat>(
       Content::Type::VALUE,
-      VarContentTypes::STRING,
+      VarContentTypes::NUMBER,
       "",
       [](
           FormatContext& ctx,
@@ -126,10 +135,10 @@ shared_ptr<Format> const&  Macro_SystemMacroesGamecomponentIsdrawableMac::_getFo
           shared_ptr<Node> const& node,
           shared_ptr<Content> const& content
       ) {
-        static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.is_drawable.mac");
+        static uint code_path_id = PathRegistry::lookUp("system/macroes/math.tan.mac");
         auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
         unlikely (code_set == null) {
-          LOG_ERR("code_set is null --- system/macroes/game_component.is_drawable.mac");
+          LOG_ERR("code_set is null --- system/macroes/math.tan.mac");
           return Var(false);
         }
         return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});

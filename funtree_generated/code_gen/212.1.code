@@ -4,13 +4,12 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 22 "assets/system/node_loader_format/common/resolution.nlf"
+#line 21 "assets/system/node_loader_format/common/lrtb_real.nlf"
               
               
-              ctx->setData("resolution.val.w", Var(content->cast<Value>()->var().as<int>()));
+              auto value = Var(Lrtb<real>());
+              value.v<Lrtb<real>>().l(content->cast<Value>()->var().as<real>());
               
-              ctx->removeData("resolution.val.base_axis");
-              ctx->removeData("resolution.val.axis_size");
-              
+              ctx->setData("lrtb_real.val", value);
               return Var(true);
               return null_var;

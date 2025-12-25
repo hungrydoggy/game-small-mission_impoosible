@@ -14,7 +14,7 @@ namespace appetizer {
 using std::shared_ptr;
 
 
-class GAMECONTENT_API Macro_SystemMacroesMapMergeMac : public fun_tree::MacroLoader {
+class FUNTREEGENERATED_API Macro_SystemMacroesMapMergeMac : public fun_tree::MacroLoader {
 public: // inner types
   using Content       = fun_tree::Content;
   using EmbodyFunc    = fun_tree::EmbodyFunc;

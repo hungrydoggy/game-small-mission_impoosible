@@ -4,10 +4,11 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 74 "assets/system/node_loader_format/common/lrtb_real.nlf"
+#line 89 "assets/system/node_loader_format/bullet_physics/joints/generic_6dof.nlf"
               
               
-              auto& value = ctx->getDataRef("lrtb_real.val");
-              value.v<Lrtb<real>>().b(content->cast<Value>()->var().as<real>());
+              auto self = loadable->cast<BulletJointInfo_General6DOF>();
+              auto& lul = ctx->getData("vector3.val").v<Vector3>();
+              BulletWrapper::vector3ToBtVector3(lul, self->linear_upper_limit);
               return Var(true);
               return null_var;

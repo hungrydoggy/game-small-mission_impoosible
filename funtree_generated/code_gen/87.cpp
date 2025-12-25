@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/macroes/global.get_data.mac",
-      make_shared<Code_SystemMacroesGlobalGetdataMac>(),
+      "system/macroes/math.cos.mac",
+      make_shared<Code_SystemMacroesMathCosMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -52,21 +63,12 @@ static Var __code_2 (
 }
 
 
-static Var __code_3 (
-    vector<Var> const& params
-) {
-
-  #include "./87.3.code"
-}
-
-
-Var Code_SystemMacroesGlobalGetdataMac::execute (
+Var Code_SystemMacroesMathCosMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
     case 1: return __code_1(params);
     case 2: return __code_2(params);
-    case 3: return __code_3(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"87.cpp\"", code_idx);
       return null_var;

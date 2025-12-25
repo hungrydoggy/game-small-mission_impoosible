@@ -1,4 +1,4 @@
-#ifndef SERVER_ONLY
+
 
 #include "./231.h"
 
@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"GpuTaskDef", },
+      vector<string>{"VertexAnimationTexture", "VAT", },
       vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf::loadable_class () const {
-  static string cls = "GpuTaskDef";
+string const& NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureNlf::loadable_class () const {
+  static string cls = "VertexAnimationTexture";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<GpuTaskDef>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<VertexAnimationTexture>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,87 +84,119 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskdefNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "name",
-            "nam",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "cmd_run_type",
-            "crt",
+            "texture_paths",
+            "tex",
             vector<string>{ },
             true,
             vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "shader_data_bind_defs",
-            "dbl",
-            vector<string>{ },
-            false,
-            vector<string>{ },
             make_shared<SequenceFormat>(
-              0,
-              0,
+              1,
+              -1,
               vector<shared_ptr<Format>>{
                 make_shared<ValueFormat>(
-                  Content::Type::OBJECT,
-                  0,
-                  "ShaderDataBindDef",
+                  Content::Type::VALUE,
+                  VarContentTypes::STRING,
+                  "",
                   [](
                       FormatContext& ctx,
                       shared_ptr<NodeLoadable> const& loadable,
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+              }
+            )
+          },
+          AttributeLoader{
+            "offset",
+            "ofs",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<SequenceFormat>(
+              3,
+              3,
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              },
+              vector<shared_ptr<Format>>{
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
                       return Var(false);
                     }
                     return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -164,25 +206,51 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskGputa
             )
           },
           AttributeLoader{
-            "config",
-            "cnf",
+            "scale",
+            "scl",
             vector<string>{ },
-            true,
+            false,
             vector<string>{ },
             make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "GpuTaskConfigGroup",
+              Content::Type::VALUE,
+              VarContentTypes::NUMBER,
+              "",
               [](
                   FormatContext& ctx,
                   shared_ptr<NodeLoadable> const& loadable,
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "duration",
+            "dur",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::NUMBER,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
                   return Var(false);
                 }
                 return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -190,32 +258,308 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskGputa
             )
           },
           AttributeLoader{
-            "extra_vmp_alloc_items",
-            "eva",
+            "time_scale",
+            "tsc",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::NUMBER,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "repeat_count",
+            "cnt",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::NUMBER,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(6, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "markers",
+            "mrk",
             vector<string>{ },
             false,
             vector<string>{ },
             make_shared<SequenceFormat>(
-              0,
-              0,
+              -1,
+              -1,
               vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::OBJECT,
-                  0,
-                  "ExtraVmpAllocItem",
+                make_shared<SequenceFormat>(
+                  2,
+                  2,
                   [](
                       FormatContext& ctx,
                       shared_ptr<NodeLoadable> const& loadable,
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
                       return Var(false);
                     }
-                    return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                    return code_set->execute(9, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  },
+                  vector<shared_ptr<Format>>{
+                    make_shared<ValueFormat>(
+                      Content::Type::VALUE,
+                      VarContentTypes::NUMBER,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                          return Var(false);
+                        }
+                        return code_set->execute(7, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                    make_shared<ValueFormat>(
+                      Content::Type::VALUE,
+                      VarContentTypes::STRING,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                          return Var(false);
+                        }
+                        return code_set->execute(8, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                  }
+                ),
+              }
+            )
+          },
+          AttributeLoader{
+            "center_point_transforms",
+            "cpt",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<SequenceFormat>(
+              -1,
+              -1,
+              vector<shared_ptr<Format>>{
+                make_shared<SequenceFormat>(
+                  8,
+                  8,
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(18, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  },
+                  vector<shared_ptr<Format>>{
+                    make_shared<ValueFormat>(
+                      Content::Type::VALUE,
+                      VarContentTypes::NUMBER,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                          return Var(false);
+                        }
+                        return code_set->execute(10, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                    make_shared<ValueFormat>(
+                      Content::Type::VALUE,
+                      VarContentTypes::NUMBER,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                          return Var(false);
+                        }
+                        return code_set->execute(11, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                    make_shared<ValueFormat>(
+                      Content::Type::VALUE,
+                      VarContentTypes::NUMBER,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                          return Var(false);
+                        }
+                        return code_set->execute(12, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                    make_shared<ValueFormat>(
+                      Content::Type::VALUE,
+                      VarContentTypes::NUMBER,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                          return Var(false);
+                        }
+                        return code_set->execute(13, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                    make_shared<ValueFormat>(
+                      Content::Type::VALUE,
+                      VarContentTypes::NUMBER,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                          return Var(false);
+                        }
+                        return code_set->execute(14, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                    make_shared<ValueFormat>(
+                      Content::Type::VALUE,
+                      VarContentTypes::NUMBER,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                          return Var(false);
+                        }
+                        return code_set->execute(15, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                    make_shared<ValueFormat>(
+                      Content::Type::VALUE,
+                      VarContentTypes::NUMBER,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                          return Var(false);
+                        }
+                        return code_set->execute(16, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
+                    make_shared<ValueFormat>(
+                      Content::Type::VALUE,
+                      VarContentTypes::NUMBER,
+                      "",
+                      [](
+                          FormatContext& ctx,
+                          shared_ptr<NodeLoadable> const& loadable,
+                          shared_ptr<Node> const& node,
+                          shared_ptr<Content> const& content
+                      ) {
+                        static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                        unlikely (code_set == null) {
+                          LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf");
+                          return Var(false);
+                        }
+                        return code_set->execute(17, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                      }
+                    ),
                   }
                 ),
               }
@@ -233,4 +577,4 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskGputa
 
 
 
-#endif
+

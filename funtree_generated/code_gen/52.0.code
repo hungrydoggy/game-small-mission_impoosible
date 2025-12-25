@@ -1,3 +1,4 @@
 
-#line 4 "assets/system/macroes/transform.make_scale_from.mac"
-                 #include <game_component/game_component.h>
+#line 6 "assets/system/macroes/color.from_code.mac"
+      
+      #include <sstream>

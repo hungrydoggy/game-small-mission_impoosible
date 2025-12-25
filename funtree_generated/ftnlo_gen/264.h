@@ -1,8 +1,8 @@
-#ifndef AUTO_GENERATED_FUN_TREE_NODE_LOADER_OBJECT_CODE_SYSTEM_NODE_LOADER_FORMAT_BULLET_PHYSICS_BULLET_PHYSICS_NLF_NODE_LOADER_H_
-#define AUTO_GENERATED_FUN_TREE_NODE_LOADER_OBJECT_CODE_SYSTEM_NODE_LOADER_FORMAT_BULLET_PHYSICS_BULLET_PHYSICS_NLF_NODE_LOADER_H_
+#ifndef AUTO_GENERATED_FUN_TREE_NODE_LOADER_OBJECT_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_GPU_TASK_SHADER_DATA_BIND_DEF_NLF_NODE_LOADER_H_
+#define AUTO_GENERATED_FUN_TREE_NODE_LOADER_OBJECT_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_GPU_TASK_SHADER_DATA_BIND_DEF_NLF_NODE_LOADER_H_
 
 
-
+#ifndef SERVER_ONLY
 
 
 #include <common/loader/fun_tree/_node_loader.h>
@@ -14,7 +14,7 @@ namespace appetizer {
 using std::shared_ptr;
 
 
-class GAMECONTENT_API NodeLoader_SystemNodeloaderformatBulletphysicsBulletphysicsNlf : public fun_tree::NodeLoader {
+class FUNTREEGENERATED_API NodeLoader_SystemNodeloaderformatGraphicsGputaskShaderdatabinddefNlf : public fun_tree::NodeLoader {
 public: // inner types
   using Content       = fun_tree::Content;
   using Format        = fun_tree::node_loader_format::Format;
@@ -50,7 +50,7 @@ private: // methods
 }
 
 
+#endif
 
 
-
-#endif  // ifndef AUTO_GENERATED_FUN_TREE_NODE_LOADER_OBJECT_CODE_SYSTEM_NODE_LOADER_FORMAT_BULLET_PHYSICS_BULLET_PHYSICS_NLF_NODE_LOADER_H_
+#endif  // ifndef AUTO_GENERATED_FUN_TREE_NODE_LOADER_OBJECT_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_GPU_TASK_SHADER_DATA_BIND_DEF_NLF_NODE_LOADER_H_

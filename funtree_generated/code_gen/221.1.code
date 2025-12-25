@@ -4,9 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 23 "assets/system/node_loader_format/graphics/draw_option/depth_option.nlf"
+#line 25 "assets/system/node_loader_format/etc/action/action_item.nlf"
               
-              auto self = loadable->cast<DepthOption>();
-              self->mask = content->cast<Value>()->var().as<bool>();
+              
+              auto self = loadable->cast<ActionItem>();
+              self->name = content->cast<Value>()->var().as<string>();
               return Var(true);
               return null_var;

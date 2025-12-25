@@ -4,15 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 48 "assets/system/node_loader_format/graphics/draw_option/stencil_option.nlf"
+#line 40 "assets/system/node_loader_format/common/vector3.nlf"
               
               
-              auto op = ctx->loadSubNodeAs<StencilOperator>(node, content);
-              unlikely (op == null)
-                return Var(false);
-              
-              auto self = loadable->cast<StencilOption>();
-              self->op = *op;
-              
+              auto& value = ctx->getDataRef("vector3.val");
+              value.v<Vector3>().y(content->cast<Value>()->var().as<real>());
               return Var(true);
               return null_var;

@@ -1,14 +1,13 @@
-auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
 
 
 
 
-#line 51 "assets/system/macroes/map.get.mac"
-      
-      
-      auto& mac_params = self->params;
-      auto map = dpc<Map>(mac_params.get(0));
-      auto key = mac_params.get(1)->asValue<string>();
-      
-      return Var(map->get(key));
-      return null_var;
+
+#line 38 "assets/system/macroes/global.get_data.mac"
+                  
+                  
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(0, content);
+                  return Var(true);
+                  return null_var;

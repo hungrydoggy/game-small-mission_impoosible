@@ -1,12 +1,6 @@
-auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
-
-
-
-
-
-#line 16 "assets/system/macroes/math.ceil.mac"
-          
-          auto self = dpc<Macro>(loadable);
-          self->params.set(0, content);
-          return Var(true);
-          return null_var;
+auto self = params[0].as<GameObject*>();  auto world_pos = params[1].as<Vector3>();  
+#line 47 "assets/scenes/game.scn"
+            
+            Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_RIGHT, KeyEventState::STATE_RELEASED});
+            Project::active_project()->enqueueKeyEvent({KeyEventType::KEY_LEFT , KeyEventState::STATE_RELEASED});
+            return null_var;

@@ -4,14 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 27 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_state_single.nlf"
+#line 24 "assets/system/node_loader_format/physics/physics_joint_item.nlf"
               
               
-              auto vat = ctx->loadSubNodeAs<VAT>(node, content);
-              unlikely (vat == null)
-                return Var(false);
-              
-              auto self = loadable->cast<VATStateSingle>();
-              self->setVAT(vat);
+              auto self = loadable->cast<PhysicsJointItem>();
+              self->name = content->asValue<string>();
               return Var(true);
               return null_var;

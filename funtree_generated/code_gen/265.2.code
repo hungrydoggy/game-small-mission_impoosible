@@ -4,14 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 48 "assets/system/node_loader_format/bullet_physics/joints/generic_6dof.nlf"
+#line 46 "assets/system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf"
               
-              auto atp = ctx->loadSubNodeAs<BulletJointAttachmentPoint>(node, content);
-              unlikely (atp == null)
-                return Var(false);
               
-              auto self = loadable->cast<BulletJointInfo_General6DOF>();
-              self->attachment_point = atp;
-              
+              auto self = loadable->cast<VertexDef::AttributeDef>();
+              self->binding = content->cast<Value>()->var().as<uint32_t>();
               return Var(true);
               return null_var;

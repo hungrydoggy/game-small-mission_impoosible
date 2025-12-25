@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/graphics/draw_option/stencil_option.nlf",
-      make_shared<Code_SystemNodeloaderformatGraphicsDrawoptionStenciloptionNlf>(),
+      "system/node_loader_format/common/vector3.nlf",
+      make_shared<Code_SystemNodeloaderformatCommonVector3Nlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -60,7 +71,7 @@ static Var __code_3 (
 }
 
 
-Var Code_SystemNodeloaderformatGraphicsDrawoptionStenciloptionNlf::execute (
+Var Code_SystemNodeloaderformatCommonVector3Nlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

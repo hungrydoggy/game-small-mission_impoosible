@@ -1,5 +1,5 @@
 
-#line 6 "assets/system/macroes/view.get_image_size.mac"
+#line 6 "assets/system/macroes/physics_shape.make_half_size_from_image_size.mac"
       
       #include <game_component/object/game_object.h>
       #include <view/image_view/image_view_def.h>

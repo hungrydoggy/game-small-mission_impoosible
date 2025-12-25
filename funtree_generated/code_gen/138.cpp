@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/view/view_def.nlf",
-      make_shared<Code_SystemNodeloaderformatViewViewdefNlf>(),
+      "system/macroes/transform.make_position_from.mac",
+      make_shared<Code_SystemMacroesTransformMakepositionfromMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -68,7 +79,7 @@ static Var __code_4 (
 }
 
 
-Var Code_SystemNodeloaderformatViewViewdefNlf::execute (
+Var Code_SystemMacroesTransformMakepositionfromMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

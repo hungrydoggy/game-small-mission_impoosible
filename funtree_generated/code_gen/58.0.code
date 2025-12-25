@@ -4,13 +4,9 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 21 "assets/system/macroes/sequence.divide.mac"
+#line 21 "assets/system/macroes/compare.lte.mac"
                   
                   auto self = dpc<Macro>(loadable);
-                  
-                  auto& seq = self->getDataRef("seq").v<vector<Var>>();
-                  self->params.add(make_shared<Value>(Var(seq), content));
-                  
-                  seq.clear();
+                  self->params.add(content);
                   return Var(true);
                   return null_var;

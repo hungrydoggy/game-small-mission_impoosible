@@ -4,10 +4,15 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 63 "assets/system/node_loader_format/etc/bitmap_font_info.nlf"
-              
-              
-              auto self = loadable->cast<BitmapFontInfo>();
-              self->font_size = content->cast<Value>()->var().as<int>();
-              return Var(true);
-              return null_var;
+#line 106 "assets/system/node_loader_format/state_serializer/data.nlf"
+                      
+                      
+                      auto self = loadable->cast<StateSerializerNodeLoadable>();
+                      unlikely (self->hasData("keys") == false)
+                        self->setData("keys", vector<string>{});
+                      
+                      auto& keys = self->getDataRef("keys").v<vector<string>>();
+                      keys.push_back(content->asValue<string>());
+                      
+                      return Var(true);
+                      return null_var;

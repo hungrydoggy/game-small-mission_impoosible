@@ -1,8 +1,4 @@
 
-#line 4 "assets/scenes/game.scn.state.fnc"
+#line 6 "assets/system/node_loader_format/view/view_def.nlf"
       
-      #include <algorithm>
-      #include <filesystem>
-      
-      #include <plugins/cooldown/cooldown.h>
-      #include <plugins/cooldown/cooldown_manager.h>
+      #include <view/view_def.h>

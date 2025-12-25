@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"PhysicsJointItem", "JointItem", },
+      vector<string>{"SclKeyFrame", },
       vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::loadable_class () const {
-  static string cls = "PhysicsJointItem";
+string const& NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::loadable_class () const {
+  static string cls = "SclKeyFrame";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<PhysicsJointItem>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<SclKeyFrame>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,20 +84,20 @@ bool NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointitemNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatBoneanimationSclkeyframeNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "name",
-            "nam",
+            "time",
+            "tim",
             vector<string>{ },
             true,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
-              VarContentTypes::STRING,
+              VarContentTypes::NUMBER,
               "",
               [](
                   FormatContext& ctx,
@@ -95,10 +105,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointi
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/physics/physics_joint_item.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bone_animation/scl_key_frame.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/physics/physics_joint_item.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/bone_animation/scl_key_frame.nlf");
                   return Var(false);
                 }
                 return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -106,10 +116,94 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointi
             )
           },
           AttributeLoader{
-            "opposite_path",
-            "opp",
+            "value",
+            "val",
             vector<string>{ },
             true,
+            vector<string>{ },
+            make_shared<SequenceFormat>(
+              3,
+              3,
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bone_animation/scl_key_frame.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/bone_animation/scl_key_frame.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              },
+              vector<shared_ptr<Format>>{
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::NUMBER,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
+              }
+            )
+          },
+          AttributeLoader{
+            "interpolation",
+            "int",
+            vector<string>{ },
+            false,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
@@ -121,65 +215,13 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatPhysicsPhysicsjointi
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/physics/physics_joint_item.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bone_animation/scl_key_frame.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/physics/physics_joint_item.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "need_register_by_default",
-            "reg",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::BOOL,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/physics/physics_joint_item.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/physics/physics_joint_item.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/bone_animation/scl_key_frame.nlf");
                   return Var(false);
                 }
                 return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "joint",
-            "jnt",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "PhysicsJointGroup",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/physics/physics_joint_item.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/physics/physics_joint_item.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

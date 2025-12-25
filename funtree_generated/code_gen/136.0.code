@@ -1,4 +1,4 @@
 
-#line 6 "assets/system/node_loader_format/view/bitmap_font_view_def.nlf"
+#line 5 "assets/system/macroes/string.replace.mac"
       
-      #include <view/bitmap_font_view/bitmap_font_view_def.h>
+      #include <util/util.h>

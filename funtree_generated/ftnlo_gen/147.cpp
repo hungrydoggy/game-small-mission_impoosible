@@ -24,8 +24,12 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
       vector<string>{"Action.CallFunc", "CallFunc", },
@@ -33,7 +37,13 @@ static void ___NodeLoaderBundleRegisterer___ () {
       make_shared<NodeLoader_SystemNodeloaderformatActionsCallfuncNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 

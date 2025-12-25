@@ -1,4 +1,4 @@
-
+#ifndef SERVER_ONLY
 
 #include "./259.h"
 
@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/state_serializer/vat_component.nlf",
-      make_shared<Code_SystemNodeloaderformatStateserializerVatcomponentNlf>(),
+      "system/node_loader_format/graphics/gpu_task/gpu_task_runner.nlf",
+      make_shared<Code_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -44,20 +55,11 @@ static Var __code_1 (
 }
 
 
-static Var __code_2 (
-    vector<Var> const& params
-) {
-
-  #include "./259.2.code"
-}
-
-
-Var Code_SystemNodeloaderformatStateserializerVatcomponentNlf::execute (
+Var Code_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
     case 1: return __code_1(params);
-    case 2: return __code_2(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"259.cpp\"", code_idx);
       return null_var;
@@ -70,4 +72,4 @@ Var Code_SystemNodeloaderformatStateserializerVatcomponentNlf::execute (
 
 
 
-
+#endif

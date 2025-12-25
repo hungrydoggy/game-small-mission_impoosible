@@ -4,9 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 73 "assets/system/node_loader_format/graphics/draw_option/stencil_option.nlf"
+#line 57 "assets/system/node_loader_format/common/vector3.nlf"
               
-              auto self = loadable->cast<StencilOption>();
-              self->mask = content->cast<Value>()->var().as<uint>();
+              
+              auto& value = ctx->getDataRef("vector3.val");
+              value.v<Vector3>().z(content->cast<Value>()->var().as<real>());
               return Var(true);
               return null_var;

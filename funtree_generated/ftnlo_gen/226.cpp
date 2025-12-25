@@ -1,4 +1,4 @@
-#ifndef SERVER_ONLY
+
 
 #include "./226.h"
 
@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"AttachmentRef", },
-      vector<string>{"AttachmentGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatGraphicsGputaskAttachmentrefNlf>(),
+      vector<string>{"GameBaseAxis", },
+      vector<string>{},
+      make_shared<NodeLoader_SystemNodeloaderformatEtcGamebaseaxisNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatGraphicsGputaskAttachmentrefNlf::loadable_class () const {
-  static string cls = "AttachmentInfo";
+string const& NodeLoader_SystemNodeloaderformatEtcGamebaseaxisNlf::loadable_class () const {
+  static string cls = "GameBaseAxis";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskAttachmentrefNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<AttachmentInfo>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatEtcGamebaseaxisNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<GameBaseAxis>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskAttachmentrefNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatEtcGamebaseaxisNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -57,20 +67,11 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskAttachmentrefNlf::_preLoad 
   if (super_ok == false)
     return false;
 
-  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
-  auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-  unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
-    return null;
-  }
-
-  auto result = code_set->execute(1, {Var(&ctx), Var(node), Var(loadable)});
-  return result.as<bool>();
-
+  return true;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskAttachmentrefNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatEtcGamebaseaxisNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -83,14 +84,14 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskAttachmentrefNlf::_postLoad
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskAttachmentrefNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcGamebaseaxisNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "name",
-            "nam",
+            "base_axis",
+            "axs",
             vector<string>{ },
             false,
             vector<string>{ },
@@ -104,117 +105,39 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskAttac
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/game_base_axis.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/game_base_axis.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "axis_size",
+            "siz",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::NUMBER,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/game_base_axis.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/game_base_axis.nlf");
                   return Var(false);
                 }
                 return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "load_op",
-            "lop",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "store_op",
-            "sop",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "stencil_load_op",
-            "slo",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "stencil_store_op",
-            "sso",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/attachment_ref.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(6, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },
@@ -230,4 +153,4 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskAttac
 
 
 
-#endif
+

@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 71 "assets/system/node_loader_format/mesh/vertex_property.nlf"
+#line 57 "assets/system/node_loader_format/common/rectangle_uint.nlf"
               
               
-              auto self = loadable->cast<VertexProperty>();
-              self->length(content->cast<Value>()->var().as<ushort>());
+              auto& value = ctx->getDataRef("rectangle_uint.val");
+              value.v<Rectangle<uint>>().width(content->cast<Value>()->var().as<uint>());
               return Var(true);
               return null_var;

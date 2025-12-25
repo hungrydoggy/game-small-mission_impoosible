@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 28 "assets/system/node_loader_format/view/nine_patch_view_def.nlf"
-              
-              
-              auto self = loadable->cast<NinePatchViewDef>();
-              self->mesh_path(content->resolveFilePath(content->asValue<string>()));
-              return Var(true);
-              return null_var;
+#line 25 "assets/system/macroes/string.split.mac"
+                  
+                  
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(0, content);
+                  return Var(true);
+                  return null_var;

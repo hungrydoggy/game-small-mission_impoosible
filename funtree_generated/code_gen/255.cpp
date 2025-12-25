@@ -1,4 +1,4 @@
-
+#ifndef SERVER_ONLY
 
 #include "./255.h"
 
@@ -8,7 +8,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./255.0.code"
+#include "./253.0.code"
 
 
 
@@ -25,39 +25,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/state_serializer/color.nlf",
-      make_shared<Code_SystemNodeloaderformatStateserializerColorNlf>(),
+      "system/node_loader_format/graphics/gpu_task/depth_attachment.nlf",
+      make_shared<Code_SystemNodeloaderformatGraphicsGputaskDepthattachmentNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-static Var __code_1 (
+static Var __code_0 (
     vector<Var> const& params
 ) {
 
-  #include "./255.1.code"
+  #include "./255.0.code"
 }
 
 
-static Var __code_2 (
-    vector<Var> const& params
-) {
-
-  #include "./255.2.code"
-}
-
-
-Var Code_SystemNodeloaderformatStateserializerColorNlf::execute (
+Var Code_SystemNodeloaderformatGraphicsGputaskDepthattachmentNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
-    case 1: return __code_1(params);
-    case 2: return __code_2(params);
+    case 0: return __code_0(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"255.cpp\"", code_idx);
       return null_var;
@@ -70,4 +72,4 @@ Var Code_SystemNodeloaderformatStateserializerColorNlf::execute (
 
 
 
-
+#endif

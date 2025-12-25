@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 59 "assets/system/node_loader_format/mesh/mesh.nlf"
-                      
-                      
-                      auto self = loadable->cast<Mesh>();
-                      self->vertex_data().push_back(content->cast<Value>()->var().as<float>());
-                      return Var(true);
-                      return null_var;
+#line 41 "assets/system/node_loader_format/common/quaternion.nlf"
+              
+              
+              auto& value = ctx->getDataRef("quaternion.vec3");
+              value.v<Vector3>().y(content->cast<Value>()->var().as<real>());
+              return Var(true);
+              return null_var;

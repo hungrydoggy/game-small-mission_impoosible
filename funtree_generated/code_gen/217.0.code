@@ -1,4 +1,4 @@
 
-#line 4 "assets/system/node_loader_format/mesh/vertex_property.nlf"
+#line 5 "assets/system/node_loader_format/common/rectangle_uint.nlf"
       
-      #include <resource/mesh/_vertex_property.h>
+      #include <util/rectangle.h>

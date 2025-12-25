@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 42 "assets/system/node_loader_format/bone_animation/scl_key_frame.nlf"
+#line 51 "assets/system/node_loader_format/bone_animation/bone_animation.nlf"
               
               
-              auto self = loadable->cast<SclKeyFrame>();
-              self->value(ctx->getData("vector3.val").v<Vector3>());
+              auto self = loadable->cast<BoneAnimation>();
+              self->name(content->cast<Value>()->var().as<string>());
               return Var(true);
               return null_var;

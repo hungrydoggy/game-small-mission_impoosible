@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 24 "assets/system/node_loader_format/physics/physics_joint_item.nlf"
+#line 24 "assets/system/node_loader_format/bone_animation/scl_key_frame.nlf"
               
               
-              auto self = loadable->cast<PhysicsJointItem>();
-              self->name = content->asValue<string>();
+              auto self = loadable->cast<SclKeyFrame>();
+              self->time(content->cast<Value>()->var().as<real>());
               return Var(true);
               return null_var;

@@ -3,9 +3,10 @@ auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<
 
 
 
-#line 16 "assets/system/node_loader_format/actions/empty.nlf"
+#line 16 "assets/system/node_loader_format/actions/set_input_processable.nlf"
+      
       
       auto al = loadable->cast<ActionLoadable>();
-      al->action = action::Empty();
+      al->action = action::SetInputProcessable(al->getData("value").as<bool>());
       return Var(true);
       return null_var;

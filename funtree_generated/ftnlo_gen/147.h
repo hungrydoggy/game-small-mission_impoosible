@@ -14,7 +14,7 @@ namespace appetizer {
 using std::shared_ptr;
 
 
-class GAMECONTENT_API NodeLoader_SystemNodeloaderformatActionsCallfuncNlf : public fun_tree::NodeLoader {
+class FUNTREEGENERATED_API NodeLoader_SystemNodeloaderformatActionsCallfuncNlf : public fun_tree::NodeLoader {
 public: // inner types
   using Content       = fun_tree::Content;
   using Format        = fun_tree::node_loader_format::Format;

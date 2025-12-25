@@ -1,3 +1,0 @@
-
-#line 4 "assets/system/macroes/random.pick.mac"
-                 #include <util/random_picker.h>

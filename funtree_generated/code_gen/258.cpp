@@ -1,4 +1,4 @@
-
+#ifndef SERVER_ONLY
 
 #include "./258.h"
 
@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/state_serializer/physics_body.nlf",
-      make_shared<Code_SystemNodeloaderformatStateserializerPhysicsbodyNlf>(),
+      "system/node_loader_format/graphics/gpu_task/gpu_task_item.nlf",
+      make_shared<Code_SystemNodeloaderformatGraphicsGputaskGputaskitemNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -52,7 +63,7 @@ static Var __code_2 (
 }
 
 
-Var Code_SystemNodeloaderformatStateserializerPhysicsbodyNlf::execute (
+Var Code_SystemNodeloaderformatGraphicsGputaskGputaskitemNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
@@ -70,4 +81,4 @@ Var Code_SystemNodeloaderformatStateserializerPhysicsbodyNlf::execute (
 
 
 
-
+#endif

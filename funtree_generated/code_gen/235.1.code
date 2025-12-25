@@ -4,12 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 26 "assets/system/node_loader_format/graphics/gpu_task/compute_config.nlf"
+#line 26 "assets/system/node_loader_format/fsm/finite_state_machine.nlf"
               
               
-              auto value = content->resolveFilePath(content->asValue<string>());
-              
-              auto self = loadable->cast<ComputeConfig>();
-              self->comp_shader(Shader::RM::load(value));
-              return Var(self->comp_shader() != null);
+              auto self = loadable->cast<FiniteStateMachine>();
+              self->setData("start_state", content->cast<Value>()->var());
+              return Var(true);
               return null_var;

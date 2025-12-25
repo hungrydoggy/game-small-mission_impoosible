@@ -8,6 +8,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
+#include "./74.0.code"
 
 
 
@@ -23,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Map.get", "map.get", },
-      make_shared<Macro_SystemMacroesMapGetMac>(),
+      vector<string>{"Global.getData", "global.getData", "g.data", "g.dat", },
+      make_shared<Macro_SystemMacroesGlobalGetdataMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesMapGetMac::loadable_class () const {
+string const& Macro_SystemMacroesGlobalGetdataMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesMapGetMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesGlobalGetdataMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesMapGetMac::preEmbody (
+bool Macro_SystemMacroesGlobalGetdataMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -56,7 +66,7 @@ bool Macro_SystemMacroesMapGetMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesMapGetMac::_preLoad (
+bool Macro_SystemMacroesGlobalGetdataMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -65,7 +75,7 @@ bool Macro_SystemMacroesMapGetMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesMapGetMac::_postLoad (
+bool Macro_SystemMacroesGlobalGetdataMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,103 +84,100 @@ bool Macro_SystemMacroesMapGetMac::_postLoad (
 }
 
 
-static shared_ptr<Content> __on_call_code_2 (
+static shared_ptr<Content> __on_call_code_3 (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/map.get.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/global.get_data.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/map.get.mac");
+    LOG_ERR("code_set is null --- system/macroes/global.get_data.mac");
     return null;
   }
 
-  auto result = code_set->execute(2, {Var(node), Var(content), Var(self)});
+  auto result = code_set->execute(3, {Var(node), Var(content), Var(self)});
   return result.v<shared_ptr<Content>>();
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesMapGetMac::execute (
+shared_ptr<Content> Macro_SystemMacroesGlobalGetdataMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
     shared_ptr<Macro> const& macro
 ) {
   switch (code_idx) {
-    case 2: return __on_call_code_2(node, content, macro);
+    case 3: return __on_call_code_3(node, content, macro);
     default:
       LOG_ERR("unknown code_idx %u --- \"74.cpp\"", code_idx);
       return null;
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesMapGetMac::execute (
+shared_ptr<Content> Macro_SystemMacroesGlobalGetdataMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
 ) {
-  return execute(node, content, 2, macro);
+  return execute(node, content, 3, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesMapGetMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesGlobalGetdataMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<MapFormat>(
-      vector<vector<AttributeLoader>>{
-        vector<AttributeLoader>{
-          AttributeLoader{
-            "map",
-            "map",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::MAP,
-              0,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/map.get.mac");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/map.get.mac");
-                  return Var(false);
-                }
-                return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "key",
-            "key",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/map.get.mac");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/map.get.mac");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-        },
+    make_shared<FormatGroup>(
+      vector<shared_ptr<Format>>{
+        make_shared<ValueFormat>(
+          Content::Type::VALUE,
+          VarContentTypes::STRING,
+          "",
+          [](
+              FormatContext& ctx,
+              shared_ptr<NodeLoadable> const& loadable,
+              shared_ptr<Node> const& node,
+              shared_ptr<Content> const& content
+          ) {
+            static uint code_path_id = PathRegistry::lookUp("system/macroes/global.get_data.mac");
+            auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+            unlikely (code_set == null) {
+              LOG_ERR("code_set is null --- system/macroes/global.get_data.mac");
+              return Var(false);
+            }
+            return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+          }
+        ),
+        make_shared<MapFormat>(
+          vector<vector<AttributeLoader>>{
+            vector<AttributeLoader>{
+              AttributeLoader{
+                "key",
+                "key",
+                vector<string>{ },
+                true,
+                vector<string>{ },
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::STRING,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/macroes/global.get_data.mac");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/macroes/global.get_data.mac");
+                      return Var(false);
+                    }
+                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                )
+              },
+            },
+          }
+        ),
       }
     )
 ;

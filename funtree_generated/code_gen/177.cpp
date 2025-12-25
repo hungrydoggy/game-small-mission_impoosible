@@ -8,7 +8,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./177.0.code"
+#include "./145.0.code"
 
 
 
@@ -25,48 +25,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/actions/script.nlf",
-      make_shared<Code_SystemNodeloaderformatActionsScriptNlf>(),
+      "system/node_loader_format/actions/scale_y_by.nlf",
+      make_shared<Code_SystemNodeloaderformatActionsScaleybyNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-static Var __code_1 (
+static Var __code_0 (
     vector<Var> const& params
 ) {
 
-  #include "./177.1.code"
+  #include "./177.0.code"
 }
 
 
-static Var __code_2 (
-    vector<Var> const& params
-) {
-
-  #include "./177.2.code"
-}
-
-
-static Var __code_3 (
-    vector<Var> const& params
-) {
-
-  #include "./177.3.code"
-}
-
-
-Var Code_SystemNodeloaderformatActionsScriptNlf::execute (
+Var Code_SystemNodeloaderformatActionsScaleybyNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
-    case 1: return __code_1(params);
-    case 2: return __code_2(params);
-    case 3: return __code_3(params);
+    case 0: return __code_0(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"177.cpp\"", code_idx);
       return null_var;

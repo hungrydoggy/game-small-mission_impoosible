@@ -1,4 +1,4 @@
-#ifndef SERVER_ONLY
+
 
 #include "./227.h"
 
@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"VertexAttributeDef", "VertexAttribute", },
+      vector<string>{"GlobalObject", },
       vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexattributedefNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatEtcGlobalobjectNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexattributedefNlf::loadable_class () const {
-  static string cls = "VertexDef::AttributeDef";
+string const& NodeLoader_SystemNodeloaderformatEtcGlobalobjectNlf::loadable_class () const {
+  static string cls = "GlobalObject";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexattributedefNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<VertexDef::AttributeDef>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatEtcGlobalobjectNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<GlobalObject>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexattributedefNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatEtcGlobalobjectNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexattributedefNlf::_pre
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexattributedefNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatEtcGlobalobjectNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,142 +84,10 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexattributedefNlf::_pos
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexattributedefNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcGlobalobjectNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
-        vector<AttributeLoader>{
-          AttributeLoader{
-            "usage",
-            "usg",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "binding",
-            "bnd",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "location",
-            "loc",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "format",
-            "fmt",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "offset",
-            "ofs",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/vertex_attribute_def.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-        },
       }
     );
   return format;
@@ -221,4 +99,4 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskVerte
 
 
 
-#endif
+

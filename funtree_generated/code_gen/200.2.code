@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 42 "assets/system/node_loader_format/bone_animation/rot_key_frame.nlf"
+#line 44 "assets/system/node_loader_format/bone_animation/frame_event.nlf"
               
               
-              auto self = loadable->cast<RotKeyFrame>();
-              self->value(ctx->getData("quaternion.val").v<Quaternion>());
+              auto self = loadable->cast<FrameEvent>();
+              self->time(content->cast<Value>()->var().as<real>());
               return Var(true);
               return null_var;

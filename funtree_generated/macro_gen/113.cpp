@@ -24,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"GameComponent.getColor", "Component.getColor", "cmp.col", },
-      make_shared<Macro_SystemMacroesGamecomponentGetcolorMac>(),
+      vector<string>{"Random.drawInt", "rand.drawInt", },
+      make_shared<Macro_SystemMacroesRandomDrawintMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesGamecomponentGetcolorMac::loadable_class () const {
+string const& Macro_SystemMacroesRandomDrawintMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesGamecomponentGetcolorMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesRandomDrawintMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesGamecomponentGetcolorMac::preEmbody (
+bool Macro_SystemMacroesRandomDrawintMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -57,7 +66,7 @@ bool Macro_SystemMacroesGamecomponentGetcolorMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesGamecomponentGetcolorMac::_preLoad (
+bool Macro_SystemMacroesRandomDrawintMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -66,7 +75,7 @@ bool Macro_SystemMacroesGamecomponentGetcolorMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesGamecomponentGetcolorMac::_postLoad (
+bool Macro_SystemMacroesRandomDrawintMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -80,10 +89,10 @@ static shared_ptr<Content> __on_call_code_2 (
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_color.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/random.draw_int.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/game_component.get_color.mac");
+    LOG_ERR("code_set is null --- system/macroes/random.draw_int.mac");
     return null;
   }
 
@@ -92,7 +101,7 @@ static shared_ptr<Content> __on_call_code_2 (
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesGamecomponentGetcolorMac::execute (
+shared_ptr<Content> Macro_SystemMacroesRandomDrawintMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
@@ -106,7 +115,7 @@ shared_ptr<Content> Macro_SystemMacroesGamecomponentGetcolorMac::execute (
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesGamecomponentGetcolorMac::execute (
+shared_ptr<Content> Macro_SystemMacroesRandomDrawintMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
@@ -114,25 +123,31 @@ shared_ptr<Content> Macro_SystemMacroesGamecomponentGetcolorMac::execute (
   return execute(node, content, 2, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesGamecomponentGetcolorMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesRandomDrawintMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<ValueFormat>(
-      Content::Type::VALUE,
-      VarContentTypes::STRING,
-      "",
-      [](
-          FormatContext& ctx,
-          shared_ptr<NodeLoadable> const& loadable,
-          shared_ptr<Node> const& node,
-          shared_ptr<Content> const& content
-      ) {
-        static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_color.mac");
-        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-        unlikely (code_set == null) {
-          LOG_ERR("code_set is null --- system/macroes/game_component.get_color.mac");
-          return Var(false);
-        }
-        return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+    make_shared<SequenceFormat>(
+      0,
+      2,
+      vector<shared_ptr<Format>>{
+        make_shared<ValueFormat>(
+          Content::Type::VALUE,
+          VarContentTypes::NUMBER,
+          "",
+          [](
+              FormatContext& ctx,
+              shared_ptr<NodeLoadable> const& loadable,
+              shared_ptr<Node> const& node,
+              shared_ptr<Content> const& content
+          ) {
+            static uint code_path_id = PathRegistry::lookUp("system/macroes/random.draw_int.mac");
+            auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+            unlikely (code_set == null) {
+              LOG_ERR("code_set is null --- system/macroes/random.draw_int.mac");
+              return Var(false);
+            }
+            return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+          }
+        ),
       }
     )
 ;

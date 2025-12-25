@@ -3,10 +3,10 @@ auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<
 
 
 
-#line 16 "assets/system/node_loader_format/actions/set_text.nlf"
+#line 16 "assets/system/node_loader_format/actions/set_sprite_cell_index.nlf"
       
       
       auto al = loadable->cast<ActionLoadable>();
-      al->action = action::SetText(al->getData("target_path", "."), al->getData("value", ""));
+      al->action = action::SetSpriteCellIndex(al->getData("target_path", "."), al->getData("index", (ushort)0));
       return Var(true);
       return null_var;

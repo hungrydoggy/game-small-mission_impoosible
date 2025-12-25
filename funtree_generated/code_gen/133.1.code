@@ -1,12 +1,58 @@
-auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
 
-
-
-
-
-#line 41 "assets/system/macroes/compare.gt.mac"
-                  
-                  auto self = dpc<Macro>(loadable);
-                  self->params.add(content);
-                  return Var(true);
-                  return null_var;
+#line 14 "assets/system/macroes/sprite.make_cells.mac"
+      
+      using namespace appetizer;
+      using namespace appetizer::fun_tree;
+      
+      
+      namespace {
+        class CellIndexIterator_ {
+        public: // inner types
+          enum class ContentType {
+            DEFAULT,
+            COUNT,
+            INDEX_LIST,
+          };
+      
+      
+        public: // methods
+          CellIndexIterator_ (sp<Content> const& cont, uint row_cnt, uint col_cnt);
+      
+          int step ();
+      
+          size_t size () const;
+      
+      
+        private: // vars
+          sp<Content> content_;
+      
+          ContentType content_type_;
+          size_t next_idx_;
+          vector<int> index_list_;
+        };
+      
+      
+      
+        class CellDurFrmIterator_ {
+        public: // inner types
+          enum class ContentType {
+            DEFAULT,
+            FRAME,
+            FRAME_LIST,
+          };
+      
+      
+        public: // methods
+          CellDurFrmIterator_ (sp<Content> const& cont, size_t cell_cnt);
+      
+          uint step ();
+      
+      
+        private: // vars
+          sp<Content> content_;
+      
+          ContentType content_type_;
+          size_t next_idx_;
+          vector<uint> frame_list_;
+        };
+      }

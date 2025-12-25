@@ -1,6 +1,5 @@
 
-#line 9 "assets/system/node_loader_format/actions/sequence.nlf"
+#line 6 "assets/system/node_loader_format/actions/play_sprite.nlf"
       
       #include <action/_action_loadable.h>
-      #include <action/_interpolation.h>
       #include <action/action_factory.h>

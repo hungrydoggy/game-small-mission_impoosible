@@ -1,4 +1,4 @@
-#ifndef SERVER_ONLY
+
 
 #include "./235.h"
 
@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"ComputeConfig", },
-      vector<string>{"GpuTaskConfigGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatGraphicsGputaskComputeconfigNlf>(),
+      vector<string>{"FiniteStateMachine", "FSM", "Fsm", },
+      vector<string>{"ObjectTraitGroup", },
+      make_shared<NodeLoader_SystemNodeloaderformatFsmFinitestatemachineNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatGraphicsGputaskComputeconfigNlf::loadable_class () const {
-  static string cls = "ComputeConfig";
+string const& NodeLoader_SystemNodeloaderformatFsmFinitestatemachineNlf::loadable_class () const {
+  static string cls = "FiniteStateMachine";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskComputeconfigNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<ComputeConfig>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatFsmFinitestatemachineNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<FiniteStateMachine>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskComputeconfigNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatFsmFinitestatemachineNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskComputeconfigNlf::_preLoad 
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskComputeconfigNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatFsmFinitestatemachineNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,16 +84,16 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskComputeconfigNlf::_postLoad
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskComputeconfigNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatFsmFinitestatemachineNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "comp_shader_path",
-            "csh",
+            "start_state",
+            "sta",
             vector<string>{ },
-            true,
+            false,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
@@ -95,13 +105,45 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskCompu
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/compute_config.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/finite_state_machine.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/compute_config.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/finite_state_machine.nlf");
                   return Var(false);
                 }
                 return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "states",
+            "stt",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<SequenceFormat>(
+              -1,
+              -1,
+              vector<shared_ptr<Format>>{
+                make_shared<ValueFormat>(
+                  Content::Type::OBJECT,
+                  0,
+                  "FiniteStateMachineState",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/finite_state_machine.nlf");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/node_loader_format/fsm/finite_state_machine.nlf");
+                      return Var(false);
+                    }
+                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
               }
             )
           },
@@ -117,4 +159,4 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskCompu
 
 
 
-#endif
+

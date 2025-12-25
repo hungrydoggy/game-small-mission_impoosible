@@ -1,4 +1,4 @@
-
+#ifndef SERVER_ONLY
 
 #include "./263.h"
 
@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/bullet_physics/shape_infos/cylinder.nlf",
-      make_shared<Code_SystemNodeloaderformatBulletphysicsShapeinfosCylinderNlf>(),
+      "system/node_loader_format/graphics/gpu_task/swapchain_attachment.nlf",
+      make_shared<Code_SystemNodeloaderformatGraphicsGputaskSwapchainattachmentNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -68,7 +79,63 @@ static Var __code_4 (
 }
 
 
-Var Code_SystemNodeloaderformatBulletphysicsShapeinfosCylinderNlf::execute (
+static Var __code_5 (
+    vector<Var> const& params
+) {
+
+  #include "./263.5.code"
+}
+
+
+static Var __code_6 (
+    vector<Var> const& params
+) {
+
+  #include "./263.6.code"
+}
+
+
+static Var __code_7 (
+    vector<Var> const& params
+) {
+
+  #include "./263.7.code"
+}
+
+
+static Var __code_8 (
+    vector<Var> const& params
+) {
+
+  #include "./263.8.code"
+}
+
+
+static Var __code_9 (
+    vector<Var> const& params
+) {
+
+  #include "./263.9.code"
+}
+
+
+static Var __code_10 (
+    vector<Var> const& params
+) {
+
+  #include "./263.10.code"
+}
+
+
+static Var __code_11 (
+    vector<Var> const& params
+) {
+
+  #include "./263.11.code"
+}
+
+
+Var Code_SystemNodeloaderformatGraphicsGputaskSwapchainattachmentNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
@@ -76,6 +143,13 @@ Var Code_SystemNodeloaderformatBulletphysicsShapeinfosCylinderNlf::execute (
     case 2: return __code_2(params);
     case 3: return __code_3(params);
     case 4: return __code_4(params);
+    case 5: return __code_5(params);
+    case 6: return __code_6(params);
+    case 7: return __code_7(params);
+    case 8: return __code_8(params);
+    case 9: return __code_9(params);
+    case 10: return __code_10(params);
+    case 11: return __code_11(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"263.cpp\"", code_idx);
       return null_var;
@@ -88,4 +162,4 @@ Var Code_SystemNodeloaderformatBulletphysicsShapeinfosCylinderNlf::execute (
 
 
 
-
+#endif

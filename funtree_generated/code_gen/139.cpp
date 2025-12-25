@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/view/sprite/cell_def.nlf",
-      make_shared<Code_SystemNodeloaderformatViewSpriteCelldefNlf>(),
+      "system/macroes/transform.make_rotation_from.mac",
+      make_shared<Code_SystemMacroesTransformMakerotationfromMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -68,15 +79,7 @@ static Var __code_4 (
 }
 
 
-static Var __code_5 (
-    vector<Var> const& params
-) {
-
-  #include "./139.5.code"
-}
-
-
-Var Code_SystemNodeloaderformatViewSpriteCelldefNlf::execute (
+Var Code_SystemMacroesTransformMakerotationfromMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
@@ -84,7 +87,6 @@ Var Code_SystemNodeloaderformatViewSpriteCelldefNlf::execute (
     case 2: return __code_2(params);
     case 3: return __code_3(params);
     case 4: return __code_4(params);
-    case 5: return __code_5(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"139.cpp\"", code_idx);
       return null_var;

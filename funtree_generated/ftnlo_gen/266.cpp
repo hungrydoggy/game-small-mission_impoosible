@@ -1,4 +1,4 @@
-
+#ifndef SERVER_ONLY
 
 #include "./266.h"
 
@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"BulletRelativeJointAttachmentPoint", "BulletRelativeJointPoint", },
-      vector<string>{"BulletJointAttachmentPointGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeNlf>(),
+      vector<string>{"VertexDef", "Vertex", },
+      vector<string>{},
+      make_shared<NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeNlf::loadable_class () const {
-  static string cls = "BulletRelativeJointAttachmentPoint";
+string const& NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::loadable_class () const {
+  static string cls = "VertexDef";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<BulletRelativeJointAttachmentPoint>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<VertexDef>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeN
 }
 
 
-bool NodeLoader_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,16 +84,16 @@ bool NodeLoader_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeN
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "anchor_ratio_from_owner_to_opposite_",
-            "anc",
+            "vertex_bytes",
+            "byt",
             vector<string>{ },
-            false,
+            true,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
@@ -95,10 +105,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatBulletphysicsJointat
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bullet_physics/joint_attachment_point/relative.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/vertex_def.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/bullet_physics/joint_attachment_point/relative.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/vertex_def.nlf");
                   return Var(false);
                 }
                 return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -106,84 +116,32 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatBulletphysicsJointat
             )
           },
           AttributeLoader{
-            "point_from_anchor",
-            "pnt",
+            "attribute_defs",
+            "atl",
             vector<string>{ },
-            false,
+            true,
             vector<string>{ },
             make_shared<SequenceFormat>(
-              3,
-              3,
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/bullet_physics/joint_attachment_point/relative.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/bullet_physics/joint_attachment_point/relative.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              },
+              0,
+              0,
               vector<shared_ptr<Format>>{
                 make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
+                  Content::Type::OBJECT,
+                  0,
+                  "VertexAttributeDef",
                   [](
                       FormatContext& ctx,
                       shared_ptr<NodeLoadable> const& loadable,
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/vertex_def.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/vertex_def.nlf");
                       return Var(false);
                     }
                     return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/common/vector3.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/common/vector3.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
                   }
                 ),
               }
@@ -201,4 +159,4 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatBulletphysicsJointat
 
 
 
-
+#endif

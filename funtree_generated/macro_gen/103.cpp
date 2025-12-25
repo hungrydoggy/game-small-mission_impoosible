@@ -8,7 +8,6 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./103.0.code"
 
 
 
@@ -24,31 +23,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"String.format", "str.format", },
-      make_shared<Macro_SystemMacroesStringFormatMac>(),
+      vector<string>{"Operator.inverse", "inverse", "inv", },
+      make_shared<Macro_SystemMacroesOperatorInverseMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesStringFormatMac::loadable_class () const {
+string const& Macro_SystemMacroesOperatorInverseMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesStringFormatMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesOperatorInverseMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesStringFormatMac::preEmbody (
+bool Macro_SystemMacroesOperatorInverseMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -57,7 +65,7 @@ bool Macro_SystemMacroesStringFormatMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesStringFormatMac::_preLoad (
+bool Macro_SystemMacroesOperatorInverseMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -66,7 +74,7 @@ bool Macro_SystemMacroesStringFormatMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesStringFormatMac::_postLoad (
+bool Macro_SystemMacroesOperatorInverseMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -75,109 +83,64 @@ bool Macro_SystemMacroesStringFormatMac::_postLoad (
 }
 
 
-static shared_ptr<Content> __on_call_code_3 (
+static shared_ptr<Content> __on_call_code_1 (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/string.format.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.inverse.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/string.format.mac");
+    LOG_ERR("code_set is null --- system/macroes/operator.inverse.mac");
     return null;
   }
 
-  auto result = code_set->execute(3, {Var(node), Var(content), Var(self)});
+  auto result = code_set->execute(1, {Var(node), Var(content), Var(self)});
   return result.v<shared_ptr<Content>>();
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesStringFormatMac::execute (
+shared_ptr<Content> Macro_SystemMacroesOperatorInverseMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
     shared_ptr<Macro> const& macro
 ) {
   switch (code_idx) {
-    case 3: return __on_call_code_3(node, content, macro);
+    case 1: return __on_call_code_1(node, content, macro);
     default:
       LOG_ERR("unknown code_idx %u --- \"103.cpp\"", code_idx);
       return null;
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesStringFormatMac::execute (
+shared_ptr<Content> Macro_SystemMacroesOperatorInverseMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
 ) {
-  return execute(node, content, 3, macro);
+  return execute(node, content, 1, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesStringFormatMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesOperatorInverseMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<MapFormat>(
-      vector<vector<AttributeLoader>>{
-        vector<AttributeLoader>{
-          AttributeLoader{
-            "format_string",
-            "fmt",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/string.format.mac");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/string.format.mac");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "format_params",
-            "par",
-            vector<string>{ },
-            false,
-            vector<string>{ "format_string", },
-            make_shared<SequenceFormat>(
-              0,
-              -1,
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::STRING,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/macroes/string.format.mac");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/macroes/string.format.mac");
-                      return Var(false);
-                    }
-                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-              }
-            )
-          },
-        },
+    make_shared<ValueFormat>(
+      Content::Type::VALUE,
+      VarContentTypes::NUMBER,
+      "",
+      [](
+          FormatContext& ctx,
+          shared_ptr<NodeLoadable> const& loadable,
+          shared_ptr<Node> const& node,
+          shared_ptr<Content> const& content
+      ) {
+        static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.inverse.mac");
+        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+        unlikely (code_set == null) {
+          LOG_ERR("code_set is null --- system/macroes/operator.inverse.mac");
+          return Var(false);
+        }
+        return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
       }
     )
 ;

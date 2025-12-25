@@ -4,9 +4,7 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 35 "assets/system/macroes/operator.multiply.mac"
-                  
-                  auto self = dpc<Macro>(loadable);
-                  self->params.add(content);
-                  return Var(true);
-                  return null_var;
+#line 14 "assets/system/macroes/project.is_system_input_processable.mac"
+          
+          return Var(true);
+          return null_var;

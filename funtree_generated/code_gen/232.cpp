@@ -1,4 +1,4 @@
-#ifndef SERVER_ONLY
+
 
 #include "./232.h"
 
@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/graphics/gpu_task/gpu_task_runner.nlf",
-      make_shared<Code_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf>(),
+      "system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_item.nlf",
+      make_shared<Code_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureitemNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -44,11 +55,20 @@ static Var __code_1 (
 }
 
 
-Var Code_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf::execute (
+static Var __code_2 (
+    vector<Var> const& params
+) {
+
+  #include "./232.2.code"
+}
+
+
+Var Code_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureitemNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
     case 1: return __code_1(params);
+    case 2: return __code_2(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"232.cpp\"", code_idx);
       return null_var;
@@ -61,4 +81,4 @@ Var Code_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf::execute (
 
 
 
-#endif
+

@@ -1,5 +1,4 @@
 
-#line 4 "assets/scenes/game.scn.fnc"
+#line 7 "assets/system/node_loader_format/view/sprite_view_def.nlf"
       
-      #include <algorithm>
-      #include <filesystem>
+      #include <view/sprite_view/sprite_view_def.h>

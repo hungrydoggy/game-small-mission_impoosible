@@ -3,11 +3,10 @@ auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<
 
 
 
-#line 20 "assets/system/node_loader_format/actions/sequence.nlf"
+#line 16 "assets/system/node_loader_format/actions/play_sprite.nlf"
       
       
       auto al = loadable->cast<ActionLoadable>();
-      auto& chl = al->getData("children").v<vector<shared_ptr<Action>>>();
-      al->action = action::Sequence(chl);
+      al->action = action::PlaySprite(al->getData("target_path", "."), al->getData("repeat_count", (ushort)0));
       return Var(true);
       return null_var;

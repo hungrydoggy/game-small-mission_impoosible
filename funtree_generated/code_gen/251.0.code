@@ -1,4 +1,4 @@
 
-#line 7 "assets/system/node_loader_format/state_serializer/drawable.nlf"
+#line 4 "assets/system/node_loader_format/graphics/draw_option/stencil_option.nlf"
       
-      #include <common/state_serializer/state_serializer.h>
+      #include <common/draw_option/draw_option.h>

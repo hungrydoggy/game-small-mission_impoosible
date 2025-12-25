@@ -4,8 +4,13 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 26 "assets/system/macroes/sequence.map.mac"
-                          
-                          // (processed on pre_embody) this is result sequence
-                          return Var(true);
-                          return null_var;
+#line 21 "assets/system/macroes/sequence.minus.mac"
+                  
+                  auto self = dpc<Macro>(loadable);
+                  
+                  auto& seq = self->getDataRef("seq").v<vector<Var>>();
+                  self->params.add(make_shared<Value>(Var(seq), content));
+                  
+                  seq.clear();
+                  return Var(true);
+                  return null_var;

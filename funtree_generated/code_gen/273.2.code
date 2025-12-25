@@ -4,14 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 47 "assets/system/node_loader_format/etc/sampler.nlf"
+#line 49 "assets/system/node_loader_format/state_serializer/color.nlf"
               
               
-              string mnf_str = content->cast<Value>()->var().as<string>();
-              Util::upper(mnf_str);
-              
-              auto mnf_p = Util::find(Sampler::filter_enm_map(), mnf_str);
-              auto self = loadable->cast<Sampler>();
-              self->min_filter((mnf_p != null)? *mnf_p : Sampler::Filter::LINEAR);
+              auto self = loadable->cast<StateSerializerNodeLoadable>();
+              self->name = content->asValue<string>();
               return Var(true);
               return null_var;

@@ -7,7 +7,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./144.0.code"
+#include "./195.0.code"
 
 
 
@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"Action.ScaleXTo", "ScaleXTo", },
+      vector<string>{"Action.UnsetAction", "UnsetAction", },
       vector<string>{"ActionGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatActionsScalextoNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatActionsUnsetactionNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatActionsScalextoNlf::loadable_class () const {
+string const& NodeLoader_SystemNodeloaderformatActionsUnsetactionNlf::loadable_class () const {
   static string cls = "ActionLoadable";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsScalextoNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool NodeLoader_SystemNodeloaderformatActionsUnsetactionNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<ActionLoadable>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsScalextoNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatActionsUnsetactionNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatActionsScalextoNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsScalextoNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatActionsUnsetactionNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -70,20 +80,20 @@ bool NodeLoader_SystemNodeloaderformatActionsScalextoNlf::_postLoad (
   if (super_ok == false)
     return false;
 
-  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/scale_x_to.nlf");
+  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/unset_action.nlf");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/node_loader_format/actions/scale_x_to.nlf");
+    LOG_ERR("code_set is null --- system/node_loader_format/actions/unset_action.nlf");
     return null;
   }
 
-  auto result = code_set->execute(0, {Var(&ctx), Var(node), Var(loadable)});
+  auto result = code_set->execute(1, {Var(&ctx), Var(node), Var(loadable)});
   return result.as<bool>();
 
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsScalextoNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsUnsetactionNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
@@ -104,10 +114,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsScalextoNlf::
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/move_to.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/unset_action.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/actions/move_to.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/actions/unset_action.nlf");
                   return Var(false);
                 }
                 return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -115,83 +125,8 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsScalextoNlf::
             )
           },
           AttributeLoader{
-            "duration",
-            "dur",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/move_to.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/actions/move_to.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "value",
-            "val",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<FormatGroup>(
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::NUMBER,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/move_x_to.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/actions/move_x_to.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-                make_shared<ValueFormat>(
-                  Content::Type::OBJECT,
-                  0,
-                  "ActionStateDataRef",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/move_to.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/actions/move_to.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-              }
-            )
-          },
-          AttributeLoader{
-            "interpolation",
-            "int",
+            "name",
+            "nam",
             vector<string>{ },
             false,
             vector<string>{ },
@@ -205,13 +140,13 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsScalextoNlf::
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/move_to.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/unset_action.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/actions/move_to.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/actions/unset_action.nlf");
                   return Var(false);
                 }
-                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

@@ -4,22 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 52 "assets/system/node_loader_format/view/bitmap_font_view_def.nlf"
-              
-              
-              auto sam = ctx->loadSubNodeAs<Sampler>(node, content);
-              unlikely (sam == null)
-                return Var(false);
-              
-              auto self = loadable->cast<BitmapFontViewDef>();
-              self->sampler_keys().resize(1);
-              self->sampler_keys()[0] =
-                  SamplerKey{
-                      sam->mag_filter(),
-                      sam->min_filter(),
-                      sam->wrap_s    (),
-                      sam->wrap_t    (),
-                      sam->mip_levels(),
-                  };
-              return Var(true);
-              return null_var;
+#line 45 "assets/system/macroes/string.replace.mac"
+                  
+                  
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(1, content);
+                  return Var(true);
+                  return null_var;

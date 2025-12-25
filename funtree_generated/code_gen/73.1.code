@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 22 "assets/system/macroes/transform.make_rotation_from.mac"
-                  
-                  
-                  auto self = loadable->cast<Macro>();
-                  self->params.set(0, content);
-                  return Var(true);
-                  return null_var;
+#line 16 "assets/system/macroes/game_component.make_path.mac"
+          
+          
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+          return null_var;

@@ -1,14 +1,13 @@
-auto self = params[0].as<GameObject*>();  auto msg_params = params[4].as<vector<Var>>();  
-#line 40 "assets/scenes/game.scn.state.fnc"
-        
-        unlikely (msg_params.size() < 1) {
-          LOG_ERR("need params --- int score_inc");
-          return null_var;
-        }
-        
-        auto score_inc = msg_params[0].as<int>();
-        
-        auto score = math::clamp(self->scene()->getData("score", 0) + score_inc, 0, 99999);
-        self->scene()->setData("score", score);
-        self->sendMessage("/camera/score", "setScore", {Var(score)});
-        return null_var;
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+
+
+
+
+
+#line 107 "assets/system/node_loader_format/view/view_def.nlf"
+              
+              
+              auto self = loadable->cast<ViewDef>();
+              self->material_reg(StringRegistry::default_registry().lookUp(content->asValue<string>()));
+              return Var(true);
+              return null_var;

@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/view/bitmap_font_view_def.nlf",
-      make_shared<Code_SystemNodeloaderformatViewBitmapfontviewdefNlf>(),
+      "system/macroes/string.replace.mac",
+      make_shared<Code_SystemMacroesStringReplaceMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -68,47 +79,7 @@ static Var __code_4 (
 }
 
 
-static Var __code_5 (
-    vector<Var> const& params
-) {
-
-  #include "./136.5.code"
-}
-
-
-static Var __code_6 (
-    vector<Var> const& params
-) {
-
-  #include "./136.6.code"
-}
-
-
-static Var __code_7 (
-    vector<Var> const& params
-) {
-
-  #include "./136.7.code"
-}
-
-
-static Var __code_8 (
-    vector<Var> const& params
-) {
-
-  #include "./136.8.code"
-}
-
-
-static Var __code_9 (
-    vector<Var> const& params
-) {
-
-  #include "./136.9.code"
-}
-
-
-Var Code_SystemNodeloaderformatViewBitmapfontviewdefNlf::execute (
+Var Code_SystemMacroesStringReplaceMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
@@ -116,11 +87,6 @@ Var Code_SystemNodeloaderformatViewBitmapfontviewdefNlf::execute (
     case 2: return __code_2(params);
     case 3: return __code_3(params);
     case 4: return __code_4(params);
-    case 5: return __code_5(params);
-    case 6: return __code_6(params);
-    case 7: return __code_7(params);
-    case 8: return __code_8(params);
-    case 9: return __code_9(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"136.cpp\"", code_idx);
       return null_var;

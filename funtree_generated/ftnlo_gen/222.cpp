@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"DrawOption", },
-      vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf>(),
+      vector<string>{"ActionList", },
+      vector<string>{"ObjectTraitGroup", },
+      make_shared<NodeLoader_SystemNodeloaderformatEtcActionActionlistNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::loadable_class () const {
-  static string cls = "DrawOption";
+string const& NodeLoader_SystemNodeloaderformatEtcActionActionlistNlf::loadable_class () const {
+  static string cls = "ActionList";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<DrawOption>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatEtcActionActionlistNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<ActionList>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatEtcActionActionlistNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::_preLoad 
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatEtcActionActionlistNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,182 +84,40 @@ bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::_postLoad
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDrawoptionNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionlistNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "use",
-            "use",
+            "items",
+            "itm",
             vector<string>{ },
-            false,
+            true,
             vector<string>{ },
             make_shared<SequenceFormat>(
-              0,
-              0,
+              -1,
+              -1,
               vector<shared_ptr<Format>>{
                 make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::STRING,
-                  "",
+                  Content::Type::OBJECT,
+                  0,
+                  "ActionItem",
                   [](
                       FormatContext& ctx,
                       shared_ptr<NodeLoadable> const& loadable,
                       shared_ptr<Node> const& node,
                       shared_ptr<Content> const& content
                   ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
+                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/action/action_list.nlf");
                     auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                     unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
+                      LOG_ERR("code_set is null --- system/node_loader_format/etc/action/action_list.nlf");
                       return Var(false);
                     }
                     return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
                   }
                 ),
-              }
-            )
-          },
-          AttributeLoader{
-            "unuse",
-            "unu",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<SequenceFormat>(
-              0,
-              0,
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::VALUE,
-                  VarContentTypes::STRING,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-              }
-            )
-          },
-          AttributeLoader{
-            "blend_option",
-            "bln",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<SequenceFormat>(
-              0,
-              0,
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::OBJECT,
-                  0,
-                  "BlendOption",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-              }
-            )
-          },
-          AttributeLoader{
-            "depth_option",
-            "dpt",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "DepthOption",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "stencil_option",
-            "stc",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "StencilOption",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "back_stencil_option",
-            "bst",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::OBJECT,
-              0,
-              "StencilOption",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/draw_option.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/draw_option.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(6, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

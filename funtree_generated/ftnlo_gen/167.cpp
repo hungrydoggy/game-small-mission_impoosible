@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"Action.Activate", "Activate", },
+      vector<string>{"Action.RegisterBody", "RegisterBody", },
       vector<string>{"ActionGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatActionsActivateNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatActionsRegisterbodyNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatActionsActivateNlf::loadable_class () const {
+string const& NodeLoader_SystemNodeloaderformatActionsRegisterbodyNlf::loadable_class () const {
   static string cls = "ActionLoadable";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsActivateNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool NodeLoader_SystemNodeloaderformatActionsRegisterbodyNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<ActionLoadable>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsActivateNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatActionsRegisterbodyNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatActionsActivateNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatActionsActivateNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatActionsRegisterbodyNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -70,10 +80,10 @@ bool NodeLoader_SystemNodeloaderformatActionsActivateNlf::_postLoad (
   if (super_ok == false)
     return false;
 
-  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/activate.nlf");
+  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/register_body.nlf");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/node_loader_format/actions/activate.nlf");
+    LOG_ERR("code_set is null --- system/node_loader_format/actions/register_body.nlf");
     return null;
   }
 
@@ -83,7 +93,7 @@ bool NodeLoader_SystemNodeloaderformatActionsActivateNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsActivateNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsRegisterbodyNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
@@ -104,10 +114,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatActionsActivateNlf::
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/activate.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/actions/register_body.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/actions/activate.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/actions/register_body.nlf");
                   return Var(false);
                 }
                 return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});

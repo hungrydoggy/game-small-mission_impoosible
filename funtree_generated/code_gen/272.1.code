@@ -4,10 +4,17 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 25 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_item.nlf"
-              
-              
-              auto self = loadable->cast<VATStateItem>();
-              self->name = content->asValue<string>();
-              return Var(true);
-              return null_var;
+#line 29 "assets/system/node_loader_format/physics/physics_shape_list.nlf"
+                      
+                      
+                      auto shp_info = ctx->loadSubNodeAs<BulletShapeInfo>(node, content);
+                      unlikely (shp_info == null)
+                        return Var(false);
+                      
+                      auto shp = make_shared<BulletShape>();
+                      shp->bt_shape_info(shp_info);
+                      
+                      auto self = loadable->cast<PhysicsShapeList>();
+                      self->shapes().push_back(shp);
+                      return Var(true);
+                      return null_var;

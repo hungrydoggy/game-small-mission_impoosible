@@ -4,19 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 24 "assets/system/node_loader_format/game_component/projection_info.nlf"
+#line 38 "assets/system/node_loader_format/game_component/game_object.nlf"
               
               
-              auto typ_str = content->cast<Value>()->var().as<string>();
-              Util::upper(typ_str);
-              
-              auto typ_p = Util::find(Camera::prjtyp_enm_map(), typ_str);
-              unlikely (typ_p == null) {
-                LOG_ERR("unknown Camera::ProjectionType --- %s", typ_str.c_str());
-                return Var(false);
-              }
-              
-              auto self = loadable->cast<ProjectionInfo>();
-              self->projection_type = *typ_p;
+              auto self = loadable->cast<GameObject>();
+              self->graphics_task_def_name(content->cast<Value>()->var().as<string>());
               return Var(true);
               return null_var;

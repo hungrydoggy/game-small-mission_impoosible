@@ -1,4 +1,0 @@
-
-#line 5 "assets/system/macroes/string.replace.mac"
-      
-      #include <util/util.h>

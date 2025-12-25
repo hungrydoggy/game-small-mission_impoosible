@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 57 "assets/system/node_loader_format/common/vector3.nlf"
+#line 57 "assets/system/node_loader_format/common/color.nlf"
               
               
-              auto& value = ctx->getDataRef("vector3.val");
-              value.v<Vector3>().z(content->cast<Value>()->var().as<real>());
+              auto& value = ctx->getDataRef("color.val");
+              value.v<Color>().b(content->cast<Value>()->var().as<real>());
               return Var(true);
               return null_var;

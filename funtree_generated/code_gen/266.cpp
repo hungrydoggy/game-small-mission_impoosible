@@ -1,4 +1,4 @@
-
+#ifndef SERVER_ONLY
 
 #include "./266.h"
 
@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/bullet_physics/joint_attachment_point/relative.nlf",
-      make_shared<Code_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeNlf>(),
+      "system/node_loader_format/graphics/gpu_task/vertex_def.nlf",
+      make_shared<Code_SystemNodeloaderformatGraphicsGputaskVertexdefNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -52,7 +63,7 @@ static Var __code_2 (
 }
 
 
-Var Code_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeNlf::execute (
+Var Code_SystemNodeloaderformatGraphicsGputaskVertexdefNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
@@ -70,4 +81,4 @@ Var Code_SystemNodeloaderformatBulletphysicsJointattachmentpointRelativeNlf::exe
 
 
 
-
+#endif

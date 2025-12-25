@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"ActionStateDataRef", "ActionDataRef", },
-      vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf>(),
+      vector<string>{"TextViewStateSerializer", "TextViewSttSer", "TextSttSer", },
+      vector<string>{"StateSerializerGroup", },
+      make_shared<NodeLoader_SystemNodeloaderformatStateserializerTextviewNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::loadable_class () const {
-  static string cls = "ActionStateDataRef";
+string const& NodeLoader_SystemNodeloaderformatStateserializerTextviewNlf::loadable_class () const {
+  static string cls = "StateSerializerNodeLoadable";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<ActionStateDataRef>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatStateserializerTextviewNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<StateSerializerNodeLoadable>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatStateserializerTextviewNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatStateserializerTextviewNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -70,20 +80,29 @@ bool NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::_postLoad 
   if (super_ok == false)
     return false;
 
-  return true;
+  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/state_serializer/text_view.nlf");
+  auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+  unlikely (code_set == null) {
+    LOG_ERR("code_set is null --- system/node_loader_format/state_serializer/text_view.nlf");
+    return null;
+  }
+
+  auto result = code_set->execute(1, {Var(&ctx), Var(node), Var(loadable)});
+  return result.as<bool>();
+
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionstatedatarefNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatStateserializerTextviewNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "key",
-            "",
-            vector<string>{ "name", "nam", },
-            true,
+            "name",
+            "nam",
+            vector<string>{ },
+            false,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
@@ -95,13 +114,13 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionstate
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/action/action_state_data_ref.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/state_serializer/text_view.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/etc/action/action_state_data_ref.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/state_serializer/text_view.nlf");
                   return Var(false);
                 }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

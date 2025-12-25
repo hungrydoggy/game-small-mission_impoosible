@@ -8,7 +8,6 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./56.0.code"
 
 
 
@@ -24,31 +23,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Math.log2", "math.log2", "log2", },
-      make_shared<Macro_SystemMacroesMathLog2Mac>(),
+      vector<string>{"Compare.gte", "gte", ">=", },
+      make_shared<Macro_SystemMacroesCompareGteMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesMathLog2Mac::loadable_class () const {
+string const& Macro_SystemMacroesCompareGteMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesMathLog2Mac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesCompareGteMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesMathLog2Mac::preEmbody (
+bool Macro_SystemMacroesCompareGteMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -57,7 +65,7 @@ bool Macro_SystemMacroesMathLog2Mac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesMathLog2Mac::_preLoad (
+bool Macro_SystemMacroesCompareGteMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -66,7 +74,7 @@ bool Macro_SystemMacroesMathLog2Mac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesMathLog2Mac::_postLoad (
+bool Macro_SystemMacroesCompareGteMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -80,10 +88,10 @@ static shared_ptr<Content> __on_call_code_2 (
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/math.log2.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/compare.gte.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/math.log2.mac");
+    LOG_ERR("code_set is null --- system/macroes/compare.gte.mac");
     return null;
   }
 
@@ -92,7 +100,7 @@ static shared_ptr<Content> __on_call_code_2 (
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesMathLog2Mac::execute (
+shared_ptr<Content> Macro_SystemMacroesCompareGteMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
@@ -106,7 +114,7 @@ shared_ptr<Content> Macro_SystemMacroesMathLog2Mac::execute (
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesMathLog2Mac::execute (
+shared_ptr<Content> Macro_SystemMacroesCompareGteMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
@@ -114,25 +122,60 @@ shared_ptr<Content> Macro_SystemMacroesMathLog2Mac::execute (
   return execute(node, content, 2, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesMathLog2Mac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesCompareGteMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<ValueFormat>(
-      Content::Type::VALUE,
-      VarContentTypes::NUMBER,
-      "",
-      [](
-          FormatContext& ctx,
-          shared_ptr<NodeLoadable> const& loadable,
-          shared_ptr<Node> const& node,
-          shared_ptr<Content> const& content
-      ) {
-        static uint code_path_id = PathRegistry::lookUp("system/macroes/math.log2.mac");
-        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-        unlikely (code_set == null) {
-          LOG_ERR("code_set is null --- system/macroes/math.log2.mac");
-          return Var(false);
-        }
-        return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+    make_shared<FormatGroup>(
+      vector<shared_ptr<Format>>{
+        make_shared<SequenceFormat>(
+          2,
+          2,
+          vector<shared_ptr<Format>>{
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::NUMBER,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/macroes/compare.gte.mac");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/macroes/compare.gte.mac");
+                  return Var(false);
+                }
+                return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            ),
+          }
+        ),
+        make_shared<SequenceFormat>(
+          2,
+          2,
+          vector<shared_ptr<Format>>{
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/macroes/compare.gte.mac");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/macroes/compare.gte.mac");
+                  return Var(false);
+                }
+                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            ),
+          }
+        ),
       }
     )
 ;

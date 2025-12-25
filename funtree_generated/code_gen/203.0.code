@@ -1,4 +1,5 @@
 
-#line 5 "assets/system/node_loader_format/physics/physics_joint_item.nlf"
+#line 4 "assets/system/node_loader_format/bone_animation/scl_key_frame.nlf"
       
-      #include <physics/_physics_joint_item.h>
+      #include <resource/bone_animation/bone_animation.h>
+      #include <util/vector3.h>

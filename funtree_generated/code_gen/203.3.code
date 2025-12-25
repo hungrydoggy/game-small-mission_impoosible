@@ -4,10 +4,9 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 64 "assets/system/node_loader_format/physics/physics_joint_item.nlf"
+#line 62 "assets/system/node_loader_format/bone_animation/scl_key_frame.nlf"
               
-              
-              auto self = loadable->cast<PhysicsJointItem>();
-              self->need_register_by_default = content->asValue<bool>();
+              auto self = loadable->cast<SclKeyFrame>();
+              self->interpolation(Interpolation::getFromString(content->cast<Value>()->var().as<string>()));
               return Var(true);
               return null_var;

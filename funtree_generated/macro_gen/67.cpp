@@ -24,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Color.fromCode", "color.code", "col.cod", },
-      make_shared<Macro_SystemMacroesColorFromcodeMac>(),
+      vector<string>{"GameComponent.getData", "Component.getData", "cmp.dat", },
+      make_shared<Macro_SystemMacroesGamecomponentGetdataMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesColorFromcodeMac::loadable_class () const {
+string const& Macro_SystemMacroesGamecomponentGetdataMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesColorFromcodeMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesGamecomponentGetdataMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesColorFromcodeMac::preEmbody (
+bool Macro_SystemMacroesGamecomponentGetdataMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -57,7 +66,7 @@ bool Macro_SystemMacroesColorFromcodeMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesColorFromcodeMac::_preLoad (
+bool Macro_SystemMacroesGamecomponentGetdataMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -66,7 +75,7 @@ bool Macro_SystemMacroesColorFromcodeMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesColorFromcodeMac::_postLoad (
+bool Macro_SystemMacroesGamecomponentGetdataMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -75,64 +84,103 @@ bool Macro_SystemMacroesColorFromcodeMac::_postLoad (
 }
 
 
-static shared_ptr<Content> __on_call_code_2 (
+static shared_ptr<Content> __on_call_code_3 (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/color.from_code.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_data.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/color.from_code.mac");
+    LOG_ERR("code_set is null --- system/macroes/game_component.get_data.mac");
     return null;
   }
 
-  auto result = code_set->execute(2, {Var(node), Var(content), Var(self)});
+  auto result = code_set->execute(3, {Var(node), Var(content), Var(self)});
   return result.v<shared_ptr<Content>>();
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesColorFromcodeMac::execute (
+shared_ptr<Content> Macro_SystemMacroesGamecomponentGetdataMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
     shared_ptr<Macro> const& macro
 ) {
   switch (code_idx) {
-    case 2: return __on_call_code_2(node, content, macro);
+    case 3: return __on_call_code_3(node, content, macro);
     default:
       LOG_ERR("unknown code_idx %u --- \"67.cpp\"", code_idx);
       return null;
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesColorFromcodeMac::execute (
+shared_ptr<Content> Macro_SystemMacroesGamecomponentGetdataMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
 ) {
-  return execute(node, content, 2, macro);
+  return execute(node, content, 3, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesColorFromcodeMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesGamecomponentGetdataMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<ValueFormat>(
-      Content::Type::VALUE,
-      VarContentTypes::STRING,
-      "",
-      [](
-          FormatContext& ctx,
-          shared_ptr<NodeLoadable> const& loadable,
-          shared_ptr<Node> const& node,
-          shared_ptr<Content> const& content
-      ) {
-        static uint code_path_id = PathRegistry::lookUp("system/macroes/color.from_code.mac");
-        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-        unlikely (code_set == null) {
-          LOG_ERR("code_set is null --- system/macroes/color.from_code.mac");
-          return Var(false);
-        }
-        return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+    make_shared<MapFormat>(
+      vector<vector<AttributeLoader>>{
+        vector<AttributeLoader>{
+          AttributeLoader{
+            "target_path",
+            "tar",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_data.mac");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/macroes/game_component.get_data.mac");
+                  return Var(false);
+                }
+                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "key",
+            "key",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_data.mac");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/macroes/game_component.get_data.mac");
+                  return Var(false);
+                }
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+        },
       }
     )
 ;

@@ -4,13 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 25 "assets/system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf"
-              
-              
-              auto self = loadable->cast<GpuTaskDef>();
-              
-              auto name = content->cast<Value>()->var().as<string>();
-              self->name(name);
-              
-              return Var(true);
-              return null_var;
+#line 30 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf"
+                      
+                      
+                      auto self = loadable->cast<VAT>();
+                      self->addTexturePath(content->resolveFilePath(content->asValue<string>()));
+                      return Var(true);
+                      return null_var;

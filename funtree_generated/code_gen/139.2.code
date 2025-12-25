@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 44 "assets/system/node_loader_format/view/sprite/cell_def.nlf"
-              
-              
-              auto self = loadable->cast<CellDef>();
-              self->position = ctx->getData("vector3.val").v<Vector3>();
-              return Var(true);
-              return null_var;
+#line 40 "assets/system/macroes/transform.make_rotation_from.mac"
+                  
+                  
+                  auto self = loadable->cast<Macro>();
+                  self->params.set(1, make_shared<Value>(ctx->getData("quaternion.val"), content));
+                  return Var(true);
+                  return null_var;

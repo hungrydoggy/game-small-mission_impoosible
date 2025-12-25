@@ -4,10 +4,9 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 25 "assets/system/macroes/string.split.mac"
-                  
-                  
-                  auto self = loadable->cast<Macro>();
-                  self->params.set(0, content);
-                  return Var(true);
-                  return null_var;
+#line 16 "assets/system/macroes/math.round.mac"
+          
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+          return null_var;

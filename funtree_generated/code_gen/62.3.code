@@ -3,46 +3,24 @@ auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<share
 
 
 
-#line 54 "assets/system/macroes/game_component.get_data.mac"
+#line 40 "assets/system/macroes/convert.to_int.mac"
       
       
       auto& mac_params = self->params;
-      auto target_path = mac_params.get(0)->asValue<string>();
-      auto key         = mac_params.get(1)->asValue<string>();
       
+      auto& v = mac_params.get(0)->cast<Value>()->var();
       
-      // make MacroOnLoad
-      auto macro_on_load =
-          make_shared<MacroOnLoad>(
-            [content](LoaderContext& ctx, shared_ptr<Node> const& node)->bool {
-              return true;
-            },
-            [content, target_path, key](LoaderContext& ctx, shared_ptr<Node> const& node)->sp<Content> {
-              // ready
-              auto owner_node = node->findAncestorNodeByObjectName("GameComponentGroup", ctx.node_loader_bundle);
-              unlikely (owner_node == null) {
-                CNT_LOG_ERR(content, "this macro must have an owner component (GameComponentGroup in its ancestry).");
-                return null;
-              }
+      likely (v.isNumber() == true)
+        return Var(make_shared<Value>(Var(v.as<int>()), content));
       
-              auto cmp = dpc<GameComponent>(ctx.node_loadable_map->at(owner_node.get()));
-              unlikely (cmp == null) {
-                CNT_LOG_ERR(content, "owner component loadable is null");
-                return null;
-              }
+      likely (v.isString() == true) {
+        auto str = v.as<string>();
+        unlikely (Util::isDoubleString(str) == false)
+          return null_var;
       
-              auto target = cmp->findByNamePath(target_path);
-              unlikely (target == null) {
-                CNT_LOG_ERR(content, "cannot find target path --- %s", target_path.c_str());
-                return null;
-              }
+        return Var(make_shared<Value>(Var((int)Util::stringToDouble(str, 0.0)), content));
+      }
       
-              return make_shared<Value>(target->getData(key), content);
-            },
-            content->file_path(),
-            content->line_in_file(),
-            content->column_in_file()
-          );
-      
-      return Var(macro_on_load);
+      CNT_LOG_ERR(content, "you cannot be here");
+      return null_var;
       return null_var;

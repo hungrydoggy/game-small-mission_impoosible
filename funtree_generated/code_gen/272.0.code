@@ -1,5 +1,4 @@
 
-#line 5 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_item.nlf"
+#line 6 "assets/system/node_loader_format/physics/physics_shape_list.nlf"
       
-      #include <etc/vertex_animation_texture/vertex_animation_texture_state.h>
-      #include <etc/vertex_animation_texture/vertex_animation_texture_state_item.h>
+      #include <physics/physics_shape.h>

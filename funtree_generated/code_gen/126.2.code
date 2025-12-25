@@ -1,14 +1,13 @@
-auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
 
 
 
 
-#line 26 "assets/system/macroes/math.acos.mac"
-      
-      
-      auto& mac_params = self->params;
-      
-      auto v = mac_params.get(0)->asValue<double>();
-      
-      return Var(make_shared<Value>(Var(math::acos(v)), content));
-      return null_var;
+
+#line 62 "assets/system/macroes/sequence.make_int_sequence.mac"
+                  
+                  
+                  auto self = dpc<Macro>(loadable);
+                  self->params.set(2, content);
+                  return Var(true);
+                  return null_var;

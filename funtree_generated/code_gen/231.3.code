@@ -4,14 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 83 "assets/system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf"
-                      
-                      auto dbl = ctx->loadSubNodeAs<ShaderDataBindDef>(node, content);
-                      unlikely (dbl == null)
-                        return Var(false);
-                      
-                      auto self = loadable->cast<GpuTaskDef>();
-                      self->shader_data_bind_defs().push_back(*dbl);
-                      
-                      return Var(true);
-                      return null_var;
+#line 68 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf"
+              
+              
+              auto self = loadable->cast<VAT>();
+              self->scale(content->asValue<real>());
+              return Var(true);
+              return null_var;

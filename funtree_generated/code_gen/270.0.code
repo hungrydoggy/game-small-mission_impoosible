@@ -1,5 +1,4 @@
 
-#line 6 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_state_selector.nlf"
+#line 4 "assets/system/node_loader_format/mesh/vertex_property.nlf"
       
-      #include <etc/vertex_animation_texture/vertex_animation_texture_state_item.h>
-      #include <etc/vertex_animation_texture/vertex_animation_texture_state_selector.h>
+      #include <resource/mesh/_vertex_property.h>

@@ -3,10 +3,10 @@ auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<
 
 
 
-#line 16 "assets/system/node_loader_format/actions/unregister_body.nlf"
+#line 16 "assets/system/node_loader_format/actions/pause.nlf"
       
       
       auto al = loadable->cast<ActionLoadable>();
-      al->action = action::UnregisterBody(al->getData("target_path", "."));
+      al->action = action::Pause(al->getData("target_path", "."), al->getData("name").as<string>());
       return Var(true);
       return null_var;

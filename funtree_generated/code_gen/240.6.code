@@ -4,11 +4,15 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 136 "assets/system/node_loader_format/game_component/projection_info.nlf"
+#line 165 "assets/system/node_loader_format/game_component/game_object.nlf"
               
               
-              auto self = loadable->cast<ProjectionInfo>();
-              self->need_default = false;
-              self->aspect_ratio = content->cast<Value>()->var().as<real>();
+              auto bdy = ctx->loadSubNodeAs<PhysicsBody>(node, content);
+              unlikely (bdy == null)
+                return Var(false);
+              
+              auto self = loadable->cast<GameObject>();
+              self->addTrait(bdy);
+              
               return Var(true);
               return null_var;

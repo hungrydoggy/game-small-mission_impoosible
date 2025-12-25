@@ -1,4 +1,4 @@
 
-#line 7 "assets/system/node_loader_format/graphics/gpu_task/graphics_config.nlf"
+#line 4 "assets/system/node_loader_format/etc/bitmap_font_info.nlf"
       
-      #include <gpu_task/_gpu_task_def_config.h>
+      #include <resource/bitmap_font/bitmap_font.h>

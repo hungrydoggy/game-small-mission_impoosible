@@ -4,10 +4,19 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 64 "assets/system/node_loader_format/state_serializer/text_view.nlf"
+#line 48 "assets/system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf"
               
               
-              auto self = loadable->cast<StateSerializerNodeLoadable>();
-              self->name = content->asValue<string>();
+              auto crt_str = content->cast<Value>()->var().as<string>();
+              Util::upper(crt_str);
+              
+              auto crt_p = Util::find(GpuCmdRunTypeUtil::cmdruntype_enm_map(), crt_str);
+              unlikely (crt_p == null) {
+                CNT_LOG_ERR(content, "unknown GpuCmdRunTypeUtil::GpuCmdRunType --- %s", crt_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<GpuTaskDef>();
+              self->cmd_run_type(*crt_p);
+              
               return Var(true);
               return null_var;

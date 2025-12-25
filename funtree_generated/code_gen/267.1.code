@@ -4,14 +4,19 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 25 "assets/system/node_loader_format/bullet_physics/joint_attachment_point/absolute.nlf"
+#line 23 "assets/system/node_loader_format/graphics/video_memory_pack.nlf"
               
               
-              auto& pow = ctx->getData("vector3.val").v<Vector3>();
-              btVector3 result;
-              BulletWrapper::vector3ToBtVector3(pow, result);
+              auto typ_str = content->cast<Value>()->var().as<string>();
+              Util::upper(typ_str);
               
-              auto self = loadable->cast<BulletAbsoluteJointAttachmentPoint>();
-              self->attachment_point_in_owner(result);
+              auto typ_p = Util::find(VideoMemoryPack::typ_enm_map(), typ_str);
+              unlikely (typ_p == null) {
+                LOG_ERR("unknown VideoMemoryPack::Type --- %s", typ_str.c_str());
+                return Var(false);
+              }
+              
+              auto self = loadable->cast<VideoMemoryPack_LoadableInfo>();
+              self->type = *typ_p;
               return Var(true);
               return null_var;

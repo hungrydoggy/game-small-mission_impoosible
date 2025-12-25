@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/actions/activate.nlf",
-      make_shared<Code_SystemNodeloaderformatActionsActivateNlf>(),
+      "system/node_loader_format/actions/register_body.nlf",
+      make_shared<Code_SystemNodeloaderformatActionsRegisterbodyNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -52,7 +63,7 @@ static Var __code_2 (
 }
 
 
-Var Code_SystemNodeloaderformatActionsActivateNlf::execute (
+Var Code_SystemNodeloaderformatActionsRegisterbodyNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

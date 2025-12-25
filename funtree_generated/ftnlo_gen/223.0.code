@@ -1,4 +1,5 @@
 
-#line 4 "assets/system/node_loader_format/graphics/draw_option/stencil_function.nlf"
+#line 5 "assets/system/node_loader_format/etc/action/action_state.nlf"
       
-      #include <common/draw_option/draw_option.h>
+      #include <action/action_item.h>
+      #include <action/action_state.h>

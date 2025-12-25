@@ -4,12 +4,12 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 21 "assets/system/node_loader_format/common/vector2.nlf"
+#line 21 "assets/system/node_loader_format/common/lrtb_uint.nlf"
               
               
-              auto value = Var(Vector2());
-              value.v<Vector2>().x(content->cast<Value>()->var().as<real>());
+              auto value = Var(Lrtb<uint>());
+              value.v<Lrtb<uint>>().l(content->cast<Value>()->var().as<uint>());
               
-              ctx->setData("vector2.val", value);
+              ctx->setData("lrtb_uint.val", value);
               return Var(true);
               return null_var;

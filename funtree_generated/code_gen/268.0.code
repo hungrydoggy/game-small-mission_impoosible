@@ -1,4 +1,4 @@
 
-#line 4 "assets/system/node_loader_format/app_info.nlf"
+#line 4 "assets/system/node_loader_format/mesh/bone.nlf"
       
-      #include <app_info.h>
+      #include <resource/mesh/_bone.h>

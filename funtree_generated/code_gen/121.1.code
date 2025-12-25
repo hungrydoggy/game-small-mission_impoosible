@@ -1,12 +1,12 @@
-auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
+auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<shared_ptr<Content>>();  auto self = params[2].as<shared_ptr<Macro>>();  
 
 
 
 
-
-#line 43 "assets/system/macroes/sequence.filter.mac"
-                  
-                  
-                  // (processed on pre_embody)
-                  return Var(true);
-                  return null_var;
+#line 30 "assets/system/macroes/sequence.first.mac"
+      
+      
+      auto& mac_params = self->params;
+      
+      return Var(mac_params.get(0));
+      return null_var;

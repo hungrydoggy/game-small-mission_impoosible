@@ -12,7 +12,6 @@
 
 
 
-#include "./288.1.code"
 
 
 
@@ -26,15 +25,34 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "scenes/game.scn.fnc",
-      make_shared<Code_ScenesGameScnFnc>(),
+      "system/node_loader_format/view/sprite_view_def.nlf",
+      make_shared<Code_SystemNodeloaderformatViewSpriteviewdefNlf>(),
       true
   );
-}
 
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
+}
+#endif
+
+
+
+static Var __code_1 (
+    vector<Var> const& params
+) {
+
+  #include "./288.1.code"
+}
 
 
 static Var __code_2 (
@@ -53,10 +71,11 @@ static Var __code_3 (
 }
 
 
-Var Code_ScenesGameScnFnc::execute (
+Var Code_SystemNodeloaderformatViewSpriteviewdefNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
+    case 1: return __code_1(params);
     case 2: return __code_2(params);
     case 3: return __code_3(params);
     default:
@@ -68,7 +87,6 @@ Var Code_ScenesGameScnFnc::execute (
 
 }
 
-#include "./288.4.code"
 
 
 

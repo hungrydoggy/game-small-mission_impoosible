@@ -1,21 +1,13 @@
+auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_ptr<NodeLoadable>>();  auto node = params[2].as<shared_ptr<Node>>();  auto content = params[3].as<shared_ptr<Content>>();  
 
-#line 10 "assets/scenes/game.scn.fsm"
-      
-      using namespace appetizer;
-      
-      
-      bool g_is_left_key_down  = false;
-      bool g_is_right_key_down = false;
-      
-      StringRegistryIdType g_cooldown_manager_gid = StringRegistry::default_registry().lookUp("cooldown_manager");
-      
-      StringRegistryIdType g_poop_create_interval_reg = StringRegistry::default_registry().lookUp("poop_create_interval");
-      StringRegistryIdType g_coin_create_interval_reg = StringRegistry::default_registry().lookUp("coin_create_interval");
-      StringRegistryIdType g_item_create_interval_reg = StringRegistry::default_registry().lookUp("item_create_interval");
-      
-      
-      static void __makePoop (GameObject* self, real x);
-      
-      static void __makeCoin (GameObject* self, real x);
-      
-      static void __makeItem (GameObject* self, real x);
+
+
+
+
+#line 24 "assets/system/node_loader_format/view/sprite/cell_action_call_info.nlf"
+              
+              
+              auto self = loadable->cast<CellActionCallInfo>();
+              self->cell_index = content->cast<Value>()->var().as<size_t>();
+              return Var(true);
+              return null_var;

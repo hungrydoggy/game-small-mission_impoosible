@@ -4,17 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 29 "assets/system/node_loader_format/physics/physics_shape_list.nlf"
-                      
-                      
-                      auto shp_info = ctx->loadSubNodeAs<BulletShapeInfo>(node, content);
-                      unlikely (shp_info == null)
-                        return Var(false);
-                      
-                      auto shp = make_shared<BulletShape>();
-                      shp->bt_shape_info(shp_info);
-                      
-                      auto self = loadable->cast<PhysicsShapeList>();
-                      self->shapes().push_back(shp);
-                      return Var(true);
-                      return null_var;
+#line 28 "assets/system/node_loader_format/bullet_physics/bullet_body.nlf"
+              
+              
+              auto self = loadable->cast<BulletBody>();
+              self->need_auto_register(content->asValue<bool>());
+              return Var(true);
+              return null_var;

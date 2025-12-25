@@ -3,56 +3,23 @@ auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<
 
 
 
-#line 15 "assets/system/node_loader_format/state_serializer/data.nlf"
+#line 16 "assets/system/node_loader_format/graphics/gpu_task/attachment_ref.nlf"
       
       
-      auto self = loadable->cast<StateSerializerNodeLoadable>();
+      auto self = loadable->cast<AttachmentInfo>();
+      self->type = AttachmentInfo::Type::REFERENCE;
       
-      // get keys
-      unlikely (self->hasData("keys") == false)
-        self->setData("keys", vector<string>{});
-      
-      auto& keys = self->getData("keys").v<vector<string>>();
-      
-      
-      // set funcs
-      self->on_serialize_func =
-          [keys](GameComponent* cmp, string const& name, vector<byte>& buffer) {
-            unlikely (keys.size() > 0) {
-              Serializer::serializeByAuto((ushort)keys.size(), buffer);
-              for (auto& k : keys) {
-                Serializer::serializeByAuto(k              , buffer);
-                Serializer::serializeByAuto(cmp->getData(k), buffer);
-              }
-            }else {
-              auto& data_map = cmp->data_map();
-              Serializer::serializeByAuto((ushort)data_map.size(), buffer);
-              for (auto& itr : data_map) {
-                Serializer::serializeByAuto(itr.first , buffer);
-                Serializer::serializeByAuto(itr.second, buffer);
-              }
-            }
-      
-            return true;
-          };
-      
-      self->on_deserialize_func =
-          [](GameComponent* cmp, string const& name, byte const*& buffer) {
-            ushort count;
-            Serializer::deserializeByAuto(count, buffer);
-      
-            for (ushort di=0; di<count; ++di) {
-              string k;
-              Serializer::deserializeByAuto(k, buffer);
-      
-              Var v;
-              Serializer::deserializeByAuto(v, buffer);
-      
-              cmp->setData(k, v);
-            }
-      
-            return true;
-          };
+      #if defined(USE_VULKAN)
+        self->desc.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        self->desc.storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        self->desc.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+        self->desc.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+      #elif defined(USE_WEB_GPU)
+        self->load_op                = WGPULoadOp_Clear;
+        self->store_op               = WGPUStoreOp_Store;
+        self->stencil_load_op        = WGPULoadOp_Load;
+        self->stencil_store_op       = WGPUStoreOp_Discard;
+      #endif
       
       return Var(true);
       return null_var;

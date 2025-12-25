@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"DrawableSerializer", "DrawableSttSer", "DrawSttSer", },
-      vector<string>{"StateSerializerGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatStateserializerDrawableNlf>(),
+      vector<string>{"StencilOption", },
+      vector<string>{},
+      make_shared<NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStenciloptionNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatStateserializerDrawableNlf::loadable_class () const {
-  static string cls = "StateSerializerNodeLoadable";
+string const& NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStenciloptionNlf::loadable_class () const {
+  static string cls = "StencilOption";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatStateserializerDrawableNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<StateSerializerNodeLoadable>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStenciloptionNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<StencilOption>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatStateserializerDrawableNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStenciloptionNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatStateserializerDrawableNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatStateserializerDrawableNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStenciloptionNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -70,33 +80,76 @@ bool NodeLoader_SystemNodeloaderformatStateserializerDrawableNlf::_postLoad (
   if (super_ok == false)
     return false;
 
-  static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/state_serializer/drawable.nlf");
-  auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-  unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/node_loader_format/state_serializer/drawable.nlf");
-    return null;
-  }
-
-  auto result = code_set->execute(1, {Var(&ctx), Var(node), Var(loadable)});
-  return result.as<bool>();
-
+  return true;
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatStateserializerDrawableNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStenciloptionNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "name",
-            "nam",
+            "function",
+            "fun",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::OBJECT,
+              0,
+              "StencilFunction",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/stencil_option.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/stencil_option.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "operator",
+            "opr",
+            vector<string>{ },
+            false,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::OBJECT,
+              0,
+              "StencilOperator",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/stencil_option.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/stencil_option.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "write_mask",
+            "msk",
             vector<string>{ },
             false,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
-              VarContentTypes::STRING,
+              VarContentTypes::NUMBER,
               "",
               [](
                   FormatContext& ctx,
@@ -104,13 +157,13 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatStateserializerDrawa
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/state_serializer/drawable.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/stencil_option.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/state_serializer/drawable.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/stencil_option.nlf");
                   return Var(false);
                 }
-                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

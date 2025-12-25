@@ -1,4 +1,4 @@
-#ifndef SERVER_ONLY
+
 
 #include "./232.h"
 
@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"GpuTaskRunner", },
-      vector<string>{"GpuTaskRunnerGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf>(),
+      vector<string>{"VertexAnimationTextureStateItem", "VATStateItem", },
+      vector<string>{},
+      make_shared<NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureitemNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf::loadable_class () const {
-  static string cls = "GpuTaskRunner";
+string const& NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureitemNlf::loadable_class () const {
+  static string cls = "VertexAnimationTextureStateItem";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<GpuTaskRunner>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureitemNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<VertexAnimationTextureStateItem>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureitemNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf::_preLoad 
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureitemNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,40 +84,60 @@ bool NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf::_postLoad
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskGputaskrunnerNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcVertexanimationtextureVertexanimationtextureitemNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "tasks",
-            "tsk",
+            "name",
+            "nam",
             vector<string>{ },
             true,
             vector<string>{ },
-            make_shared<SequenceFormat>(
+            make_shared<ValueFormat>(
+              Content::Type::VALUE,
+              VarContentTypes::STRING,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_item.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_item.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "vertex_animation_texture_state",
+            "vst",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::OBJECT,
               0,
-              0,
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::OBJECT,
-                  0,
-                  "GpuTaskItem",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/gpu_task/gpu_task_runner.nlf");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/node_loader_format/graphics/gpu_task/gpu_task_runner.nlf");
-                      return Var(false);
-                    }
-                    return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
+              "VertexAnimationTextureStateGroup",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_item.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture_item.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },
@@ -123,4 +153,4 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsGputaskGputa
 
 
 
-#endif
+

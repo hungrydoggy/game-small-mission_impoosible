@@ -4,12 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 22 "assets/system/node_loader_format/common/quaternion.nlf"
+#line 25 "assets/system/node_loader_format/bullet_physics/bullet_physics.nlf"
               
               
-              auto value = Var(Vector3());
-              value.v<Vector3>().x(content->cast<Value>()->var().as<real>());
-              
-              ctx->setData("quaternion.vec3", value);
+              auto self = loadable->cast<BulletWrapper>();
+              self->game_to_physics_scale(content->cast<Value>()->var().as<real>());
               return Var(true);
               return null_var;

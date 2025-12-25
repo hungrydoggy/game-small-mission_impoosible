@@ -1,4 +1,6 @@
 
-#line 5 "assets/system/node_loader_format/common/matrix.nlf"
+#line 7 "assets/system/node_loader_format/bullet_physics/shape_infos/box.nlf"
       
-      #include <util/matrix.h>
+      #include <physics/bullet/shape_info/_box.h>
+      #include <util/quaternion.h>
+      #include <util/vector3.h>

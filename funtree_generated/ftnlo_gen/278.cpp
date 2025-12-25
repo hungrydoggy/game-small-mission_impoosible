@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"ActionState", },
-      vector<string>{"ObjectTraitGroup", },
-      make_shared<NodeLoader_SystemNodeloaderformatEtcActionActionstateNlf>(),
+      vector<string>{"StateSerializer", },
+      vector<string>{"StateSerializerGroup", },
+      make_shared<NodeLoader_SystemNodeloaderformatStateserializerStateserializerNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatEtcActionActionstateNlf::loadable_class () const {
-  static string cls = "ActionState";
+string const& NodeLoader_SystemNodeloaderformatStateserializerStateserializerNlf::loadable_class () const {
+  static string cls = "StateSerializerNodeLoadable";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcActionActionstateNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<ActionState>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatStateserializerStateserializerNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<StateSerializerNodeLoadable>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcActionActionstateNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatStateserializerStateserializerNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatEtcActionActionstateNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatEtcActionActionstateNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatStateserializerStateserializerNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,20 +84,20 @@ bool NodeLoader_SystemNodeloaderformatEtcActionActionstateNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionstateNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatStateserializerStateserializerNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "time_scale",
-            "tsc",
+            "name",
+            "nam",
             vector<string>{ },
             false,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
-              VarContentTypes::DOUBLE,
+              VarContentTypes::STRING,
               "",
               [](
                   FormatContext& ctx,
@@ -95,10 +105,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionstate
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/action/action_state.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/state_serializer/state_serializer.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/etc/action/action_state.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/state_serializer/state_serializer.nlf");
                   return Var(false);
                 }
                 return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -106,28 +116,54 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionstate
             )
           },
           AttributeLoader{
-            "action_item",
-            "itm",
+            "on_serialize",
+            "ser",
             vector<string>{ },
-            false,
+            true,
             vector<string>{ },
             make_shared<ValueFormat>(
-              Content::Type::OBJECT,
+              Content::Type::CODE,
               0,
-              "ActionItem",
+              "",
               [](
                   FormatContext& ctx,
                   shared_ptr<NodeLoadable> const& loadable,
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/action/action_state.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/state_serializer/state_serializer.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/etc/action/action_state.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/state_serializer/state_serializer.nlf");
                   return Var(false);
                 }
                 return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "on_deserialize",
+            "dse",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::CODE,
+              0,
+              "",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/state_serializer/state_serializer.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/state_serializer/state_serializer.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

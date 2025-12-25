@@ -8,7 +8,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./144.0.code"
+#include "./145.0.code"
 
 
 
@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/actions/scale_x_by.nlf",
-      make_shared<Code_SystemNodeloaderformatActionsScalexbyNlf>(),
+      "system/node_loader_format/actions/move_y_to.nlf",
+      make_shared<Code_SystemNodeloaderformatActionsMoveytoNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -44,7 +55,7 @@ static Var __code_0 (
 }
 
 
-Var Code_SystemNodeloaderformatActionsScalexbyNlf::execute (
+Var Code_SystemNodeloaderformatActionsMoveytoNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

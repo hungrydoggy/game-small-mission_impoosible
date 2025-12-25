@@ -4,9 +4,9 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 41 "assets/system/macroes/compare.gte.mac"
-                  
-                  auto self = dpc<Macro>(loadable);
-                  self->params.add(content);
-                  return Var(true);
-                  return null_var;
+#line 16 "assets/system/macroes/math.log.mac"
+          
+          auto self = dpc<Macro>(loadable);
+          self->params.set(0, content);
+          return Var(true);
+          return null_var;

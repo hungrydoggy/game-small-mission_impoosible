@@ -1,3 +1,5 @@
 
-#line 5 "assets/system/macroes/math.log.mac"
-                 #include <util/math.h>
+#line 4 "assets/scenes/game.scn.fnc"
+      
+      #include <algorithm>
+      #include <filesystem>

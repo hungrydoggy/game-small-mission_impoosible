@@ -4,9 +4,18 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 16 "assets/system/macroes/math.round.mac"
-          
-          auto self = dpc<Macro>(loadable);
-          self->params.set(0, content);
-          return Var(true);
-          return null_var;
+#line 42 "assets/system/macroes/sequence.plus.mac"
+                          
+                          auto self = dpc<Macro>(loadable);
+                          
+                          // data part
+                          unlikely (self->hasData("seq") == false)
+                            self->setData("seq", vector<Var>{});
+                          
+                          auto& seq = self->getDataRef("seq").v<vector<Var>>();
+                          
+                          
+                          // add part
+                          seq.push_back(content->cast<Value>()->var());
+                          return Var(true);
+                          return null_var;

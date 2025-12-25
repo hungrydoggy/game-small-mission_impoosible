@@ -4,19 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 21 "assets/system/node_loader_format/common/matrix.nlf"
+#line 26 "assets/system/node_loader_format/bullet_physics/shape_infos/box.nlf"
               
               
-              unlikely (ctx->hasData("matrix.val") == false) {
-                ctx->setData("matrix.val", Var(Matrix()));
-                ctx->setData("matrix.idx", Var((size_t)0));
-              }
-              
-              auto& value = ctx->getDataRef("matrix.val");
-              auto  idx   = ctx->getData("matrix.idx", (size_t)0);
-              
-              value.v<Matrix>().setByIdx(idx, content->cast<Value>()->var().as<real>());
-              
-              ctx->setData("matrix.idx", idx+1);
+              auto self = loadable->cast<BulletShapeInfo_Box>();
+              self->offset_pos = ctx->getData("vector3.val").v<Vector3>();
               return Var(true);
               return null_var;

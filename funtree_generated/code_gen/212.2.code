@@ -4,9 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 42 "assets/system/node_loader_format/common/resolution.nlf"
+#line 40 "assets/system/node_loader_format/common/lrtb_real.nlf"
               
               
-              ctx->setData("resolution.val.h", Var(content->cast<Value>()->var().as<int>()));
+              auto& value = ctx->getDataRef("lrtb_real.val");
+              value.v<Lrtb<real>>().r(content->cast<Value>()->var().as<real>());
               return Var(true);
               return null_var;

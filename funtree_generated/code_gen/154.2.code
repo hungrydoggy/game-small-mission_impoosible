@@ -4,7 +4,7 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 37 "assets/system/node_loader_format/actions/set_input_processable.nlf"
+#line 37 "assets/system/node_loader_format/actions/log.nlf"
               
               auto self = loadable->cast<ActionLoadable>();
               self->setData("value", content->cast<Value>()->var());

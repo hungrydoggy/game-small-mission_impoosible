@@ -24,14 +24,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/macroes/operator.and.mac",
-      make_shared<Code_SystemMacroesOperatorAndMac>(),
+      "system/macroes/compare.lt.mac",
+      make_shared<Code_SystemMacroesCompareLtMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -51,12 +62,21 @@ static Var __code_1 (
 }
 
 
-Var Code_SystemMacroesOperatorAndMac::execute (
+static Var __code_2 (
+    vector<Var> const& params
+) {
+
+  #include "./57.2.code"
+}
+
+
+Var Code_SystemMacroesCompareLtMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
     case 0: return __code_0(params);
     case 1: return __code_1(params);
+    case 2: return __code_2(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"57.cpp\"", code_idx);
       return null_var;

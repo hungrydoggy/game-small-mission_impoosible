@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/node_loader_format/common/lrtb_real.nlf",
-      make_shared<Code_SystemNodeloaderformatCommonLrtbrealNlf>(),
+      "system/node_loader_format/bullet_physics/joints/generic_6dof.nlf",
+      make_shared<Code_SystemNodeloaderformatBulletphysicsJointsGeneric6dofNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -68,7 +79,23 @@ static Var __code_4 (
 }
 
 
-Var Code_SystemNodeloaderformatCommonLrtbrealNlf::execute (
+static Var __code_5 (
+    vector<Var> const& params
+) {
+
+  #include "./206.5.code"
+}
+
+
+static Var __code_6 (
+    vector<Var> const& params
+) {
+
+  #include "./206.6.code"
+}
+
+
+Var Code_SystemNodeloaderformatBulletphysicsJointsGeneric6dofNlf::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
@@ -76,6 +103,8 @@ Var Code_SystemNodeloaderformatCommonLrtbrealNlf::execute (
     case 2: return __code_2(params);
     case 3: return __code_3(params);
     case 4: return __code_4(params);
+    case 5: return __code_5(params);
+    case 6: return __code_6(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"206.cpp\"", code_idx);
       return null_var;

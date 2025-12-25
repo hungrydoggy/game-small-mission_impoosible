@@ -4,19 +4,14 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 29 "assets/system/node_loader_format/graphics/draw_option/draw_option.nlf"
+#line 29 "assets/system/node_loader_format/etc/action/action_list.nlf"
                       
-                      auto ena_typ_str = content->cast<Value>()->var().as<string>();
-                      Util::upper(ena_typ_str);
                       
-                      auto ena_typ_p = Util::find(DrawOption::str_enable_map(), ena_typ_str);
-                      unlikely (ena_typ_p == null) {
-                        LOG_ERR("unknown DrawOption::EnableType --- %s", ena_typ_str.c_str());
+                      auto itm = ctx->loadSubNodeAs<ActionItem>(node, content);
+                      unlikely (itm == null)
                         return Var(false);
-                      }
                       
-                      auto self = loadable->cast<DrawOption>();
-                      self->use(*ena_typ_p);
-                      
+                      auto self = loadable->cast<ActionList>();
+                      self->add(itm->name, itm->action);
                       return Var(true);
                       return null_var;

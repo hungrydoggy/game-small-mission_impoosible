@@ -24,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"GameComponent.getRotation", "Component.getRotation", "cmp.rot", },
-      make_shared<Macro_SystemMacroesGamecomponentGetrotationMac>(),
+      vector<string>{"Math.acos", "math.acos", "acos", },
+      make_shared<Macro_SystemMacroesMathAcosMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesGamecomponentGetrotationMac::loadable_class () const {
+string const& Macro_SystemMacroesMathAcosMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesGamecomponentGetrotationMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesMathAcosMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesGamecomponentGetrotationMac::preEmbody (
+bool Macro_SystemMacroesMathAcosMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -57,7 +66,7 @@ bool Macro_SystemMacroesGamecomponentGetrotationMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesGamecomponentGetrotationMac::_preLoad (
+bool Macro_SystemMacroesMathAcosMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -66,7 +75,7 @@ bool Macro_SystemMacroesGamecomponentGetrotationMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesGamecomponentGetrotationMac::_postLoad (
+bool Macro_SystemMacroesMathAcosMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -80,10 +89,10 @@ static shared_ptr<Content> __on_call_code_2 (
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_rotation.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/math.acos.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/game_component.get_rotation.mac");
+    LOG_ERR("code_set is null --- system/macroes/math.acos.mac");
     return null;
   }
 
@@ -92,7 +101,7 @@ static shared_ptr<Content> __on_call_code_2 (
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesGamecomponentGetrotationMac::execute (
+shared_ptr<Content> Macro_SystemMacroesMathAcosMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
@@ -106,7 +115,7 @@ shared_ptr<Content> Macro_SystemMacroesGamecomponentGetrotationMac::execute (
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesGamecomponentGetrotationMac::execute (
+shared_ptr<Content> Macro_SystemMacroesMathAcosMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
@@ -114,11 +123,11 @@ shared_ptr<Content> Macro_SystemMacroesGamecomponentGetrotationMac::execute (
   return execute(node, content, 2, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesGamecomponentGetrotationMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesMathAcosMac::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ValueFormat>(
       Content::Type::VALUE,
-      VarContentTypes::STRING,
+      VarContentTypes::NUMBER,
       "",
       [](
           FormatContext& ctx,
@@ -126,10 +135,10 @@ shared_ptr<Format> const&  Macro_SystemMacroesGamecomponentGetrotationMac::_getF
           shared_ptr<Node> const& node,
           shared_ptr<Content> const& content
       ) {
-        static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_rotation.mac");
+        static uint code_path_id = PathRegistry::lookUp("system/macroes/math.acos.mac");
         auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
         unlikely (code_set == null) {
-          LOG_ERR("code_set is null --- system/macroes/game_component.get_rotation.mac");
+          LOG_ERR("code_set is null --- system/macroes/math.acos.mac");
           return Var(false);
         }
         return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});

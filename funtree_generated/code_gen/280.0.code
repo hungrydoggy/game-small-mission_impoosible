@@ -1,6 +1,4 @@
 
-#line 4 "assets/system/node_loader_format/etc/action/action_item.nlf"
+#line 6 "assets/system/node_loader_format/state_serializer/transform.nlf"
       
-      #include <action/_action_loadable.h>
-      #include <action/action_item.h>
-      #include <game_component/game_component.h>
+      #include <common/state_serializer/state_serializer.h>

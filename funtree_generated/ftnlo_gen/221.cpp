@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"DepthOption", },
+      vector<string>{"ActionItem", },
       vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf::loadable_class () const {
-  static string cls = "DepthOption";
+string const& NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::loadable_class () const {
+  static string cls = "ActionItem";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<DepthOption>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<ActionItem>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf::_preLoad
 }
 
 
-bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,42 +84,16 @@ bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf::_postLoa
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatEtcActionActionitemNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "mask",
-            "msk",
+            "name",
+            "nam",
             vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::BOOL,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/depth_option.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/depth_option.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "function",
-            "fun",
-            vector<string>{ },
-            false,
+            true,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
@@ -121,10 +105,36 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsDrawoptionDe
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/depth_option.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/action/action_item.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/depth_option.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/action/action_item.nlf");
+                  return Var(false);
+                }
+                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "action",
+            "act",
+            vector<string>{ },
+            true,
+            vector<string>{ },
+            make_shared<ValueFormat>(
+              Content::Type::OBJECT,
+              0,
+              "ActionGroup",
+              [](
+                  FormatContext& ctx,
+                  shared_ptr<NodeLoadable> const& loadable,
+                  shared_ptr<Node> const& node,
+                  shared_ptr<Content> const& content
+              ) {
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/etc/action/action_item.nlf");
+                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                unlikely (code_set == null) {
+                  LOG_ERR("code_set is null --- system/node_loader_format/etc/action/action_item.nlf");
                   return Var(false);
                 }
                 return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});

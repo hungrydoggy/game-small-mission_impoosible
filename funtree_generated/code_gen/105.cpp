@@ -24,14 +24,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/macroes/math.abs.mac",
-      make_shared<Code_SystemMacroesMathAbsMac>(),
+      "system/macroes/operator.modulo.mac",
+      make_shared<Code_SystemMacroesOperatorModuloMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -51,7 +62,7 @@ static Var __code_1 (
 }
 
 
-Var Code_SystemMacroesMathAbsMac::execute (
+Var Code_SystemMacroesOperatorModuloMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

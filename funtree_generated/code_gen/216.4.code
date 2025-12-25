@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 79 "assets/system/node_loader_format/mesh/bone.nlf"
+#line 74 "assets/system/node_loader_format/common/rectangle_real.nlf"
               
               
-              auto self = loadable->cast<Bone>();
-              self->inv_bind_matrix(ctx->getData("matrix.val").v<Matrix>());
+              auto& value = ctx->getDataRef("rectangle_real.val");
+              value.v<Rectangle<real>>().height(content->cast<Value>()->var().as<real>());
               return Var(true);
               return null_var;

@@ -8,6 +8,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
+#include "./134.0.code"
 
 
 
@@ -23,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Map.getKeyByIndex", "map.keyByIdx", },
-      make_shared<Macro_SystemMacroesMapKeybyidxMac>(),
+      vector<string>{"String.format", "str.format", },
+      make_shared<Macro_SystemMacroesStringFormatMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesMapKeybyidxMac::loadable_class () const {
+string const& Macro_SystemMacroesStringFormatMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesMapKeybyidxMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesStringFormatMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesMapKeybyidxMac::preEmbody (
+bool Macro_SystemMacroesStringFormatMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -56,7 +66,7 @@ bool Macro_SystemMacroesMapKeybyidxMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesMapKeybyidxMac::_preLoad (
+bool Macro_SystemMacroesStringFormatMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -65,7 +75,7 @@ bool Macro_SystemMacroesMapKeybyidxMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesMapKeybyidxMac::_postLoad (
+bool Macro_SystemMacroesStringFormatMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,85 +84,59 @@ bool Macro_SystemMacroesMapKeybyidxMac::_postLoad (
 }
 
 
-static shared_ptr<Content> __on_call_code_2 (
+static shared_ptr<Content> __on_call_code_3 (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/map.key_by_idx.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/string.format.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/map.key_by_idx.mac");
+    LOG_ERR("code_set is null --- system/macroes/string.format.mac");
     return null;
   }
 
-  auto result = code_set->execute(2, {Var(node), Var(content), Var(self)});
+  auto result = code_set->execute(3, {Var(node), Var(content), Var(self)});
   return result.v<shared_ptr<Content>>();
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesMapKeybyidxMac::execute (
+shared_ptr<Content> Macro_SystemMacroesStringFormatMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
     shared_ptr<Macro> const& macro
 ) {
   switch (code_idx) {
-    case 2: return __on_call_code_2(node, content, macro);
+    case 3: return __on_call_code_3(node, content, macro);
     default:
       LOG_ERR("unknown code_idx %u --- \"134.cpp\"", code_idx);
       return null;
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesMapKeybyidxMac::execute (
+shared_ptr<Content> Macro_SystemMacroesStringFormatMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
 ) {
-  return execute(node, content, 2, macro);
+  return execute(node, content, 3, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesMapKeybyidxMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesStringFormatMac::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<MapFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "map",
-            "map",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::MAP,
-              0,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/map.key_by_idx.mac");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/map.key_by_idx.mac");
-                  return Var(false);
-                }
-                return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "index",
-            "idx",
+            "format_string",
+            "fmt",
             vector<string>{ },
             true,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
-              VarContentTypes::NUMBER,
+              VarContentTypes::STRING,
               "",
               [](
                   FormatContext& ctx,
@@ -160,13 +144,45 @@ shared_ptr<Format> const&  Macro_SystemMacroesMapKeybyidxMac::_getFormat () {
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/map.key_by_idx.mac");
+                static uint code_path_id = PathRegistry::lookUp("system/macroes/string.format.mac");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/map.key_by_idx.mac");
+                  LOG_ERR("code_set is null --- system/macroes/string.format.mac");
                   return Var(false);
                 }
                 return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+              }
+            )
+          },
+          AttributeLoader{
+            "format_params",
+            "par",
+            vector<string>{ },
+            false,
+            vector<string>{ "format_string", },
+            make_shared<SequenceFormat>(
+              0,
+              -1,
+              vector<shared_ptr<Format>>{
+                make_shared<ValueFormat>(
+                  Content::Type::VALUE,
+                  VarContentTypes::STRING,
+                  "",
+                  [](
+                      FormatContext& ctx,
+                      shared_ptr<NodeLoadable> const& loadable,
+                      shared_ptr<Node> const& node,
+                      shared_ptr<Content> const& content
+                  ) {
+                    static uint code_path_id = PathRegistry::lookUp("system/macroes/string.format.mac");
+                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+                    unlikely (code_set == null) {
+                      LOG_ERR("code_set is null --- system/macroes/string.format.mac");
+                      return Var(false);
+                    }
+                    return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
+                  }
+                ),
               }
             )
           },

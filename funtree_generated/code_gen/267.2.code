@@ -4,14 +4,19 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 47 "assets/system/node_loader_format/bullet_physics/joint_attachment_point/absolute.nlf"
+#line 52 "assets/system/node_loader_format/graphics/video_memory_pack.nlf"
               
               
-              auto& oow = ctx->getData("quaternion.val").v<Quaternion>();
-              btQuaternion result;
-              BulletWrapper::quaternionToBtQuaternion(oow, result);
+              auto prp_str = content->cast<Value>()->var().as<string>();
+              Util::upper(prp_str);
               
-              auto self = loadable->cast<BulletAbsoluteJointAttachmentPoint>();
-              self->attachment_orientation_in_owner(result);
+              auto prp_p = Util::find(VideoMemoryPack::vmpprop_enm_map(), prp_str);
+              unlikely (prp_p == null) {
+                LOG_ERR("unknown VideoMemoryPack::Property --- %s", prp_str.c_str());
+                return Var(false);
+              }
+              
+              auto self = loadable->cast<VideoMemoryPack_LoadableInfo>();
+              self->property = *prp_p;
               return Var(true);
               return null_var;

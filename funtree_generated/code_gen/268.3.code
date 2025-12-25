@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 62 "assets/system/node_loader_format/app_info.nlf"
+#line 61 "assets/system/node_loader_format/mesh/bone.nlf"
               
               
-              auto self = loadable->cast<AppInfo>();
-              self->setData("windows", Var(content));
+              auto self = loadable->cast<Bone>();
+              self->transform_matrix(ctx->getData("matrix.val").v<Matrix>());
               return Var(true);
               return null_var;

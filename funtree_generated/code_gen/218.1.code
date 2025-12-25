@@ -4,11 +4,13 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 23 "assets/system/node_loader_format/graphics/draw_option/blend_option.nlf"
+#line 22 "assets/system/node_loader_format/common/resolution.nlf"
               
-              #ifndef SERVER_ONLY
-              auto self = loadable->cast<BlendOptionInfo>();
-              self->enable = content->cast<Value>()->var().as<bool>();
-              #endif
+              
+              ctx->setData("resolution.val.w", Var(content->cast<Value>()->var().as<int>()));
+              
+              ctx->removeData("resolution.val.base_axis");
+              ctx->removeData("resolution.val.axis_size");
+              
               return Var(true);
               return null_var;

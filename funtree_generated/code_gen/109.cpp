@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/macroes/view.get_image_size.mac",
-      make_shared<Code_SystemMacroesViewGetimagesizeMac>(),
+      "system/macroes/physics_shape.make_half_size_from_image_size.mac",
+      make_shared<Code_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -52,7 +63,7 @@ static Var __code_2 (
 }
 
 
-Var Code_SystemMacroesViewGetimagesizeMac::execute (
+Var Code_SystemMacroesPhysicsshapeMakehalfsizefromimagesizeMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

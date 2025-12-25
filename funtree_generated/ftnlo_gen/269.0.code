@@ -1,5 +1,4 @@
 
-#line 5 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf"
+#line 4 "assets/system/node_loader_format/mesh/mesh.nlf"
       
-      #include <etc/vertex_animation_texture/vertex_animation_texture.h>
-      #include <resource/texture/texture.h>
+      #include <resource/mesh/mesh.h>

@@ -25,14 +25,25 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/macroes/game_component.get_children_names.mac",
-      make_shared<Code_SystemMacroesGamecomponentGetchildrennamesMac>(),
+      "system/macroes/math.floor.mac",
+      make_shared<Code_SystemMacroesMathFloorMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
@@ -52,7 +63,7 @@ static Var __code_2 (
 }
 
 
-Var Code_SystemMacroesGamecomponentGetchildrennamesMac::execute (
+Var Code_SystemMacroesMathFloorMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {

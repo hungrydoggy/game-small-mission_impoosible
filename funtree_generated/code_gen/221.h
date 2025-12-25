@@ -1,5 +1,5 @@
-#ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_DRAW_OPTION_DEPTH_OPTION_NLF_H_
-#define AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_DRAW_OPTION_DEPTH_OPTION_NLF_H_
+#ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_ETC_ACTION_ACTION_ITEM_NLF_H_
+#define AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_ETC_ACTION_ACTION_ITEM_NLF_H_
 
 
 
@@ -13,7 +13,7 @@
 namespace appetizer {
 
 
-class GAMECONTENT_API Code_SystemNodeloaderformatGraphicsDrawoptionDepthoptionNlf : public fun_tree::CodeSet {
+class FUNTREEGENERATED_API Code_SystemNodeloaderformatEtcActionActionitemNlf : public fun_tree::CodeSet {
 public:  // methods
   Var execute (int code_idx, vector<Var> const& params) override;
 
@@ -26,4 +26,4 @@ public:  // methods
 
 
 
-#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_GRAPHICS_DRAW_OPTION_DEPTH_OPTION_NLF_H_
+#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_NODE_LOADER_FORMAT_ETC_ACTION_ACTION_ITEM_NLF_H_

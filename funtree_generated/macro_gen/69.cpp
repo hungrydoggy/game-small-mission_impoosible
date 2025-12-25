@@ -24,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Project.isSystemInputProcessable", "prj.isSystemInputProcessable", },
-      make_shared<Macro_SystemMacroesProjectIssysteminputprocessableMac>(),
+      vector<string>{"GameComponent.getPosition", "Component.getPosition", "cmp.pos", },
+      make_shared<Macro_SystemMacroesGamecomponentGetpositionMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesProjectIssysteminputprocessableMac::loadable_class () const {
+string const& Macro_SystemMacroesGamecomponentGetpositionMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesProjectIssysteminputprocessableMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesGamecomponentGetpositionMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesProjectIssysteminputprocessableMac::preEmbody (
+bool Macro_SystemMacroesGamecomponentGetpositionMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -57,7 +66,7 @@ bool Macro_SystemMacroesProjectIssysteminputprocessableMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesProjectIssysteminputprocessableMac::_preLoad (
+bool Macro_SystemMacroesGamecomponentGetpositionMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -66,7 +75,7 @@ bool Macro_SystemMacroesProjectIssysteminputprocessableMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesProjectIssysteminputprocessableMac::_postLoad (
+bool Macro_SystemMacroesGamecomponentGetpositionMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -80,10 +89,10 @@ static shared_ptr<Content> __on_call_code_2 (
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/project.is_system_input_processable.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_position.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/project.is_system_input_processable.mac");
+    LOG_ERR("code_set is null --- system/macroes/game_component.get_position.mac");
     return null;
   }
 
@@ -92,7 +101,7 @@ static shared_ptr<Content> __on_call_code_2 (
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesProjectIssysteminputprocessableMac::execute (
+shared_ptr<Content> Macro_SystemMacroesGamecomponentGetpositionMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
@@ -106,7 +115,7 @@ shared_ptr<Content> Macro_SystemMacroesProjectIssysteminputprocessableMac::execu
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesProjectIssysteminputprocessableMac::execute (
+shared_ptr<Content> Macro_SystemMacroesGamecomponentGetpositionMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
@@ -114,11 +123,11 @@ shared_ptr<Content> Macro_SystemMacroesProjectIssysteminputprocessableMac::execu
   return execute(node, content, 2, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesProjectIssysteminputprocessableMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesGamecomponentGetpositionMac::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ValueFormat>(
-      Content::Type::ANY,
-      0,
+      Content::Type::VALUE,
+      VarContentTypes::STRING,
       "",
       [](
           FormatContext& ctx,
@@ -126,10 +135,10 @@ shared_ptr<Format> const&  Macro_SystemMacroesProjectIssysteminputprocessableMac
           shared_ptr<Node> const& node,
           shared_ptr<Content> const& content
       ) {
-        static uint code_path_id = PathRegistry::lookUp("system/macroes/project.is_system_input_processable.mac");
+        static uint code_path_id = PathRegistry::lookUp("system/macroes/game_component.get_position.mac");
         auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
         unlikely (code_set == null) {
-          LOG_ERR("code_set is null --- system/macroes/project.is_system_input_processable.mac");
+          LOG_ERR("code_set is null --- system/macroes/game_component.get_position.mac");
           return Var(false);
         }
         return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});

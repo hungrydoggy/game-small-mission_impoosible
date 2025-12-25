@@ -3,7 +3,7 @@ auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<share
 
 
 
-#line 33 "assets/system/macroes/physics_shape.make_half_size_from_image_size.mac"
+#line 27 "assets/system/macroes/game_component.get_name.mac"
       
       
       auto& mac_params = self->params;
@@ -13,7 +13,7 @@ auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<share
       // make MacroOnLoad
       auto macro_on_load =
           make_shared<MacroOnLoad>(
-            [content, target_path](LoaderContext& ctx, shared_ptr<Node> const& node)->bool {
+            [content](LoaderContext& ctx, shared_ptr<Node> const& node)->bool {
               return true;
             },
             [content, target_path](LoaderContext& ctx, shared_ptr<Node> const& node)->sp<Content> {
@@ -30,43 +30,13 @@ auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<share
                 return null;
               }
       
-              auto target = cmp->findByNamePath<GameObject>(target_path);
+              auto target = cmp->findByNamePath(target_path);
               unlikely (target == null) {
-                CNT_LOG_ERR(content, "cannot find Object with target path --- %s", target_path.c_str());
+                CNT_LOG_ERR(content, "cannot find target path --- %s", target_path.c_str());
                 return null;
               }
       
-              auto view = target->getTrait<View>("view");
-              unlikely (view == null) {
-                CNT_LOG_ERR(content, "Object has no view --- %s", target_path.c_str());
-                return null;
-              }
-      
-              // case: Image
-              auto img = view->def<ImageViewDef>();
-              likely (img != null) {
-                auto result =
-                    make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
-                auto& siz = img->image_size();
-                result->add(make_shared<Value>(Var(siz.x() * REAL(0.5)), content));
-                result->add(make_shared<Value>(Var(siz.y() * REAL(0.5)), content));
-                result->add(make_shared<Value>(Var(          REAL(0.1)), content));
-                return result;
-              }
-      
-              // case: NinePatch
-              auto ninpch = view->def<NinePatchViewDef>();
-              likely (ninpch != null) {
-                auto result =
-                    make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
-                auto& siz = ninpch->image_size();
-                result->add(make_shared<Value>(Var(siz.x() * REAL(0.5)), content));
-                result->add(make_shared<Value>(Var(siz.y() * REAL(0.5)), content));
-                result->add(make_shared<Value>(Var(          REAL(0.1)), content));
-                return result;
-              }
-      
-              return null;
+              return make_shared<Value>(Var(target->name()), content);
             },
             content->file_path(),
             content->line_in_file(),

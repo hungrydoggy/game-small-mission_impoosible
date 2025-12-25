@@ -4,21 +4,14 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 42 "assets/system/node_loader_format/graphics/draw_option/depth_option.nlf"
+#line 45 "assets/system/node_loader_format/etc/action/action_item.nlf"
               
               
-              #ifndef SERVER_ONLY
-              auto fun_str = content->cast<Value>()->var().as<string>();
-              Util::upper(fun_str);
-              
-              auto fun_p = Util::find(DepthOption::str_funtyp_map(), fun_str);
-              unlikely (fun_p == null) {
-                LOG_ERR("unknown DepthOption::FuncType --- %s", fun_str.c_str());
+              auto action_loader = ctx->loadSubNodeAs<ActionLoadable>(node, content);
+              unlikely (action_loader == null)
                 return Var(false);
-              }
-              auto self = loadable->cast<DepthOption>();
-              self->func = *fun_p;
-              #endif
               
+              auto self = loadable->cast<ActionItem>();
+              self->action = action_loader->action;
               return Var(true);
               return null_var;

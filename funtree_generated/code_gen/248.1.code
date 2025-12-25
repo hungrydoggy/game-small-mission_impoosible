@@ -4,40 +4,19 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 35 "assets/system/node_loader_format/game_component/camera.nlf"
-              
-              
-              auto info = ctx->loadSubNodeAs<ProjectionInfo>(node, content);
-              unlikely (info == null)
-                return Var(false);
-              
-              auto self = loadable->cast<Camera>();
-              if (info->need_default == true) {
-                switch (info->projection_type) {
-                  case Camera::ProjectionType::ORTHOGONAL:
-                    self->setOrthogonal(*Project::active_project());
-                    return Var(true);
-                  case Camera::ProjectionType::PERSPECTIVE:
-                    self->setPerspective(*Project::active_project());
-                    return Var(true);
-                  default:
-                    return Var(false);
-                }
-                return Var(false);
-              }
-              
-              switch (info->projection_type) {
-                case Camera::ProjectionType::ORTHOGONAL:
-                  self->setOrthogonal(
-                      info->left, info->right, info->top, info->bottom,
-                      info->near_v, info->far_v);
-                  return Var(true);
-                case Camera::ProjectionType::PERSPECTIVE:
-                  self->setPerspective(
-                      info->aspect_ratio, info->fov, info->near_v, info->far_v);
-                  return Var(true);
-                default:
-                  return Var(false);
-              }
-              return Var(true);
-              return null_var;
+#line 29 "assets/system/node_loader_format/graphics/draw_option/draw_option.nlf"
+                      
+                      auto ena_typ_str = content->cast<Value>()->var().as<string>();
+                      Util::upper(ena_typ_str);
+                      
+                      auto ena_typ_p = Util::find(DrawOption::str_enable_map(), ena_typ_str);
+                      unlikely (ena_typ_p == null) {
+                        LOG_ERR("unknown DrawOption::EnableType --- %s", ena_typ_str.c_str());
+                        return Var(false);
+                      }
+                      
+                      auto self = loadable->cast<DrawOption>();
+                      self->use(*ena_typ_p);
+                      
+                      return Var(true);
+                      return null_var;

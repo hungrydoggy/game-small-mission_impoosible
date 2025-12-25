@@ -4,15 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 49 "assets/system/node_loader_format/bone_animation/bone_key_frame_info.nlf"
-                      
-                      
-                      auto pkf = ctx->loadSubNodeAs<PosKeyFrame>(node, content);
-                      unlikely (pkf == null)
-                        return Var(false);
-                      
-                      auto self = loadable->cast<BoneKeyFrameInfo>();
-                      self->pos_key_frames().push_back(*pkf);
-                      
-                      return Var(true);
-                      return null_var;
+#line 42 "assets/system/node_loader_format/bone_animation/rot_key_frame.nlf"
+              
+              
+              auto self = loadable->cast<RotKeyFrame>();
+              self->value(ctx->getData("quaternion.val").v<Quaternion>());
+              return Var(true);
+              return null_var;

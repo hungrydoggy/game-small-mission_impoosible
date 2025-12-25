@@ -4,10 +4,14 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 108 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf"
-              
-              
-              auto self = loadable->cast<VAT>();
-              self->time_scale(content->asValue<double>());
-              return Var(true);
-              return null_var;
+#line 129 "assets/system/node_loader_format/mesh/mesh.nlf"
+                      
+                      
+                      auto bone = ctx->loadSubNodeAs<Bone>(node, content);
+                      unlikely (bone == null)
+                        return Var(false);
+                      
+                      auto self = loadable->cast<Mesh>();
+                      self->bones().push_back(*bone);
+                      return Var(true);
+                      return null_var;

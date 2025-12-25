@@ -1,5 +1,5 @@
-#ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_MACROES_PROJECT_IS_SYSTEM_INPUT_PROCESSABLE_MAC_H_
-#define AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_MACROES_PROJECT_IS_SYSTEM_INPUT_PROCESSABLE_MAC_H_
+#ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_MACROES_GAME_COMPONENT_GET_POSITION_MAC_H_
+#define AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_MACROES_GAME_COMPONENT_GET_POSITION_MAC_H_
 
 
 
@@ -13,7 +13,7 @@
 namespace appetizer {
 
 
-class GAMECONTENT_API Code_SystemMacroesProjectIssysteminputprocessableMac : public fun_tree::CodeSet {
+class FUNTREEGENERATED_API Code_SystemMacroesGamecomponentGetpositionMac : public fun_tree::CodeSet {
 public:  // methods
   Var execute (int code_idx, vector<Var> const& params) override;
 
@@ -26,4 +26,4 @@ public:  // methods
 
 
 
-#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_MACROES_PROJECT_IS_SYSTEM_INPUT_PROCESSABLE_MAC_H_
+#endif  // ifndef AUTO_GENERATED_FUN_TREE_CODE_SYSTEM_MACROES_GAME_COMPONENT_GET_POSITION_MAC_H_

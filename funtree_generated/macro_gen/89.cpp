@@ -8,6 +8,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
+#include "./89.0.code"
 
 
 
@@ -23,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Sequence.get", "seq.get", },
-      make_shared<Macro_SystemMacroesSequenceGetMac>(),
+      vector<string>{"Math.exp", "math.exp", "exp", },
+      make_shared<Macro_SystemMacroesMathExpMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesSequenceGetMac::loadable_class () const {
+string const& Macro_SystemMacroesMathExpMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesSequenceGetMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesMathExpMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesSequenceGetMac::preEmbody (
+bool Macro_SystemMacroesMathExpMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -56,7 +66,7 @@ bool Macro_SystemMacroesSequenceGetMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesSequenceGetMac::_preLoad (
+bool Macro_SystemMacroesMathExpMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -65,7 +75,7 @@ bool Macro_SystemMacroesSequenceGetMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesSequenceGetMac::_postLoad (
+bool Macro_SystemMacroesMathExpMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -79,10 +89,10 @@ static shared_ptr<Content> __on_call_code_2 (
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.get.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/math.exp.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/sequence.get.mac");
+    LOG_ERR("code_set is null --- system/macroes/math.exp.mac");
     return null;
   }
 
@@ -91,7 +101,7 @@ static shared_ptr<Content> __on_call_code_2 (
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesSequenceGetMac::execute (
+shared_ptr<Content> Macro_SystemMacroesMathExpMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
@@ -105,7 +115,7 @@ shared_ptr<Content> Macro_SystemMacroesSequenceGetMac::execute (
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesSequenceGetMac::execute (
+shared_ptr<Content> Macro_SystemMacroesMathExpMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
@@ -113,70 +123,25 @@ shared_ptr<Content> Macro_SystemMacroesSequenceGetMac::execute (
   return execute(node, content, 2, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesSequenceGetMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesMathExpMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<MapFormat>(
-      vector<vector<AttributeLoader>>{
-        vector<AttributeLoader>{
-          AttributeLoader{
-            "sequence",
-            "seq",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<SequenceFormat>(
-              0,
-              -1,
-              vector<shared_ptr<Format>>{
-                make_shared<ValueFormat>(
-                  Content::Type::ANY,
-                  0,
-                  "",
-                  [](
-                      FormatContext& ctx,
-                      shared_ptr<NodeLoadable> const& loadable,
-                      shared_ptr<Node> const& node,
-                      shared_ptr<Content> const& content
-                  ) {
-                    static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.get.mac");
-                    auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                    unlikely (code_set == null) {
-                      LOG_ERR("code_set is null --- system/macroes/sequence.get.mac");
-                      return Var(false);
-                    }
-                    return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-                  }
-                ),
-              }
-            )
-          },
-          AttributeLoader{
-            "index",
-            "idx",
-            vector<string>{ },
-            true,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/sequence.get.mac");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/sequence.get.mac");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-        },
+    make_shared<ValueFormat>(
+      Content::Type::VALUE,
+      VarContentTypes::NUMBER,
+      "",
+      [](
+          FormatContext& ctx,
+          shared_ptr<NodeLoadable> const& loadable,
+          shared_ptr<Node> const& node,
+          shared_ptr<Content> const& content
+      ) {
+        static uint code_path_id = PathRegistry::lookUp("system/macroes/math.exp.mac");
+        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+        unlikely (code_set == null) {
+          LOG_ERR("code_set is null --- system/macroes/math.exp.mac");
+          return Var(false);
+        }
+        return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
       }
     )
 ;

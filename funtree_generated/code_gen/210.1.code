@@ -4,12 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 21 "assets/system/node_loader_format/common/lrtb_uint.nlf"
+#line 26 "assets/system/node_loader_format/bullet_physics/shape_infos/cylinder.nlf"
               
               
-              auto value = Var(Lrtb<uint>());
-              value.v<Lrtb<uint>>().l(content->cast<Value>()->var().as<uint>());
-              
-              ctx->setData("lrtb_uint.val", value);
+              auto self = loadable->cast<BulletShapeInfo_Cylinder>();
+              self->offset_pos = ctx->getData("vector3.val").v<Vector3>();
               return Var(true);
               return null_var;

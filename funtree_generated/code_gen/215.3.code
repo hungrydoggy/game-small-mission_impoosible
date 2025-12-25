@@ -4,10 +4,12 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 85 "assets/system/node_loader_format/mesh/mesh.nlf"
-                      
-                      
-                      auto self = loadable->cast<Mesh>();
-                      self->indices().push_back(content->cast<Value>()->var().as<uint>());
-                      return Var(true);
-                      return null_var;
+#line 58 "assets/system/node_loader_format/common/quaternion.nlf"
+              
+              
+              auto& vec3 = ctx->getDataRef("quaternion.vec3").v<Vector3>();
+              vec3.z(content->cast<Value>()->var().as<real>());
+              
+              ctx->setData("quaternion.val", Var(Quaternion(vec3 * math::kDeg2RadFactor)));
+              return Var(true);
+              return null_var;

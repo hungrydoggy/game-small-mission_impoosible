@@ -1,4 +1,5 @@
 
-#line 7 "assets/system/node_loader_format/graphics/gpu_task/swapchain_attachment.nlf"
+#line 5 "assets/system/node_loader_format/etc/resource_holder.nlf"
       
-      #include <gpu_task/_gpu_task_def_config.h>
+      #include <resource/audio_clip/audio_clip.h>
+      #include <resource/resource_holder.h>

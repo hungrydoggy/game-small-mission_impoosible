@@ -4,7 +4,7 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 22 "assets/system/macroes/physics_shape.make_half_size_from_image_size.mac"
+#line 16 "assets/system/macroes/game_component.get_name.mac"
           
           
           auto self = dpc<Macro>(loadable);

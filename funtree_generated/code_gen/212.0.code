@@ -1,4 +1,4 @@
 
-#line 5 "assets/system/node_loader_format/common/resolution.nlf"
+#line 5 "assets/system/node_loader_format/common/lrtb_real.nlf"
       
-      #include <vector>
+      #include <util/lrtb.h>

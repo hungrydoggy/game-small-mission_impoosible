@@ -1,4 +1,4 @@
 
-#line 7 "assets/system/node_loader_format/fsm/finite_state_machine.nlf"
+#line 4 "assets/system/node_loader_format/graphics/draw_option/stencil_operator.nlf"
       
-      #include <fsm/finite_state_machine.h>
+      #include <common/draw_option/draw_option.h>

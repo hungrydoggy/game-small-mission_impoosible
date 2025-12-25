@@ -4,7 +4,7 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 21 "assets/system/macroes/operator.and.mac"
+#line 21 "assets/system/macroes/compare.lt.mac"
                   
                   auto self = dpc<Macro>(loadable);
                   self->params.add(content);

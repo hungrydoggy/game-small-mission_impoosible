@@ -24,31 +24,41 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___NodeLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___NodeLoaderBundleRegisterer___ () {
+#endif
 
   NodeLoaderBundle::default_bundle().registerLoader(
-      vector<string>{"FiniteStateMachineState", "FSMState", "FsmState", },
+      vector<string>{"StencilFunction", },
       vector<string>{},
-      make_shared<NodeLoader_SystemNodeloaderformatFsmFsmstateNlf>(),
+      make_shared<NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStencilfunctionNlf>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::loadable_class () const {
-  static string cls = "FiniteStateMachineState";
+string const& NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStencilfunctionNlf::loadable_class () const {
+  static string cls = "StencilFunction";
   return cls;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
-  return dpc<FiniteStateMachineState>(loadable) != null;
+bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStencilfunctionNlf::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+  return dpc<StencilFunction>(loadable) != null;
 }
 
 
-bool NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_preLoad (
+bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStencilfunctionNlf::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -61,7 +71,7 @@ bool NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_preLoad (
 }
 
 
-bool NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_postLoad (
+bool NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStencilfunctionNlf::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -74,16 +84,16 @@ bool NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_postLoad (
 }
 
 
-shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_getFormat () {
+shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatGraphicsDrawoptionStencilfunctionNlf::_getFormat () {
   static shared_ptr<Format> format =
     make_shared<ObjectFormat>(
       vector<vector<AttributeLoader>>{
         vector<AttributeLoader>{
           AttributeLoader{
-            "name",
-            "nam",
+            "function",
+            "fun",
             vector<string>{ },
-            true,
+            false,
             vector<string>{ },
             make_shared<ValueFormat>(
               Content::Type::VALUE,
@@ -95,10 +105,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_get
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/stencil_function.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/stencil_function.nlf");
                   return Var(false);
                 }
                 return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -106,14 +116,14 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_get
             )
           },
           AttributeLoader{
-            "on_enter",
-            "ent",
+            "value",
+            "val",
             vector<string>{ },
             false,
             vector<string>{ },
             make_shared<ValueFormat>(
-              Content::Type::CODE,
-              0,
+              Content::Type::VALUE,
+              VarContentTypes::NUMBER,
               "",
               [](
                   FormatContext& ctx,
@@ -121,10 +131,10 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_get
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/stencil_function.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/stencil_function.nlf");
                   return Var(false);
                 }
                 return code_set->execute(2, {Var(&ctx), Var(loadable), Var(node), Var(content)});
@@ -132,14 +142,14 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_get
             )
           },
           AttributeLoader{
-            "on_update",
-            "upd",
+            "mask",
+            "msk",
             vector<string>{ },
             false,
             vector<string>{ },
             make_shared<ValueFormat>(
-              Content::Type::CODE,
-              0,
+              Content::Type::VALUE,
+              VarContentTypes::NUMBER,
               "",
               [](
                   FormatContext& ctx,
@@ -147,117 +157,13 @@ shared_ptr<Format> const&  NodeLoader_SystemNodeloaderformatFsmFsmstateNlf::_get
                   shared_ptr<Node> const& node,
                   shared_ptr<Content> const& content
               ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
+                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/graphics/draw_option/stencil_function.nlf");
                 auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
                 unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
+                  LOG_ERR("code_set is null --- system/node_loader_format/graphics/draw_option/stencil_function.nlf");
                   return Var(false);
                 }
                 return code_set->execute(3, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "on_local_update",
-            "lup",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::CODE,
-              0,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(4, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "on_exit",
-            "ext",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::CODE,
-              0,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(5, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "message_receiver",
-            "msg",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::MAP,
-              0,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(6, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            )
-          },
-          AttributeLoader{
-            "local_message_receiver",
-            "lms",
-            vector<string>{ },
-            false,
-            vector<string>{ },
-            make_shared<ValueFormat>(
-              Content::Type::MAP,
-              0,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/node_loader_format/fsm/fsm_state.nlf");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/node_loader_format/fsm/fsm_state.nlf");
-                  return Var(false);
-                }
-                return code_set->execute(7, {Var(&ctx), Var(loadable), Var(node), Var(content)});
               }
             )
           },

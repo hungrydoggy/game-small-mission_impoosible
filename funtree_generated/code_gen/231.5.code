@@ -4,12 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 148 "assets/system/node_loader_format/graphics/gpu_task/gpu_task_def.nlf"
-                      
-                      auto eva = ctx->loadSubNodeAs<ExtraVmpAllocItem>(node, content);
-                      unlikely (eva == null)
-                        return Var(false);
-                      
-                      auto self = loadable->cast<GpuTaskDef>();
-                      self->extra_vmp_alloc_items().push_back(*eva);
-                      return null_var;
+#line 108 "assets/system/node_loader_format/etc/vertex_animation_texture/vertex_animation_texture.nlf"
+              
+              
+              auto self = loadable->cast<VAT>();
+              self->time_scale(content->asValue<double>());
+              return Var(true);
+              return null_var;

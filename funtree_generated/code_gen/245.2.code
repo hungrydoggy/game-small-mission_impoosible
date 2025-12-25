@@ -4,14 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 58 "assets/system/node_loader_format/game_component/game_object.nlf"
+#line 62 "assets/system/node_loader_format/game_component/scene.nlf"
               
               
-              auto acs = ctx->loadSubNodeAs<ActionState>(node, content);
-              unlikely (acs == null)
-                return Var(false);
-              
-              auto self = loadable->cast<GameObject>();
-              self->addTrait(acs);
+              auto self = loadable->cast<Scene>();
+              self->ambient(ctx->getData("color.val").v<Color>());
               return Var(true);
               return null_var;

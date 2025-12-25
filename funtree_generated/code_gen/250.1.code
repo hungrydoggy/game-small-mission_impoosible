@@ -4,10 +4,21 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 26 "assets/system/node_loader_format/fsm/finite_state_machine.nlf"
+#line 23 "assets/system/node_loader_format/graphics/draw_option/stencil_operator.nlf"
               
               
-              auto self = loadable->cast<FiniteStateMachine>();
-              self->setData("start_state", content->cast<Value>()->var());
+              #ifndef SERVER_ONLY
+              auto op_str = content->cast<Value>()->var().as<string>();
+              Util::upper(op_str);
+              
+              auto op_p = Util::find(StencilOperator::str_optyp_map(), op_str);
+              unlikely (op_p == null) {
+                LOG_ERR("unknown StencilOperator::opcType --- %s", op_str.c_str());
+                return Var(false);
+              }
+              auto self = loadable->cast<StencilOperator>();
+              self->when_stencil_fails = *op_p;
+              #endif
+              
               return Var(true);
               return null_var;

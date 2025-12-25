@@ -4,14 +4,14 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 45 "assets/system/node_loader_format/graphics/gpu_task/gpu_task_item.nlf"
+#line 47 "assets/system/node_loader_format/etc/sampler.nlf"
               
-              auto tsd = ctx->loadSubNodeAs<GpuTaskDef>(node, content);
-              unlikely (tsd == null)
-                return Var(false);
               
-              auto self = loadable->cast<GpuTaskRunner::TaskItem>();
-              self->task_def = tsd;
+              string mnf_str = content->cast<Value>()->var().as<string>();
+              Util::upper(mnf_str);
               
+              auto mnf_p = Util::find(Sampler::filter_enm_map(), mnf_str);
+              auto self = loadable->cast<Sampler>();
+              self->min_filter((mnf_p != null)? *mnf_p : Sampler::Filter::LINEAR);
               return Var(true);
               return null_var;

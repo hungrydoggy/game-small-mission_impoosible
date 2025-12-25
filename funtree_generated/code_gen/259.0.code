@@ -1,4 +1,4 @@
 
-#line 7 "assets/system/node_loader_format/state_serializer/vat_component.nlf"
+#line 7 "assets/system/node_loader_format/graphics/gpu_task/gpu_task_runner.nlf"
       
-      #include <common/state_serializer/state_serializer.h>
+      #include <gpu_task/gpu_task_runner.h>

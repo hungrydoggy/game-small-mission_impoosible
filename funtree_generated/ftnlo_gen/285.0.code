@@ -1,0 +1,6 @@
+
+#line 7 "assets/system/node_loader_format/view/nine_patch_view_def.nlf"
+      
+      #include <util/lrtb.h>
+      #include <util/rectangle.h>
+      #include <view/nine_patch_view/nine_patch_view_def.h>

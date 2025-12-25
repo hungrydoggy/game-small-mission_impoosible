@@ -4,11 +4,7 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 35 "assets/system/macroes/operator.minus.mac"
+#line 14 "assets/system/macroes/project.is_input_processable.mac"
           
-          // case: uminus
-          auto self = dpc<Macro>(loadable);
-          self->params.set(0, make_shared<Value>(Var(0), content));
-          self->params.set(1, content);
           return Var(true);
           return null_var;

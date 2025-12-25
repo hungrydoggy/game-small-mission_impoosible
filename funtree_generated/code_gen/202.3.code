@@ -4,15 +4,9 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 80 "assets/system/node_loader_format/bone_animation/bone_key_frame_info.nlf"
-                      
-                      
-                      auto rkf = ctx->loadSubNodeAs<RotKeyFrame>(node, content);
-                      unlikely (rkf == null)
-                        return Var(false);
-                      
-                      auto self = loadable->cast<BoneKeyFrameInfo>();
-                      self->rot_key_frames().push_back(*rkf);
-                      
-                      return Var(true);
-                      return null_var;
+#line 62 "assets/system/node_loader_format/bone_animation/rot_key_frame.nlf"
+              
+              auto self = loadable->cast<RotKeyFrame>();
+              self->interpolation(Interpolation::getFromString(content->cast<Value>()->var().as<string>()));
+              return Var(true);
+              return null_var;

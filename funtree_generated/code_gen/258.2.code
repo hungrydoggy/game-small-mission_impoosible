@@ -4,10 +4,14 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 86 "assets/system/node_loader_format/state_serializer/physics_body.nlf"
+#line 45 "assets/system/node_loader_format/graphics/gpu_task/gpu_task_item.nlf"
               
+              auto tsd = ctx->loadSubNodeAs<GpuTaskDef>(node, content);
+              unlikely (tsd == null)
+                return Var(false);
               
-              auto self = loadable->cast<StateSerializerNodeLoadable>();
-              self->name = content->asValue<string>();
+              auto self = loadable->cast<GpuTaskRunner::TaskItem>();
+              self->task_def = tsd;
+              
               return Var(true);
               return null_var;

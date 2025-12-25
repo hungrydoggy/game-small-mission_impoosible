@@ -1,14 +1,6 @@
-auto ctx = params[0].as<LoaderContext*>();  auto node = params[1].as<shared_ptr<Node>>();  auto loadable = params[2].as<shared_ptr<NodeLoadable>>();  
 
-
-
-
-#line 10 "assets/system/node_loader_format/actions/repeat.nlf"
+#line 6 "assets/system/node_loader_format/actions/play_sound.nlf"
       
-      
-      auto al = loadable->cast<ActionLoadable>();
-      auto  cnt = al->getData("count"   ).as<uint>();
-      auto& chl = al->getData("children").v<vector<shared_ptr<Action>>>();
-      al->action = action::Repeat(cnt, chl);
-      return Var(true);
-      return null_var;
+      #include <action/_action_loadable.h>
+      #include <action/action_factory.h>
+      #include <audio/audio_source.h>

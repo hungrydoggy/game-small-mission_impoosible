@@ -8,11 +8,9 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
-#include "./116.0.code"
 
 
 
-#include "./116.1.code"
 
 
 
@@ -26,15 +24,42 @@ using std::make_shared;
 
 
 
+#if defined(_WINDOWS)
+static bool ___CodeSetBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___CodeSetBundleRegisterer___ () {
+#endif
+
   CodeSetBundle::default_bundle().registerCodeSet(
-      "system/macroes/sprite.make_cells.mac",
-      make_shared<Code_SystemMacroesSpriteMakecellsMac>(),
+      "system/macroes/rectangle.normalize.mac",
+      make_shared<Code_SystemMacroesRectangleNormalizeMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
+}
+#endif
+
+
+
+static Var __code_0 (
+    vector<Var> const& params
+) {
+
+  #include "./116.0.code"
 }
 
+
+static Var __code_1 (
+    vector<Var> const& params
+) {
+
+  #include "./116.1.code"
+}
 
 
 static Var __code_2 (
@@ -53,111 +78,14 @@ static Var __code_3 (
 }
 
 
-static Var __code_4 (
-    vector<Var> const& params
-) {
-
-  #include "./116.4.code"
-}
-
-
-static Var __code_5 (
-    vector<Var> const& params
-) {
-
-  #include "./116.5.code"
-}
-
-
-static Var __code_6 (
-    vector<Var> const& params
-) {
-
-  #include "./116.6.code"
-}
-
-
-static Var __code_7 (
-    vector<Var> const& params
-) {
-
-  #include "./116.7.code"
-}
-
-
-static Var __code_8 (
-    vector<Var> const& params
-) {
-
-  #include "./116.8.code"
-}
-
-
-static Var __code_9 (
-    vector<Var> const& params
-) {
-
-  #include "./116.9.code"
-}
-
-
-static Var __code_10 (
-    vector<Var> const& params
-) {
-
-  #include "./116.10.code"
-}
-
-
-static Var __code_11 (
-    vector<Var> const& params
-) {
-
-  #include "./116.11.code"
-}
-
-
-static Var __code_12 (
-    vector<Var> const& params
-) {
-
-  #include "./116.12.code"
-}
-
-
-static Var __code_13 (
-    vector<Var> const& params
-) {
-
-  #include "./116.13.code"
-}
-
-
-static Var __code_14 (
-    vector<Var> const& params
-) {
-
-  #include "./116.14.code"
-}
-
-
-Var Code_SystemMacroesSpriteMakecellsMac::execute (
+Var Code_SystemMacroesRectangleNormalizeMac::execute (
     int code_idx, vector<Var> const& params
 ) {
   switch (code_idx) {
+    case 0: return __code_0(params);
+    case 1: return __code_1(params);
     case 2: return __code_2(params);
     case 3: return __code_3(params);
-    case 4: return __code_4(params);
-    case 5: return __code_5(params);
-    case 6: return __code_6(params);
-    case 7: return __code_7(params);
-    case 8: return __code_8(params);
-    case 9: return __code_9(params);
-    case 10: return __code_10(params);
-    case 11: return __code_11(params);
-    case 12: return __code_12(params);
-    case 13: return __code_13(params);
-    case 14: return __code_14(params);
     default:
       LOG_ERR("unknown code_idx %u --- \"116.cpp\"", code_idx);
       return null_var;
@@ -167,7 +95,6 @@ Var Code_SystemMacroesSpriteMakecellsMac::execute (
 
 }
 
-#include "./116.15.code"
 
 
 

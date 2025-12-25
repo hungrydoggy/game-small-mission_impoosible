@@ -4,10 +4,10 @@ auto ctx = params[0].as<FormatContext*>();  auto loadable = params[1].as<shared_
 
 
 
-#line 65 "assets/system/node_loader_format/bullet_physics/bullet_physics.nlf"
+#line 66 "assets/system/node_loader_format/graphics/gpu_task/shader_data_bind_def.nlf"
               
               
-              auto self = loadable->cast<BulletWrapper>();
-              self->max_sub_step(content->cast<Value>()->var().as<int>());
+              auto self = loadable->cast<ShaderDataBindDef>();
+              self->binding_idx = content->cast<Value>()->var().as<uint>();
               return Var(true);
               return null_var;

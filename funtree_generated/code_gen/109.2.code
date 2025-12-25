@@ -3,7 +3,7 @@ auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<share
 
 
 
-#line 33 "assets/system/macroes/view.get_image_size.mac"
+#line 33 "assets/system/macroes/physics_shape.make_half_size_from_image_size.mac"
       
       
       auto& mac_params = self->params;
@@ -13,7 +13,7 @@ auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<share
       // make MacroOnLoad
       auto macro_on_load =
           make_shared<MacroOnLoad>(
-            [content](LoaderContext& ctx, shared_ptr<Node> const& node)->bool {
+            [content, target_path](LoaderContext& ctx, shared_ptr<Node> const& node)->bool {
               return true;
             },
             [content, target_path](LoaderContext& ctx, shared_ptr<Node> const& node)->sp<Content> {
@@ -37,8 +37,10 @@ auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<share
               }
       
               auto view = target->getTrait<View>("view");
-              unlikely (view == null)
+              unlikely (view == null) {
+                CNT_LOG_ERR(content, "Object has no view --- %s", target_path.c_str());
                 return null;
+              }
       
               // case: Image
               auto img = view->def<ImageViewDef>();
@@ -46,8 +48,9 @@ auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<share
                 auto result =
                     make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
                 auto& siz = img->image_size();
-                result->add(make_shared<Value>(Var(siz.x()), content));
-                result->add(make_shared<Value>(Var(siz.y()), content));
+                result->add(make_shared<Value>(Var(siz.x() * REAL(0.5)), content));
+                result->add(make_shared<Value>(Var(siz.y() * REAL(0.5)), content));
+                result->add(make_shared<Value>(Var(          REAL(0.1)), content));
                 return result;
               }
       
@@ -57,8 +60,9 @@ auto node = params[0].as<shared_ptr<Node>>();  auto content = params[1].as<share
                 auto result =
                     make_shared<Sequence>(content->file_path(), content->line_in_file(), content->column_in_file());
                 auto& siz = ninpch->image_size();
-                result->add(make_shared<Value>(Var(siz.x()), content));
-                result->add(make_shared<Value>(Var(siz.y()), content));
+                result->add(make_shared<Value>(Var(siz.x() * REAL(0.5)), content));
+                result->add(make_shared<Value>(Var(siz.y() * REAL(0.5)), content));
+                result->add(make_shared<Value>(Var(          REAL(0.1)), content));
                 return result;
               }
       

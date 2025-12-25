@@ -8,6 +8,7 @@
 #include <common/loader/fun_tree/fun_tree.h>
 #include <util/var.h>
 
+#include "./111.0.code"
 
 
 
@@ -23,31 +24,40 @@ using namespace fun_tree::node_loader_format;
 using std::make_shared;
 
 
-
+#if defined(_WINDOWS)
+static bool ___MacroLoaderBundleRegisterer___ = []() {
+#else
 __attribute__((constructor))
 static void ___MacroLoaderBundleRegisterer___ () {
+#endif
 
   MacroLoaderBundle::default_bundle().registerMacroLoader(
-      vector<string>{"Operator.multiply", "multiply", "*", },
-      make_shared<Macro_SystemMacroesOperatorMultiplyMac>(),
+      vector<string>{"Project.isSystemInputProcessable", "prj.isSystemInputProcessable", },
+      make_shared<Macro_SystemMacroesProjectIssysteminputprocessableMac>(),
       true
   );
+
+#if defined(_WINDOWS)
+  return true;
+}();
+#else
 }
+#endif
 
 
 
-string const& Macro_SystemMacroesOperatorMultiplyMac::loadable_class () const {
+string const& Macro_SystemMacroesProjectIssysteminputprocessableMac::loadable_class () const {
   static string cls = "Macro";
   return cls;
 }
 
 
-bool Macro_SystemMacroesOperatorMultiplyMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
+bool Macro_SystemMacroesProjectIssysteminputprocessableMac::isCompatibleLoadable (shared_ptr<NodeLoadable> const& loadable) {
   return dpc<Macro>(loadable) != null;
 }
 
 
-bool Macro_SystemMacroesOperatorMultiplyMac::preEmbody (
+bool Macro_SystemMacroesProjectIssysteminputprocessableMac::preEmbody (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& call_params,
     EmbodyFunc embody_func
@@ -56,7 +66,7 @@ bool Macro_SystemMacroesOperatorMultiplyMac::preEmbody (
 }
 
 
-bool Macro_SystemMacroesOperatorMultiplyMac::_preLoad (
+bool Macro_SystemMacroesProjectIssysteminputprocessableMac::_preLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -65,7 +75,7 @@ bool Macro_SystemMacroesOperatorMultiplyMac::_preLoad (
 }
 
 
-bool Macro_SystemMacroesOperatorMultiplyMac::_postLoad (
+bool Macro_SystemMacroesProjectIssysteminputprocessableMac::_postLoad (
     LoaderContext& ctx,
     shared_ptr<Node> const& node,
     shared_ptr<NodeLoadable> const& loadable
@@ -79,10 +89,10 @@ static shared_ptr<Content> __on_call_code_2 (
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& self
 ) {
-  static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.multiply.mac");
+  static uint code_path_id = PathRegistry::lookUp("system/macroes/project.is_system_input_processable.mac");
   auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
   unlikely (code_set == null) {
-    LOG_ERR("code_set is null --- system/macroes/operator.multiply.mac");
+    LOG_ERR("code_set is null --- system/macroes/project.is_system_input_processable.mac");
     return null;
   }
 
@@ -91,7 +101,7 @@ static shared_ptr<Content> __on_call_code_2 (
 }
 
 
-shared_ptr<Content> Macro_SystemMacroesOperatorMultiplyMac::execute (
+shared_ptr<Content> Macro_SystemMacroesProjectIssysteminputprocessableMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     int code_idx,
@@ -105,7 +115,7 @@ shared_ptr<Content> Macro_SystemMacroesOperatorMultiplyMac::execute (
   }
 }
 
-shared_ptr<Content> Macro_SystemMacroesOperatorMultiplyMac::execute (
+shared_ptr<Content> Macro_SystemMacroesProjectIssysteminputprocessableMac::execute (
     shared_ptr<Node> const& node,
     shared_ptr<Content> const& content,
     shared_ptr<Macro> const& macro
@@ -113,54 +123,25 @@ shared_ptr<Content> Macro_SystemMacroesOperatorMultiplyMac::execute (
   return execute(node, content, 2, macro);
 }
 
-shared_ptr<Format> const&  Macro_SystemMacroesOperatorMultiplyMac::_getFormat () {
+shared_ptr<Format> const&  Macro_SystemMacroesProjectIssysteminputprocessableMac::_getFormat () {
   static shared_ptr<Format> format =
-    make_shared<SequenceFormat>(
-      1,
-      -1,
-      vector<shared_ptr<Format>>{
-        make_shared<FormatGroup>(
-          vector<shared_ptr<Format>>{
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::NUMBER,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.multiply.mac");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/operator.multiply.mac");
-                  return Var(false);
-                }
-                return code_set->execute(0, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            ),
-            make_shared<ValueFormat>(
-              Content::Type::VALUE,
-              VarContentTypes::STRING,
-              "",
-              [](
-                  FormatContext& ctx,
-                  shared_ptr<NodeLoadable> const& loadable,
-                  shared_ptr<Node> const& node,
-                  shared_ptr<Content> const& content
-              ) {
-                static uint code_path_id = PathRegistry::lookUp("system/macroes/operator.multiply.mac");
-                auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
-                unlikely (code_set == null) {
-                  LOG_ERR("code_set is null --- system/macroes/operator.multiply.mac");
-                  return Var(false);
-                }
-                return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
-              }
-            ),
-          }
-        ),
+    make_shared<ValueFormat>(
+      Content::Type::ANY,
+      0,
+      "",
+      [](
+          FormatContext& ctx,
+          shared_ptr<NodeLoadable> const& loadable,
+          shared_ptr<Node> const& node,
+          shared_ptr<Content> const& content
+      ) {
+        static uint code_path_id = PathRegistry::lookUp("system/macroes/project.is_system_input_processable.mac");
+        auto code_set = CodeSetBundle::default_bundle().getCodeSet(code_path_id);
+        unlikely (code_set == null) {
+          LOG_ERR("code_set is null --- system/macroes/project.is_system_input_processable.mac");
+          return Var(false);
+        }
+        return code_set->execute(1, {Var(&ctx), Var(loadable), Var(node), Var(content)});
       }
     )
 ;
