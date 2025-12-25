@@ -5,186 +5,186 @@ macro_gen :
     [ ]
   last_gen_dtm :
     system/macroes/compare.neq.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/game_component.get_data.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/color.from_code.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/operator.minus.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/color.from_rgba_bytes.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/string.join.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/map.size.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/game_component.get_scale.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/compare.eq.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.half.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.radian_to_degree.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/rectangle.normalize.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/compare.gt.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/compare.gte.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/game_component.get_rotation.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/operator.and.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.log10.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/compare.lt.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/compare.lte.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/condition.if.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/global.has_data.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/condition.switch.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.degree_to_radian.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/convert.to_int.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/map.keys.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/convert.to_real.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/convert.to_string.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/game_component.get_children_names.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/game_component.get_color.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/operator.plus.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/game_component.get_name.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/game_component.get_position.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/game_component.is_drawable.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/game_component.make_path.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.max.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/random.pick.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/global.get_data.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/project.is_input_processable.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.abs.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/link.make.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/map.merge.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/map.get.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/map.key_by_idx.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.acos.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.asin.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.floor.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.atan.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.ceil.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.cos.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.exp.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/operator.inverse.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.log.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.log2.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.min.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.round.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/operator.multiply.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.sin.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.sqrt.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/math.tan.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/operator.divide.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/operator.modulo.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/operator.or.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.pick.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/physics_shape.make_half_size_from_image_size.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/project.is_system_input_processable.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/project.is_user_input_processable.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/random.draw_int.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/random.draw_real.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/reference.make.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.concat.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.divide.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.filter.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.first.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.get.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.multiply.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.index_of.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.last.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.make_int_sequence.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.map.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.minus.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.plus.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sequence.size.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/sprite.make_cells.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/string.format.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/string.replace.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/string.split.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/transform.make_position_from.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/transform.make_rotation_from.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/transform.make_scale_from.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/view.get_bitmap_font_size.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     system/macroes/view.get_image_size.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"
     plugins/relh/relh.pair.mac :
-      "2025-12-18 23:11:25"
+      "2025-12-26 00:06:59"

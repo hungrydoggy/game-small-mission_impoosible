@@ -580,6 +580,13 @@ path_no_info :
   system/settings.app :
     290
 code_info :
+  code_gen/49.0.code :
+    no :
+      49
+    line :
+      68
+    column :
+      21
   code_gen/18.0.code :
     no :
       18
@@ -608,13 +615,6 @@ code_info :
       50
     column :
       9
-  code_gen/49.0.code :
-    no :
-      49
-    line :
-      68
-    column :
-      21
   code_gen/163.1.code :
     no :
       163
