@@ -24,6 +24,8 @@ runner_web/
 tmp/
 assets/baked/
 assets/bin/
+subprojects/funtree_generated/funtree_generated
+subprojects/funtree_generated/optional
 
 
 compile_commands.json
